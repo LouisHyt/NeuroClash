@@ -18,12 +18,14 @@ router.on('/').renderInertia('home')
 
 //Auth
 router.group(() => {
-    router.get('/login', [AuthController, 'showLogin'])
-    router.post('/login', [AuthController, 'handleLogin'])
-    router.get('/register', [AuthController, 'showRegister'])
-    router.post('/register', [AuthController, 'handleRegister'])
+    router.get('/login', [AuthController, 'showLogin']).as('auth.login')
+    router.post('/login', [AuthController, 'handleLogin']).as('auth.handlelogin')
+    router.get('/register', [AuthController, 'showRegister']).as('auth.register')
+    router.post('/register', [AuthController, 'handleRegister']).as('auth.handleregister')
 }).use(middleware.guest())
 
-router.get('/dashboard', [DashboardController, 'showDashboard'])
+router.group(() => {
+    router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
+    router.get('/logout', [AuthController, 'logout']).use(middleware.auth()).as('auth.logout')
+})
 
-router.get('/logout', [AuthController, 'logout']).use(middleware.auth())
