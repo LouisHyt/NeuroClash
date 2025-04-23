@@ -4,7 +4,6 @@ import User from '#models/user'
 import Statistic from '#models/statistic'
 
 export default class AuthController {
-
   showLogin({ inertia }: HttpContext) {
     return inertia.render('auth/login')
   }

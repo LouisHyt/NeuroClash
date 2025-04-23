@@ -7,6 +7,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'password.confirmed': 'The passwords do not match.',
   'username.minLength': 'The username must be at least 3 characters.',
   'username.maxLength': 'The username must be at most 20 characters.',
+  'approve_conditions.accepted': 'You must accept the terms and conditions.',
 })
 
 export const registerValidator = vine.compile(
@@ -31,6 +32,7 @@ export const registerValidator = vine.compile(
       confirmationField: 'confirm_password',
     }),
     confirm_password: vine.string().trim(),
+    approve_conditions: vine.accepted(),
   })
 )
 
