@@ -10,7 +10,11 @@ export default defineConfig({
   | will be scanned automatically from the "./commands" directory.
   |
   */
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'), () => import('@jrmc/adonis-attachment/commands')],
+  commands: [
+    () => import('@adonisjs/core/commands'),
+    () => import('@adonisjs/lucid/commands'),
+    () => import('@jrmc/adonis-attachment/commands'),
+  ],
 
   /*
   |--------------------------------------------------------------------------
@@ -39,7 +43,7 @@ export default defineConfig({
     () => import('@adonisjs/auth/auth_provider'),
     () => import('@adonisjs/inertia/inertia_provider'),
     () => import('@jrmc/adonis-attachment/attachment_provider'),
-    () => import('@adonisjs/drive/drive_provider')
+    () => import('@adonisjs/drive/drive_provider'),
   ],
 
   /*
@@ -53,7 +57,7 @@ export default defineConfig({
   preloads: [
     () => import('#start/routes'),
     () => import('#start/kernel'),
-    () => import('#start/socketio')
+    () => import('#start/socketio'),
   ],
 
   /*

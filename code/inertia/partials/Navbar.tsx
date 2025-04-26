@@ -39,6 +39,14 @@ const Navbar = () => {
                 </div>
               </Link>
               <div className="h-8 w-px bg-violet-500/30 mx-2"></div>
+              {user.isAdmin && (
+                <Link
+                  href="/admin"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text font-semibold mr-0"
+                >
+                  Admin Panel
+                </Link>
+              )}
               <Link
                 method="post"
                 href="/logout"

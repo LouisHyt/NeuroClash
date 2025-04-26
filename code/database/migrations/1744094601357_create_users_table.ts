@@ -1,3 +1,4 @@
+import Roles from '#enums/Roles'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -6,6 +7,7 @@ export default class extends BaseSchema {
   async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('uuid').notNullable().primary()
+      table.integer('role_id').unsigned().references('id').inTable('roles').defaultTo(Roles.USER)
       table.string('username', 80).notNullable().unique()
       table.string('email', 254).notNullable().unique()
       table.string('password', 255).notNullable()

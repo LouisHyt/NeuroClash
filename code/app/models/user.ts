@@ -1,14 +1,24 @@
 import { DateTime } from 'luxon'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
-import { BaseModel, beforeCreate, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import {
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+  computed,
+  hasMany,
+  hasOne,
+} from '@adonisjs/lucid/orm'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { randomUUID } from 'node:crypto'
 import Statistic from '#models/statistic'
-import type { HasOne, HasMany } from '@adonisjs/lucid/types/relations'
+import Role from '#models/role'
+import type { HasOne, HasMany, BelongsTo } from '@adonisjs/lucid/types/relations'
 import { attachment } from '@jrmc/adonis-attachment'
 import type { Attachment } from '@jrmc/adonis-attachment/types/attachment'
 import Question from './question.js'
+import Roles from '#enums/Roles'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['username'],
@@ -16,7 +26,6 @@ const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
 })
 
 export default class User extends compose(BaseModel, AuthFinder) {
-  
   @beforeCreate()
   static assignUuid(user: User) {
     user.uuid = randomUUID()
@@ -24,6 +33,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @column({ isPrimary: true })
   declare uuid: string
+
+  @column()
+  declare roleId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -48,7 +60,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @computed()
   public get avatarUrl() {
-    if(this.avatar) {
+    if (this.avatar) {
       return this.avatar.url
     }
     const eyesVariant = 'variant2W10,variant3W10,variant4W10,variant5W14,variant9W10'
@@ -59,14 +71,16 @@ export default class User extends compose(BaseModel, AuthFinder) {
   }
 
   @computed()
-  public getRank() {
-    return 'placeholder'
+  public get isAdmin() {
+    return this.roleId === Roles.ADMIN
   }
+
+  @belongsTo(() => Role)
+  declare role: BelongsTo<typeof Role>
 
   @hasOne(() => Statistic)
   declare statistic: HasOne<typeof Statistic>
 
   @hasMany(() => Question)
   declare suggestedQuestions: HasMany<typeof Question>
-
 }
