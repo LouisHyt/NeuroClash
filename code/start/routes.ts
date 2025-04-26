@@ -25,7 +25,9 @@ router
   })
   .use(middleware.guest())
 
-router.group(() => {
-  router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
-  router.post('/logout', [AuthController, 'logout']).use(middleware.auth()).as('auth.logout')
-})
+router
+  .group(() => {
+    router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
+    router.post('/logout', [AuthController, 'logout']).use(middleware.auth()).as('auth.logout')
+  })
+  .use(middleware.auth())

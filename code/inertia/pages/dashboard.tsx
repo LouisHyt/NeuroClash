@@ -8,7 +8,10 @@ import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-
 import type { InferPageProps, SharedProps } from '@adonisjs/inertia/types'
 import type DashboardController from '#controllers/dashboard_controller'
 
-const Dashboard = ({ statistics }: InferPageProps<DashboardController, 'showDashboard'>) => {
+const Dashboard = ({
+  statistics,
+  progression,
+}: InferPageProps<DashboardController, 'showDashboard'>) => {
   const [chatVisible, setChatVisible] = useState(false)
 
   const messages = [
@@ -27,20 +30,6 @@ const Dashboard = ({ statistics }: InferPageProps<DashboardController, 'showDash
   const { user } = usePage<SharedProps>().props
 
   // Données de progression
-  const progression = {
-    currentRank: 'Gold',
-    nextRank: 'Platinum',
-    currentElo: 1850,
-    requiredElo: 2000,
-    progress: (1850 / 2000) * 100,
-  }
-
-  const userData = {
-    elo: 1200,
-    rank: 'Silver',
-    username: 'Jonathan Tree',
-    avatar: 'https://picsum.photos/200/300?random=1',
-  }
 
   const swapyRef = useRef<Swapy | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -186,47 +175,72 @@ const Dashboard = ({ statistics }: InferPageProps<DashboardController, 'showDash
                           />
                         </svg>
                         <div>
-                          <h3 className="text-lg sm:text-xl font-semibold text-gray-100 mb-1">
+                          <h3 className="text-md sm:text-xl font-semibold text-gray-100 mb-1">
                             Progression
                           </h3>
-                          <p className="text-sm sm:text-base text-gray-300">
-                            Reach {progression.requiredElo} ELO to rank up
+                          <p className="text-xs sm:text-base text-gray-300">
+                            {progression.nextRank
+                              ? `Reach ${progression.nextRank.eloRequired} ELO to rank up`
+                              : 'Congratulations! You have reached the highest rank'}
                           </p>
                         </div>
                       </div>
                       <div className="hidden sm:flex items-center gap-6">
                         <div className="text-right">
                           <div className="text-sm sm:text-base font-bold text-violet-400">
-                            {progression.currentRank}
+                            {progression.currentRank?.name || 'Bronze'}
                           </div>
                           <div className="text-xs sm:text-sm text-gray-300">Current Rank</div>
                         </div>
-                        <div className="w-px h-8 bg-violet-500/20"></div>
-                        <div>
-                          <div className="text-sm sm:text-base font-bold text-fuchsia-400">
-                            {progression.nextRank}
-                          </div>
-                          <div className="text-xs sm:text-sm text-gray-300">Next Rank</div>
-                        </div>
+                        {progression.nextRank && (
+                          <>
+                            <div className="w-px h-8 bg-violet-500/20"></div>
+                            <div>
+                              <div className="text-sm sm:text-base font-bold text-fuchsia-400">
+                                {progression.nextRank.name}
+                              </div>
+                              <div className="text-xs sm:text-sm text-gray-300">Next Rank</div>
+                            </div>
+                          </>
+                        )}
                       </div>
                       <div className="sm:hidden text-center mb-2">
-                        <div className="text-xs font-bold text-gray-300">
-                          {progression.currentRank} → {progression.nextRank}
-                        </div>
+                        {progression.nextRank ? (
+                          <div className="text-xs font-bold text-gray-300">
+                            {progression.currentRank && progression.currentRank.name} →{' '}
+                            {progression.nextRank.name}
+                          </div>
+                        ) : (
+                          <div className="text-xs font-bold text-gray-300">
+                            {progression.currentRank && progression.currentRank.name}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm sm:text-base mb-2">
-                        <span className="text-violet-400">{progression.currentElo} ELO</span>
-                        <span className="text-fuchsia-400">{progression.requiredElo} ELO</span>
+                        <span className="text-violet-400">{progression.elo} ELO</span>
+                        {progression.nextRank && (
+                          <span className="text-fuchsia-400">
+                            {progression.nextRank.eloRequired} ELO
+                          </span>
+                        )}
                       </div>
                       <div className="h-2 bg-gray-900 rounded-full overflow-hidden backdrop-blur-md">
-                        <div
-                          className="h-full bg-violet-600 rounded-full transition-all duration-1000 relative"
-                          style={{ width: `${progression.progress}%` }}
-                        >
-                          <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
-                        </div>
+                        {progression.nextRank && progression.currentRank ? (
+                          <div
+                            className="h-full bg-violet-600 rounded-full transition-all duration-1000 relative"
+                            style={{
+                              width: `${((progression.elo - progression.currentRank.eloRequired) / (progression.nextRank.eloRequired - progression.currentRank.eloRequired)) * 100}%`,
+                            }}
+                          >
+                            <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
+                          </div>
+                        ) : (
+                          <div className="h-full bg-violet-600 rounded-full transition-all duration-1000 relative">
+                            <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
