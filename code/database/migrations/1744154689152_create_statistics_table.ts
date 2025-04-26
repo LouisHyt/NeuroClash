@@ -11,6 +11,8 @@ export default class extends BaseSchema {
       table.integer('losses').unsigned().notNullable().defaultTo(0)
       table.integer('questions_correct').unsigned().notNullable().defaultTo(0)
       table.integer('questions_failed').unsigned().notNullable().defaultTo(0)
+      table.integer('streak').unsigned().notNullable().defaultTo(0)
+      table.integer('total_games').unsigned().notNullable().defaultTo(0)
       table.integer('elo').unsigned().notNullable().defaultTo(500)
 
       table.timestamp('created_at')

@@ -1,3 +1,4 @@
+import type User from '#models/user'
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
 
@@ -11,7 +12,18 @@ const inertiaConfig = defineConfig({
    * Data that should be shared with all rendered pages
    */
   sharedData: {
-    // user: (ctx) => ctx.inertia.always(() => ctx.auth.user),
+    flashes: (ctx) =>
+      ctx.inertia.always(() => {
+        const flashes = ctx.session?.flashMessages.all()
+        return Object.entries(flashes).map(([type, message]) => ({ type, message })) as Record<
+          string,
+          string
+        >[]
+      }),
+    user: async (ctx) => {
+      await ctx.auth?.user?.load('statistic')
+      return ctx.auth?.user as User
+    },
   },
 
   /**
@@ -19,8 +31,8 @@ const inertiaConfig = defineConfig({
    */
   ssr: {
     enabled: true,
-    entrypoint: 'inertia/app/ssr.tsx'
-  }
+    entrypoint: 'inertia/app/ssr.tsx',
+  },
 })
 
 export default inertiaConfig

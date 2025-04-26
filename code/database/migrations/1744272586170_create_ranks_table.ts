@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name', 100).notNullable().unique()
       table.integer('elo_required').notNullable()
-      table.json('icon_url').notNullable()
+      table.json('icon_url').nullable()
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

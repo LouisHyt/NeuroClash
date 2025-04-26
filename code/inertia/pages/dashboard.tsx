@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react'
-import { Head } from '@inertiajs/react'
+import { Head, usePage } from '@inertiajs/react'
 import { type Swapy, createSwapy } from 'swapy'
 import '~/css/swapyStyle.css'
 import Navbar from '~/partials/Navbar'
+import StatisticCard from '~/components/StatisticCard'
 import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-icons/hi'
+import type { InferPageProps, SharedProps } from '@adonisjs/inertia/types'
+import type DashboardController from '#controllers/dashboard_controller'
 
-const Dashboard = () => {
+const Dashboard = ({ statistics }: InferPageProps<DashboardController, 'showDashboard'>) => {
   const [chatVisible, setChatVisible] = useState(false)
 
   const messages = [
@@ -21,6 +24,7 @@ const Dashboard = () => {
   ]
 
   const [newMessage, setNewMessage] = useState('')
+  const { user } = usePage<SharedProps>().props
 
   // Données de progression
   const progression = {
@@ -29,16 +33,6 @@ const Dashboard = () => {
     currentElo: 1850,
     requiredElo: 2000,
     progress: (1850 / 2000) * 100,
-  }
-
-  // Données des statistiques
-  const statistics = {
-    gamesPlayed: 142,
-    winRatio: 68.5,
-    averageScore: 856,
-    bestScore: 1250,
-    totalPlayTime: '46h',
-    winStreak: 5,
   }
 
   const userData = {
@@ -283,21 +277,19 @@ const Dashboard = () => {
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 h-full">
-                          {Object.entries(statistics).map(([key, value]) => (
-                            <div
-                              key={key}
-                              className="bg-gray-900 rounded-lg p-1.5 sm:p-2 border border-gray-800 flex flex-col hover:bg-gray-850 transition-all duration-300 hover:border-gray-700 group"
-                            >
-                              <div className="text-[10px] sm:text-sm md:text-base font-semibold capitalize text-gray-300 mb-0.5 sm:mb-1 group-hover:text-gray-100 transition-colors">
-                                {key.split(/(?=[A-Z])/).join(' ')}
-                              </div>
-                              <div className="text-sm sm:text-lg md:text-xl font-bold text-violet-400 group-hover:text-violet-300 transition-all duration-300">
-                                {typeof value === 'number' && key.toLowerCase().includes('ratio')
-                                  ? `${value}%`
-                                  : value}
-                              </div>
-                            </div>
-                          ))}
+                          {/* Game played */}
+                          <StatisticCard value={statistics.gamesPlayed} label="Games Played" />
+                          <StatisticCard value={statistics.winRatio} label="Win Ratio" />
+                          <StatisticCard value={statistics.winStreak} label="Win Streak" />
+                          <StatisticCard
+                            value={statistics.correctQuestions}
+                            label="Correct Answers"
+                          />
+                          <StatisticCard value={statistics.wrongQuestions} label="Wrong Answers " />
+                          <StatisticCard
+                            value={statistics.averagePerformance}
+                            label="Average Performance"
+                          />
                         </div>
                       </div>
                     </div>

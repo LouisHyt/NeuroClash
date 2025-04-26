@@ -26,7 +26,9 @@ const Register = () => {
         {/* Zone de connexion */}
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-1 text-fuchsia-200/80">
           <div className="flex flex-col gap-5">
-            <p className="text-2xl color-gray-200 uppercase font-bold">Where it all begins</p>
+            <p className="text-2xl color-gray-200 uppercase font-bold text-pretty">
+              Where it all begins
+            </p>
             <h2 className="text-4xl font-bold text-white">Join the adventure!</h2>
             <p>
               Already a member?{' '}
@@ -200,7 +202,7 @@ const Register = () => {
               )}
             </div>
 
-            {/* Remember me */}
+            {/* Accept terms */}
             <div className="flex flex-col gap-1 mt-2">
               <div className="relative flex items-center">
                 <input

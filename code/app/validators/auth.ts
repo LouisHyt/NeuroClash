@@ -40,5 +40,6 @@ export const loginValidator = vine.compile(
   vine.object({
     username: vine.string().trim(),
     password: vine.string().trim(),
+    remember_me: vine.boolean(),
   })
 )
