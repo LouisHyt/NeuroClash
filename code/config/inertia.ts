@@ -25,13 +25,16 @@ const inertiaConfig = defineConfig({
         >[]
       }),
     user: async (ctx) => {
+      if (!ctx.auth?.user) return null
       await ctx.auth?.user?.load('statistic')
-      const rankManager = new RankManager();
-      const rank = ctx.auth?.user ? await rankManager.getPlayerRank(ctx.auth?.user?.statistic?.elo) : null;
+      const rankManager = new RankManager()
+      const rank = ctx.auth?.user
+        ? await rankManager.getPlayerRank(ctx.auth?.user?.statistic?.elo)
+        : null
       return {
         ...ctx.auth?.user?.toJSON(),
-        rank: rank
-      } as UserSharedType;
+        rank: rank,
+      } as UserSharedType
     },
   },
 

@@ -5,6 +5,7 @@ import type { SharedProps } from '@adonisjs/inertia/types'
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user } = usePage<SharedProps>().props
+  console.log(user)
 
   return (
     <nav className="bg-black/40 border-b border-violet-500/20 z-40 relative">
@@ -33,7 +34,7 @@ const Navbar = () => {
                   <img
                     src={user.avatarUrl}
                     alt={`${user.username}'s avatar`}
-                    className="w-8 h-8 rounded-full object-cover border-2 border-violet-500"
+                    className="w-8 h-8 rounded-full object-cover"
                   />
                 </div>
                 <div className="flex flex-col">

@@ -155,7 +155,7 @@ const GeneralChat = () => {
                   exit={{ opacity: 0, x: -10 }}
                   transition={{ duration: 0.25 }}
                 >
-                  {user.isAdmin && (
+                  {user!.isAdmin && (
                     <button
                       onClick={handleDeleteMessage}
                       className="absolute top-1 right-1 cursor-pointer"

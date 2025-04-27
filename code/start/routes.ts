@@ -12,8 +12,9 @@ import { middleware } from './kernel.js'
 
 const AuthController = () => import('#controllers/auth_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
+const BanController = () => import('#controllers/ban_controller')
 
-router.on('/').renderInertia('home')
+router.on('/').renderInertia('home').as('home')
 
 //Auth
 router
@@ -28,6 +29,9 @@ router
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
-    router.post('/logout', [AuthController, 'logout']).use(middleware.auth()).as('auth.logout')
+    router.post('/logout', [AuthController, 'logout']).as('auth.logout')
   })
   .use(middleware.auth())
+  .use(middleware.ban())
+
+router.get('/ban', [BanController, 'showBan']).as('ban').use(middleware.auth())
