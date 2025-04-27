@@ -19,6 +19,7 @@ const inertiaConfig = defineConfig({
     flashes: (ctx) =>
       ctx.inertia.always(() => {
         const flashes = ctx.session?.flashMessages.all()
+        if (!flashes) return [] as Record<string, string>[]
         return Object.entries(flashes).map(([type, message]) => ({ type, message })) as Record<
           string,
           string

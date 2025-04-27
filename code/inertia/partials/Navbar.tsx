@@ -5,7 +5,6 @@ import type { SharedProps } from '@adonisjs/inertia/types'
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user } = usePage<SharedProps>().props
-  console.log(user)
 
   return (
     <nav className="bg-black/40 border-b border-violet-500/20 z-40 relative">

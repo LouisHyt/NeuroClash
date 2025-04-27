@@ -10,7 +10,10 @@ import {
   FiUserX,
   FiSlash,
   FiFrown,
+  FiWifiOff,
 } from 'react-icons/fi'
+
+import { FaQuestion, FaRegFaceSadCry } from 'react-icons/fa6'
 
 export const BackgroundEffect = {
   default: {
@@ -61,6 +64,14 @@ export const BackgroundEffect = {
     theme: {
       gradient: 'rgba(68, 181, 240, 0.09)',
       overlay: 'from-blue-500/7',
+    },
+  },
+  error: {
+    icons: [FaQuestion, FiXOctagon, FaRegFaceSadCry, FiWifiOff],
+    colors: ['text-red-500/50', 'text-orange-500/50', 'text-red-700/50', 'text-orange-800/50'],
+    theme: {
+      gradient: 'rgba(183, 36, 54, 0.1)',
+      overlay: 'from-red-500/2',
     },
   },
 }
