@@ -1,6 +1,10 @@
+import Rank from '#models/rank'
 import type User from '#models/user'
+import { RankManager } from '#services/rank_manager'
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
+
+type UserSharedType = User & { rank: Rank }
 
 const inertiaConfig = defineConfig({
   /**
@@ -22,7 +26,12 @@ const inertiaConfig = defineConfig({
       }),
     user: async (ctx) => {
       await ctx.auth?.user?.load('statistic')
-      return ctx.auth?.user as User
+      const rankManager = new RankManager();
+      const rank = ctx.auth?.user ? await rankManager.getPlayerRank(ctx.auth?.user?.statistic?.elo) : null;
+      return {
+        ...ctx.auth?.user?.toJSON(),
+        rank: rank
+      } as UserSharedType;
     },
   },
 

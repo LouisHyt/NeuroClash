@@ -1,6 +1,7 @@
 import { Socket, Namespace } from 'socket.io'
 import User from '#models/user'
 import { cuid } from '@adonisjs/core/helpers'
+import { RankManager } from '#services/rank_manager'
 
 export default class GeneralSocketController {
   constructor(private io: Namespace) {}
@@ -13,6 +14,10 @@ export default class GeneralSocketController {
   private async handleSendMessage(socket: Socket, message: string) {
     const user = await User.findBy('uuid', socket.data.userUuid)
     if (!user) return
+    await user.load('statistic')
+    const rankManager = new RankManager()
+    const rank = await rankManager.getPlayerRank(user.statistic.elo)
+
     this.io.emit('newChatMessage', {
       message,
       id: cuid(),
@@ -20,6 +25,7 @@ export default class GeneralSocketController {
         username: user.username,
         avatarUrl: user.avatarUrl,
         isAdmin: user.isAdmin,
+        rankIcon: rank?.iconUrl,
       },
       time: new Date().toLocaleTimeString('en-US', {
         hour: '2-digit',

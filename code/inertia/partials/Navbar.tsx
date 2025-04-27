@@ -26,6 +26,11 @@ const Navbar = () => {
               >
                 <div className="relative">
                   <img
+                    src={user.rank?.iconUrl}
+                    alt={`${user.username}'s rank border`}
+                    className="absolute aspect-square scale-125 bottom-0.75"
+                  />
+                  <img
                     src={user.avatarUrl}
                     alt={`${user.username}'s avatar`}
                     className="w-8 h-8 rounded-full object-cover border-2 border-violet-500"
