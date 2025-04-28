@@ -112,7 +112,6 @@ const Dashboard = ({
                           <span>Join Game</span>
                         </div>
                       </button>
-
                     </div>
                   </div>
                 </div>
@@ -216,7 +215,7 @@ const Dashboard = ({
                       data-swapy-item="c"
                       className="item bg-gradient-to-br from-slate-800/80 via-indigo-900/10 to-slate-800/80 border border-indigo-400/30 rounded-lg p-3 sm:p-4 h-full backdrop-blur-md shadow-lg"
                     >
-                      <div className="h-full flex flex-col">
+                      <div className="h-full flex flex-col @container">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
                             <svg
@@ -238,7 +237,7 @@ const Dashboard = ({
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 h-full">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 h-full text-sm">
                           {/* Game played */}
                           <StatisticCard value={statistics.gamesPlayed} label="Games Played" />
                           <StatisticCard value={statistics.winRatio} label="Win Ratio" />
