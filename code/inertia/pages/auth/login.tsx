@@ -1,6 +1,7 @@
 import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
 import { Head, useForm } from '@inertiajs/react'
+import Flashes from '~/partials/Flashes'
 
 const Login = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -18,6 +19,7 @@ const Login = () => {
   return (
     <>
       <Head title="Login" />
+      <Flashes />
       <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
         <GridBackground animated={true} iconsDensity={22} type="auth" />
         <Navbar />

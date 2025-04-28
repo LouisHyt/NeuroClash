@@ -1,6 +1,6 @@
 import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
-import { Head, useForm } from '@inertiajs/react'
+import { Head, Link, useForm } from '@inertiajs/react'
 
 const Register = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -237,9 +237,13 @@ const Register = () => {
                   </div>
                   <p>
                     I agree to the{' '}
-                    <a href="/register" className="underline text-cyan-500">
+                    <Link href="/register" className="underline text-cyan-500">
                       Terms & Conditions
-                    </a>
+                    </Link>{' '}
+                    And the{' '}
+                    <Link href="/rules" className="underline text-cyan-500">
+                      Community rules
+                    </Link>
                   </p>
                 </label>
               </div>

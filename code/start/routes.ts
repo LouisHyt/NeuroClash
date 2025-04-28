@@ -15,6 +15,7 @@ const DashboardController = () => import('#controllers/dashboard_controller')
 const BanController = () => import('#controllers/ban_controller')
 
 router.on('/').renderInertia('home').as('home')
+router.on('/rules').renderInertia('rules').as('rules')
 
 //Auth
 router

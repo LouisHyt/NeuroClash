@@ -4,7 +4,10 @@ import User from '#models/user'
 import Statistic from '#models/statistic'
 
 export default class AuthController {
-  showLogin({ inertia }: HttpContext) {
+  showLogin({ inertia, session }: HttpContext) {
+    session.flash('error', ['You account has been suspended', 'Your account has been deleted'])
+    session.flash('warning', ['Please contact an administrator'])
+    session.flash('success', ['Please contact an administratorqzdq'])
     return inertia.render('auth/login')
   }
 
@@ -24,7 +27,10 @@ export default class AuthController {
     const { email, password, username } = await ctx.request.validateUsing(registerValidator)
     const user = await User.create({ email, password, username })
     await Statistic.create({ userUuid: user.uuid })
-    ctx.session.flash('success', 'Account created successfully, please login')
+    ctx.session.flash(
+      'success',
+      'Your account has been successfully created! Please login to continue'
+    )
     return ctx.response.redirect().toRoute('auth.login')
   }
 

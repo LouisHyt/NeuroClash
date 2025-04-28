@@ -79,22 +79,7 @@ const Dashboard = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-blue-800/60 to-indigo-900/50 group-hover:from-blue-800/70 group-hover:to-indigo-900/60 transition-all duration-300"></div>
                         <div className="relative z-10 flex flex-col items-center">
                           <HiOutlineSearch className="w-8 h-8 mb-2" />
-                          <span>Trouver une partie</span>
-                        </div>
-                      </button>
-
-                      {/* Bouton Rejoindre une partie */}
-                      <button
-                        className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
-                        style={{
-                          backgroundImage: "url('https://picsum.photos/seed/joingame/400/200')",
-                        }}
-                      >
-                        {/* Overlay avec dégradé plus subtil */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-green-700/60 to-cyan-800/50 group-hover:from-green-700/70 group-hover:to-cyan-800/60 transition-all duration-300"></div>
-                        <div className="relative z-10 flex flex-col items-center">
-                          <HiOutlineUserGroup className="w-8 h-8 mb-2" />
-                          <span>Rejoindre une partie</span>
+                          <span>Find game</span>
                         </div>
                       </button>
 
@@ -109,9 +94,25 @@ const Dashboard = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-purple-800/60 to-pink-900/50 group-hover:from-purple-800/70 group-hover:to-pink-900/60 transition-all duration-300"></div>
                         <div className="relative z-10 flex flex-col items-center">
                           <HiOutlinePlusCircle className="w-8 h-8 mb-2" />
-                          <span>Créer une partie privée</span>
+                          <span>Create private game</span>
                         </div>
                       </button>
+
+                      {/* Bouton Rejoindre une partie */}
+                      <button
+                        className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
+                        style={{
+                          backgroundImage: "url('https://picsum.photos/seed/joingame/400/200')",
+                        }}
+                      >
+                        {/* Overlay avec dégradé plus subtil */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-green-700/60 to-cyan-800/50 group-hover:from-green-700/70 group-hover:to-cyan-800/60 transition-all duration-300"></div>
+                        <div className="relative z-10 flex flex-col items-center">
+                          <HiOutlineUserGroup className="w-8 h-8 mb-2" />
+                          <span>Join Game</span>
+                        </div>
+                      </button>
+
                     </div>
                   </div>
                 </div>
