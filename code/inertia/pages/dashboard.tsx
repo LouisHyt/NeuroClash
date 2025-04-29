@@ -8,7 +8,6 @@ import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-
 import type { InferPageProps } from '@adonisjs/inertia/types'
 import type DashboardController from '#controllers/dashboard_controller'
 import GeneralChat from '~/components/GeneralChat'
-import Footer from '~/partials/Footer'
 
 const Dashboard = ({
   statistics,

@@ -4,20 +4,45 @@ import GridBackground from '~/components/GridBackground'
 import Footer from '~/partials/Footer'
 import type { SharedProps } from '@adonisjs/inertia/types'
 import { useState } from 'react'
+import { DateTime } from 'luxon'
+import Flashes from '~/partials/Flashes'
 
 type TabTypes = 'info' | 'edit' | 'security'
 
 const Profile = () => {
   const { user } = usePage<SharedProps>().props
 
+  const userCreationDate = DateTime.fromISO(user?.createdAt.toLocaleString()!)
+    .toFormat('MM/dd/yyyy')
+    .toLowerCase()
+
   const [isEditing, setIsEditing] = useState(false)
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [activeTab, setActiveTab] = useState<TabTypes>('info')
 
-  const { data, setData, post, processing, errors } = useForm({
-    username: '',
-    bio: '',
+  const {
+    data: profileData,
+    setData: setProfileData,
+    post: postProfile,
+    processing: profileProcessing,
+    errors: profileErrors,
+  } = useForm({
+    username: user?.username || '',
+    bio: user?.bio || '',
+  })
+
+  const {
+    data: passwordData,
+    setData: setPasswordData,
+    post: postPassword,
+    processing: passwordProcessing,
+    errors: passwordErrors,
+  } = useForm({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+    E_INVALID_CREDENTIALS: '',
   })
 
   const handleTabChange = (tab: TabTypes) => {
@@ -27,14 +52,24 @@ const Profile = () => {
     setShowDeleteConfirm(false)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    post('/login')
+    postProfile('/update-profile')
+  }
+
+  const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    postPassword('/update-password')
+  }
+
+  const handleDeleteAccount = () => {
+    console.log('delete account')
   }
 
   return (
     <>
       <Head title="Profile" />
+      <Flashes />
       <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden text-fuchsia-200/80 grid grid-rows-[auto_1fr_auto]">
         <GridBackground animated={true} type="profile" />
         <Navbar />
@@ -61,9 +96,7 @@ const Profile = () => {
 
                 {/* Nom d'utilisateur */}
                 <h2 className="text-2xl font-bold text-white mb-1">{user?.username}</h2>
-                <p className="text-gray-400 text-sm mb-4">
-                  Member since {user?.createdAt.toLocaleString()}
-                </p>
+                <p className="text-gray-400 text-sm mb-4">Member since {userCreationDate}</p>
 
                 {/* Statistiques */}
                 <div className="w-full grid grid-cols-2 gap-2 mb-4">
@@ -71,18 +104,24 @@ const Profile = () => {
                     <p className="text-xl font-bold text-fuchsia-300">
                       {user?.statistic.totalGames}
                     </p>
-                    <p className="text-xs text-gray-400">Parties</p>
+                    <p className="text-xs text-gray-400">Games</p>
                   </div>
                   <div className="text-center p-2 bg-violet-900/20 rounded-lg border border-violet-500/20">
                     <p className="text-xl font-bold text-fuchsia-300">0</p>
-                    <p className="text-xs text-gray-400">Victoires</p>
+                    <p className="text-xs text-gray-400">Victories</p>
                   </div>
                 </div>
 
                 {/* Bio */}
                 <div className="w-full mb-4">
                   <h3 className="text-sm uppercase text-gray-400 mb-2">Bio</h3>
-                  <p className="text-sm text-gray-300">{user?.bio}</p>
+                  {!user?.bio || user?.bio.length === 0 ? (
+                    <p className="text-sm text-gray-300 italic font-thin">
+                      You can add a bio by editing your informations
+                    </p>
+                  ) : (
+                    <p className="text-gray-300 text-sm">{user?.bio}</p>
+                  )}
                 </div>
               </div>
             </div>
@@ -93,21 +132,21 @@ const Profile = () => {
               <div className="flex flex-wrap border-b border-violet-500/30 mb-6 overflow-x-auto">
                 <button
                   onClick={() => handleTabChange('info')}
-                  className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${activeTab === 'info' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
+                  className={`px-3 sm:px-4 py-2 text-xs cursor-pointer sm:text-sm font-medium whitespace-nowrap ${activeTab === 'info' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
                 >
                   Informations
                 </button>
                 <button
                   onClick={() => handleTabChange('edit')}
-                  className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${activeTab === 'edit' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
+                  className={`px-3 sm:px-4 py-2 text-xs cursor-pointer sm:text-sm font-medium whitespace-nowrap ${activeTab === 'edit' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
                 >
-                  Modifier le profil
+                  Edit profile
                 </button>
                 <button
                   onClick={() => handleTabChange('security')}
-                  className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium whitespace-nowrap ${activeTab === 'security' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
+                  className={`px-3 sm:px-4 py-2 cursor-pointer text-xs sm:text-sm font-medium whitespace-nowrap ${activeTab === 'security' ? 'text-fuchsia-400 border-b-2 border-fuchsia-500' : 'text-gray-400 hover:text-fuchsia-300'}`}
                 >
-                  Sécurité
+                  Security
                 </button>
               </div>
 
@@ -116,22 +155,22 @@ const Profile = () => {
                 {/* Onglet Informations */}
                 {activeTab === 'info' && (
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-6">Informations du profil</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">Profile informations</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <h3 className="text-sm uppercase text-gray-400 mb-2">Nom d'utilisateur</h3>
+                        <h3 className="text-sm uppercase text-gray-400 mb-2">Username</h3>
                         <p className="text-lg text-white">{user?.username}</p>
                       </div>
 
                       <div>
-                        <h3 className="text-sm uppercase text-gray-400 mb-2">Adresse email</h3>
+                        <h3 className="text-sm uppercase text-gray-400 mb-2">Email Adress</h3>
                         <p className="text-lg text-white">{user?.email}</p>
                       </div>
 
                       <div>
-                        <h3 className="text-sm uppercase text-gray-400 mb-2">Date d'inscription</h3>
-                        <p className="text-lg text-white">{user?.createdAt.toLocaleString()}</p>
+                        <h3 className="text-sm uppercase text-gray-400 mb-2">Inscription date</h3>
+                        <p className="text-lg text-white">{userCreationDate}</p>
                       </div>
 
                       <div>
@@ -144,13 +183,17 @@ const Profile = () => {
 
                     <div className="mt-8">
                       <h3 className="text-sm uppercase text-gray-400 mb-2">Bio</h3>
-                      <p className="text-white">{user?.bio}</p>
+                      {!user?.bio || user?.bio.length === 0 ? (
+                        <p className="text-slate-400">You have no bio for the moment</p>
+                      ) : (
+                        <p className="text-white">{user?.bio}</p>
+                      )}
                     </div>
 
                     <div className="mt-8 flex justify-end">
                       <button
                         onClick={() => handleTabChange('edit')}
-                        className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
+                        className="px-4 py-2 cursor-pointer bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
                       >
                         Edit profile
                       </button>
@@ -171,13 +214,13 @@ const Profile = () => {
 
                         <button
                           onClick={() => setIsEditing(true)}
-                          className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
+                          className="px-4 py-2 cursor-pointer bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
                         >
                           Start editing
                         </button>
                       </div>
                     ) : (
-                      <form className="space-y-6" onSubmit={handleSubmit}>
+                      <form className="space-y-6" onSubmit={handleProfileSubmit}>
                         {/* Champ Username avec label flottant */}
                         <div className="relative">
                           <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
@@ -185,8 +228,9 @@ const Profile = () => {
                               type="text"
                               id="username"
                               placeholder="Username"
-                              value={data.username}
-                              onChange={(e) => setData('username', e.target.value)}
+                              required
+                              value={profileData.username}
+                              onChange={(e) => setProfileData('username', e.target.value)}
                               className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 peer"
                             />
                             <label
@@ -196,6 +240,11 @@ const Profile = () => {
                               Username
                             </label>
                           </div>
+                          {profileErrors.username && (
+                            <div className="text-red-500 text-sm mt-1">
+                              {profileErrors.username}
+                            </div>
+                          )}
                         </div>
 
                         {/* Champ Bio avec label flottant */}
@@ -205,8 +254,8 @@ const Profile = () => {
                               id="bio"
                               placeholder="Bio"
                               name="bio"
-                              value={data.bio}
-                              onChange={(e) => setData('bio', e.target.value)}
+                              value={profileData.bio}
+                              onChange={(e) => setProfileData('bio', e.target.value)}
                               className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 peer h-24 resize-none"
                             />
                             <label
@@ -216,20 +265,23 @@ const Profile = () => {
                               Bio
                             </label>
                           </div>
+                          {profileErrors.bio && (
+                            <div className="text-red-500 text-sm mt-1">{profileErrors.bio}</div>
+                          )}
                         </div>
 
                         <div className="flex justify-end gap-3">
                           <button
                             type="button"
                             onClick={() => setIsEditing(false)}
-                            className="px-4 py-2 border border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
+                            className="px-4 py-2 border cursor-pointer  border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
                           >
                             Cancel
                           </button>
                           <button
                             type="submit"
-                            disabled={processing}
-                            className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
+                            disabled={profileProcessing}
+                            className="px-4 py-2 cursor-pointer bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
                           >
                             Save
                           </button>
@@ -242,36 +294,33 @@ const Profile = () => {
                 {/* Onglet Sécurité */}
                 {activeTab === 'security' && (
                   <div>
-                    <h2 className="text-2xl font-bold text-white mb-6">Paramètres de sécurité</h2>
+                    <h2 className="text-2xl font-bold text-white mb-6">Security settings</h2>
 
                     {/* Changement de mot de passe */}
                     <div className="mb-8">
-                      <h3 className="text-lg font-semibold text-fuchsia-300 mb-4">
-                        Changer le mot de passe
-                      </h3>
+                      <h3 className="text-lg font-semibold text-fuchsia-300 mb-4">Edit password</h3>
 
                       {!isChangingPassword ? (
                         <button
                           onClick={() => setIsChangingPassword(true)}
-                          className="px-4 py-2 border border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
+                          className="px-4 py-2 cursor-pointer border border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
                         >
-                          Changer le mot de passe
+                          Change the password
                         </button>
                       ) : (
-                        <form className="space-y-4">
+                        <form className="space-y-4" onSubmit={handlePasswordSubmit}>
                           {/* Mot de passe actuel */}
                           <div className="relative">
                             <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                               <input
                                 type="password"
                                 id="currentPassword"
-                                placeholder="Mot de passe actuel"
-                                value={passwordData.currentPassword}
+                                name="current_password"
+                                required
+                                placeholder="Current password"
+                                value={passwordData.current_password}
                                 onChange={(e) =>
-                                  setPasswordData({
-                                    ...passwordData,
-                                    currentPassword: e.target.value,
-                                  })
+                                  setPasswordData('current_password', e.target.value)
                                 }
                                 className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 peer"
                               />
@@ -279,9 +328,19 @@ const Profile = () => {
                                 htmlFor="currentPassword"
                                 className="absolute text-gray-400 text-xs left-4 top-1.5 transition-all duration-200 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus-within:text-xs peer-focus-within:top-1.5 peer-focus-within:text-violet-300"
                               >
-                                Mot de passe actuel
+                                Current password
                               </label>
                             </div>
+                            {passwordErrors.E_INVALID_CREDENTIALS && (
+                              <div className="text-red-500 text-sm mt-1">
+                                The password is not correct
+                              </div>
+                            )}
+                            {passwordErrors.current_password && (
+                              <div className="text-red-500 text-sm mt-1">
+                                {passwordErrors.current_password}
+                              </div>
+                            )}
                           </div>
 
                           {/* Nouveau mot de passe */}
@@ -290,20 +349,25 @@ const Profile = () => {
                               <input
                                 type="password"
                                 id="newPassword"
-                                placeholder="Nouveau mot de passe"
-                                value={passwordData.newPassword}
-                                onChange={(e) =>
-                                  setPasswordData({ ...passwordData, newPassword: e.target.value })
-                                }
+                                name="new_password"
+                                placeholder="New password"
+                                required
+                                value={passwordData.new_password}
+                                onChange={(e) => setPasswordData('new_password', e.target.value)}
                                 className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 peer"
                               />
                               <label
                                 htmlFor="newPassword"
                                 className="absolute text-gray-400 text-xs left-4 top-1.5 transition-all duration-200 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus-within:text-xs peer-focus-within:top-1.5 peer-focus-within:text-violet-300"
                               >
-                                Nouveau mot de passe
+                                New password
                               </label>
                             </div>
+                            {passwordErrors.new_password && (
+                              <div className="text-red-500 text-sm mt-1">
+                                {passwordErrors.new_password}
+                              </div>
+                            )}
                           </div>
 
                           {/* Confirmer le nouveau mot de passe */}
@@ -312,13 +376,12 @@ const Profile = () => {
                               <input
                                 type="password"
                                 id="confirmPassword"
-                                placeholder="Confirmer le mot de passe"
-                                value={passwordData.confirmPassword}
+                                name="confirm_password"
+                                required
+                                placeholder="Confirm the password"
+                                value={passwordData.confirm_password}
                                 onChange={(e) =>
-                                  setPasswordData({
-                                    ...passwordData,
-                                    confirmPassword: e.target.value,
-                                  })
+                                  setPasswordData('confirm_password', e.target.value)
                                 }
                                 className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 peer"
                               />
@@ -326,25 +389,31 @@ const Profile = () => {
                                 htmlFor="confirmPassword"
                                 className="absolute text-gray-400 text-xs left-4 top-1.5 transition-all duration-200 peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-focus-within:text-xs peer-focus-within:top-1.5 peer-focus-within:text-violet-300"
                               >
-                                Confirmer le mot de passe
+                                Confirm password
                               </label>
                             </div>
+                            {passwordErrors.confirm_password && (
+                              <div className="text-red-500 text-sm mt-1">
+                                {passwordErrors.confirm_password}
+                              </div>
+                            )}
                           </div>
 
                           <div className="flex justify-end gap-3">
                             <button
                               type="button"
+                              disabled={passwordProcessing}
                               onClick={() => setIsChangingPassword(false)}
-                              className="px-4 py-2 border border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
+                              className="px-4 py-2 border cursor-pointer border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
                             >
-                              Annuler
+                              Cancel
                             </button>
                             <button
-                              type="button"
-                              onClick={handleChangePassword}
-                              className="px-4 py-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
+                              type="submit"
+                              disabled={passwordProcessing}
+                              className="px-4 py-2 cursor-pointer bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-lg font-medium text-sm"
                             >
-                              Mettre à jour
+                              Update
                             </button>
                           </div>
                         </form>
@@ -358,29 +427,29 @@ const Profile = () => {
                       {!showDeleteConfirm ? (
                         <button
                           onClick={() => setShowDeleteConfirm(true)}
-                          className="px-4 py-2 border border-red-500/50 text-red-400 rounded-lg font-medium text-sm hover:bg-red-500/10 transition-colors"
+                          className="px-4 py-2 cursor-pointer border border-red-500/50 text-red-400 rounded-lg font-medium text-sm hover:bg-red-500/10 transition-colors"
                         >
                           Supprimer mon compte
                         </button>
                       ) : (
                         <div className="border border-red-500/30 rounded-lg p-4 bg-red-900/10">
                           <p className="text-gray-300 mb-4">
-                            Cette action est irréversible. Toutes vos données seront définitivement
-                            supprimées.
+                            This action is irreversible. All your data will be permanently deleted.
+                            Are you sure ?
                           </p>
 
                           <div className="flex gap-3">
                             <button
                               onClick={() => setShowDeleteConfirm(false)}
-                              className="px-4 py-2 border border-gray-500/50 text-gray-300 rounded-lg font-medium text-sm hover:bg-gray-500/10 transition-colors"
+                              className="px-4 py-2 border cursor-pointer border-gray-500/50 text-gray-300 rounded-lg font-medium text-sm hover:bg-gray-500/10 transition-colors"
                             >
-                              Annuler
+                              Cancel
                             </button>
                             <button
                               onClick={handleDeleteAccount}
-                              className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium text-sm"
+                              className="px-4 py-2 cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium text-sm"
                             >
-                              Confirmer la suppression
+                              Yes
                             </button>
                           </div>
                         </div>

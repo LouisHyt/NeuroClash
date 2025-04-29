@@ -31,7 +31,12 @@ router
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
+
     router.get('/profile', [ProfileController, 'showProfile']).as('profile')
+    router.post('/update-profile', [ProfileController, 'editProfile']).as('profile.edit.login')
+    router.post('/update-password', [ProfileController, 'editPassword']).as('profile.edit.password')
+
+
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
   })
   .use(middleware.auth())

@@ -31,7 +31,7 @@ const Flashes = () => {
     })
 
     setFlashesOpen(flatFlashes)
-  }, [])
+  }, [flashes])
 
   const handleDeleteFlash = (id: string) => {
     setFlashesOpen((prev) => prev.filter((flash) => flash.id !== id))

@@ -5,16 +5,6 @@ import Statistic from '#models/statistic'
 
 export default class AuthController {
   showLogin({ inertia, session }: HttpContext) {
-    session.flash('error', {
-      E_ACCOUNT_BANNED: 'Your account has been banned',
-      E_ACCOUNT_SUSPENDED: 'Your account has been suspended',
-    })
-    session.flash('warning', {
-      W_CONTACT_ADMIN: 'Please contact an administrator',
-    })
-    session.flash('success', {
-      S_LOGIN_SUCCESS: 'Successfully logged in',
-    })
     return inertia.render('auth/login')
   }
 
@@ -22,7 +12,9 @@ export default class AuthController {
     const { username, password } = await ctx.request.validateUsing(loginValidator)
     const user = await User.verifyCredentials(username, password)
     await ctx.auth.use('web').login(user)
-    ctx.session.flash('success', `Welcome back ${username}!`)
+    ctx.session.flash('success', {
+      S_LOGIN_SUCCESS: 'Welcome back ' + user.username,
+    })
     return ctx.response.redirect().toRoute('dashboard')
   }
 
@@ -34,16 +26,17 @@ export default class AuthController {
     const { email, password, username } = await ctx.request.validateUsing(registerValidator)
     const user = await User.create({ email, password, username })
     await Statistic.create({ userUuid: user.uuid })
-    ctx.session.flash(
-      'success',
-      'Your account has been successfully created! Please login to continue'
-    )
+    ctx.session.flash('success', {
+      S_REGISTER_SUCCESS: 'You account has been successfully created, please Login',
+    })
     return ctx.response.redirect().toRoute('auth.login')
   }
 
   async logout(ctx: HttpContext) {
     await ctx.auth.use('web').logout()
-    ctx.session.flash('success', 'Successfully logged out')
+    ctx.session.flash('success', {
+      S_LOGOUT_SUCCESS: 'Successfully logged out',
+    })
     return ctx.response.redirect().toRoute('auth.login')
   }
 }
