@@ -11,6 +11,12 @@
   body {
     @apply antialiased;
   }
+
+  input[type=password]::-ms-reveal,
+  input[type=password]::-ms-clear
+  {
+      display: none;
+  }
 }
 
 /* Scrollbars style */

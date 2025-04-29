@@ -97,6 +97,8 @@
   "prettier": "@adonisjs/prettier-config",
   "pnpm": {
     "ignoredBuiltDependencies": [
+      "@swc/core",
+      "esbuild",
       "exifreader"
     ]
   }

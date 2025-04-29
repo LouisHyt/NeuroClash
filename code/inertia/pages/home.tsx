@@ -2,7 +2,16 @@ import { useState } from 'react'
 import Navbar from '~/partials/Navbar'
 import { Head, Link } from '@inertiajs/react'
 import GridBackground from '../components/GridBackground'
-import { FaArrowUpWideShort, FaUserGroup, FaFileCircleQuestion, FaGamepad, FaBolt, FaStairs, FaChevronDown } from "react-icons/fa6";
+import {
+  FaArrowUpWideShort,
+  FaUserGroup,
+  FaFileCircleQuestion,
+  FaGamepad,
+  FaBolt,
+  FaStairs,
+  FaChevronDown,
+} from 'react-icons/fa6'
+import Footer from '~/partials/Footer'
 
 function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -29,16 +38,15 @@ function Home() {
         'If you encounter a problem, you can report it by sending an email at support@neuroclash.com. It will help us improve the platform!',
     },
     {
-      question: 'My account has been suspended and i don\'t know why !',
-      answer:
-        `If you have been suspended, you probably violated our rules. If you think this is a mistake, you can contact our support team at support@neuroclash.com`,
-    }
+      question: "My account has been suspended and i don't know why !",
+      answer: `If you have been suspended, you probably violated our rules. If you think this is a mistake, you can contact our support team at support@neuroclash.com`,
+    },
   ]
 
   return (
     <>
       <Head title="Home" />
-      <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
+      <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden grid grid-rows-[auto_1fr_auto]">
         <Navbar />
         <GridBackground type="default" animated={true} />
 
@@ -51,10 +59,16 @@ function Home() {
               Join a passionate community, test your knowledge, and climb the global rankings!
             </p>
             <div className="flex flex-col items-center sm:flex-row gap-4 justify-center">
-              <Link href="/register" className="cursor-pointer bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:opacity-90 transition-colors max-w-max">
+              <Link
+                href="/register"
+                className="cursor-pointer bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:opacity-90 transition-colors max-w-max"
+              >
                 <span>Start the Adventure</span>
               </Link>
-              <a href="#features" className="cursor-pointer bg-black/40 text-fuchsia-400 px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:bg-black/60 border border-violet-500/20 max-w-max">
+              <a
+                href="#features"
+                className="cursor-pointer bg-black/40 text-fuchsia-400 px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:bg-black/60 border border-violet-500/20 max-w-max"
+              >
                 Learn More
               </a>
             </div>
@@ -74,7 +88,7 @@ function Home() {
             <div className="mt-12 grid md:grid-cols-3 gap-8">
               <div className="group bg-black/40 p-6 rounded-xl border border-violet-500/20">
                 <div className="h-12 w-12 bg-gradient-to-br from-violet-600 to-fuchsia-500 rounded-lg flex items-center justify-center mb-4">
-                  <FaArrowUpWideShort color="white" size={22}/>
+                  <FaArrowUpWideShort color="white" size={22} />
                 </div>
                 <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 mb-2">
                   Competition
@@ -83,10 +97,10 @@ function Home() {
                   Challenge the best players and climb the rankings.
                 </p>
               </div>
-           
+
               <div className="group bg-black/40 p-6 rounded-xl border border-violet-500/20">
                 <div className="h-12 w-12 bg-gradient-to-br from-violet-600 to-fuchsia-500 rounded-lg flex items-center justify-center mb-4">
-                 <FaFileCircleQuestion color="white" size={22}/>
+                  <FaFileCircleQuestion color="white" size={22} />
                 </div>
                 <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 mb-2">
                   Diverse Questions
@@ -104,15 +118,14 @@ function Home() {
                   Engagement
                 </h3>
                 <p className="text-fuchsia-200/70">
-                Contribute to the evolution of Neuroclash by proposing your own questions.
+                  Contribute to the evolution of Neuroclash by proposing your own questions.
                 </p>
               </div>
-
 
               {/* Rank and Elo card */}
               <div className="group bg-black/40 p-6 rounded-xl border border-violet-500/20">
                 <div className="h-12 w-12 bg-gradient-to-br from-violet-600 to-fuchsia-500 rounded-lg flex items-center justify-center mb-4">
-                  <FaStairs color="white" size={22}/>
+                  <FaStairs color="white" size={22} />
                 </div>
                 <h3 className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 mb-2">
                   Rank & Elo
@@ -172,9 +185,11 @@ function Home() {
                     className="w-full px-6 py-4 text-left flex justify-between items-center cursor-pointer"
                   >
                     <span className="text-violet-100 font-medium">{item.question}</span>
-                    <FaChevronDown className={`text-violet-400 transform transition-transform ${
-                      openFaq === index ? 'rotate-180' : ''
-                    }`} />
+                    <FaChevronDown
+                      className={`text-violet-400 transform transition-transform ${
+                        openFaq === index ? 'rotate-180' : ''
+                      }`}
+                    />
                   </button>
                   <div
                     className={`
@@ -190,24 +205,7 @@ function Home() {
           </div>
         </section>
 
-        <footer className="py-4 border-t border-violet-500/10 relative z-5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center text-sm text-fuchsia-200/50">
-              <a href="/privacy" className="hover:text-fuchsia-200/70 transition-colors">
-                Privacy Policy
-              </a>
-              <span className="mx-2">•</span>
-              <a href="/terms" className="hover:text-fuchsia-200/70 transition-colors">
-                Terms of Service
-              </a>
-              <span className="mx-2">•</span>
-              <Link href="/rules" className="hover:text-fuchsia-200/70 transition-colors">
-                Community Rules
-              </Link>
-              <div className="mt-2 text-xs">2025 NeuroClash. All rights reserved.</div>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   )

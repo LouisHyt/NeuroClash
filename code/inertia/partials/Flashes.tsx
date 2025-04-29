@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react'
 const Flashes = () => {
   const { flashes } = usePage<SharedProps>().props
 
+  console.log(flashes)
+
   type Flash = (typeof flashes)[0]
 
   // Then define FlattenedFlash based on Flash, but ensure message is always a string
@@ -22,10 +24,12 @@ const Flashes = () => {
   }
 
   useEffect(() => {
-    const flatFlashes = flashes.flatMap((flash) => {
-      if (!Array.isArray(flash.message))
-        return { ...flash, message: flash.message, id: generateId() }
-      return flash.message.map((msg) => ({ type: flash.type, message: msg, id: generateId() }))
+    const flatFlashes = flashes.flatMap((item) => {
+      return Object.entries(item.message).map(([type, message]) => ({
+        type: item.type,
+        message,
+        id: generateId(),
+      }))
     })
 
     setFlashesOpen(flatFlashes)

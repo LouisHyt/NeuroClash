@@ -2,6 +2,10 @@ import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
 import { Head, useForm } from '@inertiajs/react'
 import Flashes from '~/partials/Flashes'
+import Footer from '~/partials/Footer'
+import { useState } from 'react'
+import { VscEyeClosed, VscEye } from 'react-icons/vsc'
+import { FiUser } from 'react-icons/fi'
 
 const Login = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -10,6 +14,8 @@ const Login = () => {
     remember_me: false as boolean,
     E_INVALID_CREDENTIALS: '',
   })
+
+  const [passwordVisible, setPasswordVisible] = useState(false)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -20,10 +26,9 @@ const Login = () => {
     <>
       <Head title="Login" />
       <Flashes />
-      <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden">
+      <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden grid grid-rows-[auto_1fr_auto]">
         <GridBackground animated={true} iconsDensity={22} type="auth" />
         <Navbar />
-
         {/* Zone de connexion */}
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-1 text-fuchsia-200/80">
           <div className="flex flex-col gap-5">
@@ -58,21 +63,7 @@ const Login = () => {
                   Username
                 </label>
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-gray-400"
-                  >
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
+                  <FiUser size={25} />
                 </div>
               </div>
               {errors.username && (
@@ -84,13 +75,13 @@ const Login = () => {
             <div className="relative flex flex-col gap-1">
               <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                 <input
-                  type="password"
+                  type={passwordVisible ? 'text' : 'password'}
                   id="password"
                   placeholder="Password"
                   required
                   value={data.password}
                   onChange={(e) => setData('password', e.target.value)}
-                  className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 pr-10 peer"
+                  className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 pr-10 peer appearance-none"
                 />
                 <label
                   htmlFor="password"
@@ -98,23 +89,20 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-gray-400"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </div>
+                <button
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  type="button"
+                  onClick={() => setPasswordVisible((prev) => !prev)}
+                  aria-controls="password"
+                  aria-label={passwordVisible ? 'Hide password' : 'Show password'}
+                  aria-pressed={passwordVisible}
+                >
+                  {passwordVisible ? (
+                    <VscEyeClosed size={25} aria-hidden={true} />
+                  ) : (
+                    <VscEye size={25} aria-hidden={true} />
+                  )}
+                </button>
               </div>
               <div className="flex justify-end mt-1">
                 <a href="/forgot-password" className="text-xs text-gray-400 hover:text-violet-400">
@@ -180,6 +168,7 @@ const Login = () => {
             )}
           </form>
         </div>
+        <Footer />
       </div>
     </>
   )
