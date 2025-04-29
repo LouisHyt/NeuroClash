@@ -4,17 +4,17 @@ import User from '#models/user'
 import Statistic from '#models/statistic'
 
 export default class AuthController {
-  showLogin({ inertia }: HttpContext) {
-    // session.flash('error', {
-    //   E_ACCOUNT_BANNED: 'Your account has been banned',
-    //   E_ACCOUNT_SUSPENDED: 'Your account has been suspended',
-    // })
-    // session.flash('warning', {
-    //   W_CONTACT_ADMIN: 'Please contact an administrator',
-    // })
-    // session.flash('success', {
-    //   S_LOGIN_SUCCESS: 'Successfully logged in',
-    // })
+  showLogin({ inertia, session }: HttpContext) {
+    session.flash('error', {
+      E_ACCOUNT_BANNED: 'Your account has been banned',
+      E_ACCOUNT_SUSPENDED: 'Your account has been suspended',
+    })
+    session.flash('warning', {
+      W_CONTACT_ADMIN: 'Please contact an administrator',
+    })
+    session.flash('success', {
+      S_LOGIN_SUCCESS: 'Successfully logged in',
+    })
     return inertia.render('auth/login')
   }
 

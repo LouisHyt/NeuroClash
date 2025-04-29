@@ -7,7 +7,9 @@ import type { InferSharedProps } from '@adonisjs/inertia/types'
 type UserSharedType = User & { rank: Rank }
 type FlashType = {
   type: 'success' | 'error' | 'warning'
-  message: string[]
+  message: {
+    [key: string]: string
+  }
 }[]
 
 const inertiaConfig = defineConfig({
@@ -23,7 +25,6 @@ const inertiaConfig = defineConfig({
     flashes: (ctx) =>
       ctx.inertia.always(() => {
         const flashes = ctx.session?.flashMessages.all()
-        console.log(flashes);
         if (!flashes) return [] as FlashType
         return Object.entries(flashes).map(([type, message]) => ({ type, message })) as FlashType
       }),

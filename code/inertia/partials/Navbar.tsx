@@ -52,6 +52,14 @@ const Navbar = () => {
                   Admin Panel
                 </Link>
               )}
+              {user && (
+                <Link
+                  href="/dashboard"
+                  className="px-4 py-2 bg-gradient-to-r from-violet-400 to-fuchsia-500 text-transparent bg-clip-text font-semibold mr-0"
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 method="post"
                 href="/logout"

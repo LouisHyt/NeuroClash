@@ -2,9 +2,9 @@ import { Link } from '@inertiajs/react'
 
 const Footer = () => {
   return (
-    <footer className="py-4 border-t border-violet-500/10 z-5 bg-[#0a0a0a] relative">
+    <footer className="py-3 border-t border-violet-500/10 z-5 bg-[#0a0a0a7c] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center text-sm text-fuchsia-200/50">
+        <div className="text-center text-sm text-slate-300/60">
           <a href="/privacy" className="hover:text-fuchsia-200/70 transition-colors">
             Privacy Policy
           </a>
