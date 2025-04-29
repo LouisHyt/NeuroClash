@@ -8,8 +8,6 @@ import { useEffect, useState } from 'react'
 const Flashes = () => {
   const { flashes } = usePage<SharedProps>().props
 
-  console.log(flashes)
-
   type Flash = (typeof flashes)[0]
 
   // Then define FlattenedFlash based on Flash, but ensure message is always a string
