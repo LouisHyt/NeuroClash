@@ -3,10 +3,11 @@ import type User from '#models/user'
 import { RankManager } from '#services/rank_manager'
 import { defineConfig } from '@adonisjs/inertia'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
+import FlashKeys from '#enums/Flashes'
 
 type UserSharedType = User & { rank: Rank }
 type FlashType = {
-  type: 'success' | 'error' | 'warning'
+  type: FlashKeys
   message: {
     [key: string]: string
   }

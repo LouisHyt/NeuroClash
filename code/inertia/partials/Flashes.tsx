@@ -5,6 +5,8 @@ import { FaCircleCheck } from 'react-icons/fa6'
 import { IoWarning } from 'react-icons/io5'
 import { BiSolidErrorAlt } from 'react-icons/bi'
 import { useEffect, useState } from 'react'
+import FlashKeys from '#enums/Flashes'
+
 const Flashes = () => {
   const { flashes } = usePage<SharedProps>().props
 
@@ -22,14 +24,22 @@ const Flashes = () => {
   }
 
   useEffect(() => {
-    const flatFlashes = flashes.flatMap((item) => {
-      return Object.entries(item.message).map(([type, message]) => ({
-        type: item.type,
-        message,
-        id: generateId(),
-      }))
-    })
+    const flatFlashes = flashes
+      .flatMap((item) => {
+        if (!item.message) return []
+        return Object.entries(item.message).map(([type, message]) => ({
+          type: item.type,
+          message,
+          id: generateId(),
+        }))
+      })
+      .filter(
+        (item) =>
+          [FlashKeys.SUCCESS, FlashKeys.WARNING, FlashKeys.ERROR].includes(item.type) &&
+          item.message !== ''
+      )
 
+    console.log(flatFlashes)
     setFlashesOpen(flatFlashes)
   }, [flashes])
 
@@ -47,9 +57,9 @@ const Flashes = () => {
             data-id={flash.id}
             className={`
               py-4 px-7 relative rounded-lg border shadow-md w-fit
-              ${flash.type === 'success' && 'sm:bg-green-500/20 bg-green-500/90 text-white sm:text-green-400 border-green-500/30'}
-              ${flash.type === 'warning' && 'sm:bg-yellow-500/20 bg-yellow-600/90 text-white sm:text-yellow-400 border-yellow-500/30'}
-              ${flash.type === 'error' && 'sm:bg-red-500/20 bg-red-500/90 text-white sm:text-red-400 border-red-500/30'}
+              ${flash.type === FlashKeys.SUCCESS && 'sm:bg-green-500/20 bg-green-500/90 text-white sm:text-green-400 border-green-500/30'}
+              ${flash.type === FlashKeys.WARNING && 'sm:bg-yellow-500/20 bg-yellow-600/90 text-white sm:text-yellow-400 border-yellow-500/30'}
+              ${flash.type === FlashKeys.ERROR && 'sm:bg-red-500/20 bg-red-500/90 text-white sm:text-red-400 border-red-500/30'}
             `}
             initial={{ opacity: 0, x: 35 }}
             animate={{ opacity: 1, x: 0 }}
@@ -57,13 +67,13 @@ const Flashes = () => {
             transition={{ duration: 0.5, delay: index * 0.2 }}
             onClick={() => handleDeleteFlash(flash.id)}
           >
-            {flash.type === 'success' && (
+            {flash.type === FlashKeys.SUCCESS && (
               <FaCircleCheck className="absolute -top-2 -left-3" size={32} />
             )}
-            {flash.type === 'warning' && (
+            {flash.type === FlashKeys.WARNING && (
               <IoWarning className="absolute -top-2 -left-3" size={35} />
             )}
-            {flash.type === 'error' && (
+            {flash.type === FlashKeys.ERROR && (
               <BiSolidErrorAlt className="absolute -top-2 -left-3" size={32} />
             )}
             <p>{flash.message}</p>
