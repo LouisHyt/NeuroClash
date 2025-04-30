@@ -14,6 +14,7 @@ const AuthController = () => import('#controllers/auth_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
 const BanController = () => import('#controllers/ban_controller')
 const ProfileController = () => import('#controllers/profile_controller')
+const QuestionsController = () => import('#controllers/questions_controller')
 
 router.on('/').renderInertia('home').as('home')
 router.on('/rules').renderInertia('rules').as('rules')
@@ -40,6 +41,8 @@ router
       .post('/profile/update/password', [ProfileController, 'editPassword'])
       .as('profile.edit.password')
     router.delete('/profile/delete', [ProfileController, 'deleteAccount']).as('profile.delete')
+
+    router.get('/suggest-question', [QuestionsController, 'showSuggestQuestion']).as('questions.suggest') 
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
   })

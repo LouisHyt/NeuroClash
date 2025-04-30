@@ -12,10 +12,38 @@
     @apply antialiased;
   }
 
-  input[type=password]::-ms-reveal,
-  input[type=password]::-ms-clear
-  {
-      display: none;
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    display: none;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  select option {
+    background-color: #0f0f0f;
+    color: #e9d5ff;
+    padding: 10px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+
+  select:focus {
+    outline: none;
+  }
+
+  /* Styles pour Firefox */
+  @-moz-document url-prefix() {
+    select {
+      color: #e9d5ff;
+      background-color: #0f0f0f;
+    }
   }
 }
 
