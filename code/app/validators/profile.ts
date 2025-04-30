@@ -6,7 +6,8 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'username.minLength': 'The username must be at least 3 characters.',
   'username.maxLength': 'The username must be at most 20 characters.',
   'bio.maxLength': 'The bio must be at most 175 characters.',
-  'current_password.invalid': 'The actual password is incorrect'
+  'current_password.invalid': 'The actual password is incorrect',
+  'new_password.confirmed': 'The passwords do not match.',
 })
 
 export const updateProfileValidator = vine.compile(
@@ -26,11 +27,7 @@ export const updateProfileValidator = vine.compile(
 
 export const updateProfileVarientValidator = vine.compile(
   vine.object({
-    username: vine
-      .string()
-      .trim()
-      .maxLength(25)
-      .minLength(3),
+    username: vine.string().trim().maxLength(25).minLength(3),
     bio: vine.string().maxLength(175).nullable(),
   })
 )

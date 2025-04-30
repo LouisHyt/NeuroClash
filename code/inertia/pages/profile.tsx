@@ -1,4 +1,4 @@
-import { Head, usePage, useForm } from '@inertiajs/react'
+import { Head, usePage, useForm, Link } from '@inertiajs/react'
 import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
 import Footer from '~/partials/Footer'
@@ -54,16 +54,20 @@ const Profile = () => {
 
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    postProfile('/update-profile')
+    postProfile('/profile/update/infos')
+    setActiveTab('info')
+    setIsEditing(false)
+    setIsChangingPassword(false)
+    setShowDeleteConfirm(false)
   }
 
   const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    postPassword('/update-password')
-  }
-
-  const handleDeleteAccount = () => {
-    console.log('delete account')
+    postPassword('/profile/update/password')
+    setActiveTab('info')
+    setIsEditing(false)
+    setIsChangingPassword(false)
+    setShowDeleteConfirm(false)
   }
 
   return (
@@ -445,12 +449,13 @@ const Profile = () => {
                             >
                               Cancel
                             </button>
-                            <button
-                              onClick={handleDeleteAccount}
+                            <Link
+                              href="/profile/delete"
+                              method="delete"
                               className="px-4 py-2 cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium text-sm"
                             >
                               Yes
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       )}

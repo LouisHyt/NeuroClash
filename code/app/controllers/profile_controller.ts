@@ -5,6 +5,7 @@ import {
   updateProfileVarientValidator,
 } from '#validators/profile'
 import User from '#models/user'
+import FlashKeys from '#enums/Flashes'
 
 export default class ProfileController {
   async showProfile({ inertia }: HttpContext) {
@@ -17,7 +18,7 @@ export default class ProfileController {
 
     //If no information changed
     if (user.username === username && user.bio === bio) {
-      ctx.session.flash('warning', {
+      ctx.session.flash(FlashKeys.WARNING, {
         W_NO_CHANGE: "You haven't done any changes. Your profile hasn't been updated",
       })
       return ctx.response.redirect().toRoute('profile')
@@ -28,7 +29,7 @@ export default class ProfileController {
       const { bio: newBio } = await ctx.request.validateUsing(updateProfileVarientValidator)
       user.bio = newBio
       await user.save()
-      ctx.session.flash('success', {
+      ctx.session.flash(FlashKeys.SUCCESS, {
         W_NO_CHANGE: 'Your profile has been successfully updated!',
       })
       return ctx.response.redirect().toRoute('profile')
@@ -39,7 +40,7 @@ export default class ProfileController {
     user.username = newUsername
     user.bio = newBio
     await user.save()
-    ctx.session.flash('success', {
+    ctx.session.flash(FlashKeys.SUCCESS, {
       W_NO_CHANGE: 'Your profile has been successfully updated!',
     })
     return ctx.response.redirect().toRoute('profile')
@@ -47,11 +48,28 @@ export default class ProfileController {
 
   async editPassword(ctx: HttpContext) {
     const user = ctx.auth.user!
-    const { current_password, password, confirm_password } =
+    const { current_password, new_password } =
       await ctx.request.validateUsing(updatePasswordValidator)
-
     await User.verifyCredentials(user.username, current_password)
 
-    return ''
+    //The new password is automatically hashed by AdonisJS
+    user.password = new_password
+    await user.save()
+
+    ctx.session.flash(FlashKeys.SUCCESS, {
+      W_NO_CHANGE: 'Your password has been successfully updated!',
+    })
+
+    return ctx.response.redirect().toRoute('profile')
+  }
+
+  async deleteAccount(ctx: HttpContext) {
+    const user = ctx.auth.user!
+    await user.delete()
+    await ctx.auth.use('web').logout()
+    ctx.session.flash(FlashKeys.SUCCESS, {
+      W_NO_CHANGE: 'Your account has been successfully deleted!',
+    })
+    return ctx.response.redirect().toRoute('auth.login')
   }
 }

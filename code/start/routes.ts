@@ -33,9 +33,13 @@ router
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
 
     router.get('/profile', [ProfileController, 'showProfile']).as('profile')
-    router.post('/update-profile', [ProfileController, 'editProfile']).as('profile.edit.login')
-    router.post('/update-password', [ProfileController, 'editPassword']).as('profile.edit.password')
-
+    router
+      .post('/profile/update/infos', [ProfileController, 'editProfile'])
+      .as('profile.edit.infos')
+    router
+      .post('/profile/update/password', [ProfileController, 'editPassword'])
+      .as('profile.edit.password')
+    router.delete('/profile/delete', [ProfileController, 'deleteAccount']).as('profile.delete')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
   })

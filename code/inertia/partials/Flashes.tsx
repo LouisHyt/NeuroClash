@@ -39,7 +39,6 @@ const Flashes = () => {
           item.message !== ''
       )
 
-    console.log(flatFlashes)
     setFlashesOpen(flatFlashes)
   }, [flashes])
 
