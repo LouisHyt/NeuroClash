@@ -8,6 +8,7 @@ import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-
 import type { InferPageProps } from '@adonisjs/inertia/types'
 import type DashboardController from '#controllers/dashboard_controller'
 import GeneralChat from '~/components/GeneralChat'
+import Flashes from '~/partials/Flashes'
 
 const Dashboard = ({
   statistics,
@@ -51,6 +52,7 @@ const Dashboard = ({
   return (
     <>
       <Head title="Dashboard" />
+      <Flashes />
       <div className="min-h-screen bg-gray-950 text-white overflow-hidden relative grid grid-rows-[auto_1fr_auto]">
         {/* Navigation */}
         <Navbar />

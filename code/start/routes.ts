@@ -34,6 +34,7 @@ router
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard')
 
     router.get('/profile', [ProfileController, 'showProfile']).as('profile')
+
     router
       .post('/profile/update/infos', [ProfileController, 'editProfile'])
       .as('profile.edit.infos')
@@ -42,7 +43,12 @@ router
       .as('profile.edit.password')
     router.delete('/profile/delete', [ProfileController, 'deleteAccount']).as('profile.delete')
 
-    router.get('/suggest-question', [QuestionsController, 'showSuggestQuestion']).as('questions.suggest') 
+    router
+      .get('/suggest-question', [QuestionsController, 'showSuggestQuestion'])
+      .as('questions.suggest')
+    router
+      .post('/suggest-question', [QuestionsController, 'handleSuggestQuestion'])
+      .as('questions.handlesuggest')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
   })

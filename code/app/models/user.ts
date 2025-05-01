@@ -78,6 +78,20 @@ export default class User extends compose(BaseModel, AuthFinder) {
     return this.roleId === Roles.ADMIN
   }
 
+  @computed()
+  public get timeUntilNextSuggestion() {
+    if (!this.suggestedQuestions || this.isAdmin) return 0
+    const recentQuestion = this.suggestedQuestions.reduce((latest, current) => {
+      return latest.createdAt > current.createdAt ? latest : current
+    })
+
+    const unlockTime = recentQuestion.createdAt.plus({ hours: 12 })
+
+    if (unlockTime < DateTime.now()) return 0
+
+    return Math.ceil(unlockTime.diff(DateTime.now(), 'hours').hours)
+  }
+
   @belongsTo(() => Role)
   declare role: BelongsTo<typeof Role>
 

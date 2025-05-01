@@ -6,18 +6,25 @@ import Flashes from '~/partials/Flashes'
 import { useState, useRef } from 'react'
 import { FaChevronDown, FaCheck } from 'react-icons/fa6'
 import { motion, AnimatePresence } from 'motion/react'
+import { InferPageProps } from '@adonisjs/inertia/types'
+import type QuestionsController from '#controllers/questions_controller'
+import { HiX } from 'react-icons/hi'
+import { FaRegImage } from 'react-icons/fa6'
 
-const SuggestQuestion = () => {
+const SuggestQuestion = ({
+  themes,
+  difficulties,
+}: InferPageProps<QuestionsController, 'showSuggestQuestion'>) => {
   const { data, setData, post, processing, errors } = useForm({
     theme: '',
     difficulty: '',
     question: '',
     image: null as File | null,
     answers: [
-      { text: '', isCorrect: true, order: 0, id: 1 },
-      { text: '', isCorrect: false, order: 1, id: 2 },
-      { text: '', isCorrect: false, order: 2, id: 3 },
-      { text: '', isCorrect: false, order: 3, id: 4 },
+      { text: '', isCorrect: true, slot: 0, id: 1 },
+      { text: '', isCorrect: false, slot: 1, id: 2 },
+      { text: '', isCorrect: false, slot: 2, id: 3 },
+      { text: '', isCorrect: false, slot: 3, id: 4 },
     ],
   })
 
@@ -77,9 +84,9 @@ const SuggestQuestion = () => {
     newAnswers[index] = newAnswers[targetIndex]
     newAnswers[targetIndex] = temp
 
-    // Update the order
-    newAnswers[index].order = index
-    newAnswers[targetIndex].order = targetIndex
+    // Update the slot
+    newAnswers[index].slot = index
+    newAnswers[targetIndex].slot = targetIndex
 
     setAnswers(newAnswers)
     setData('answers', newAnswers)
@@ -124,14 +131,12 @@ const SuggestQuestion = () => {
                       className="w-full bg-transparent px-4 py-3 text-white outline-none pt-5 pb-2 appearance-none peer select-custom"
                     >
                       <option value="" disabled></option>
-                      <option value="science">Science</option>
-                      <option value="history">Histoire</option>
-                      <option value="geography">Géographie</option>
-                      <option value="literature">Littérature</option>
-                      <option value="art">Art</option>
-                      <option value="sports">Sports</option>
-                      <option value="technology">Technologie</option>
-                      <option value="gaming">Jeux vidéo</option>
+
+                      {themes.map((theme) => (
+                        <option key={theme.id} value={theme.id}>
+                          {theme.name}
+                        </option>
+                      ))}
                     </select>
                     <label
                       htmlFor="theme"
@@ -158,10 +163,11 @@ const SuggestQuestion = () => {
                       className="w-full bg-transparent px-4 py-3 text-white outline-none pt-5 pb-2 appearance-none peer select-custom"
                     >
                       <option value="" disabled></option>
-                      <option value="easy">Facile</option>
-                      <option value="medium">Moyen</option>
-                      <option value="hard">Difficile</option>
-                      <option value="expert">Expert</option>
+                      {difficulties.map((difficulty) => (
+                        <option key={difficulty.id} value={difficulty.id}>
+                          {difficulty.name}
+                        </option>
+                      ))}
                     </select>
                     <label
                       htmlFor="difficulty"
@@ -205,73 +211,50 @@ const SuggestQuestion = () => {
                 {/* Upload d'image */}
                 <div className="flex flex-col gap-2">
                   <label className="text-fuchsia-200/80 font-medium">Image (optional)</label>
-                  <div className="flex flex-col gap-3">
-                    <div className="relative border-2 border-dashed border-violet-500/30 rounded-lg bg-black/30 hover:border-violet-500/50 transition-colors p-4">
+                  <div className="relative">
+                    <div className="relative border-2 border-dashed border-violet-500/30 rounded-lg bg-black/30 hover:border-violet-500/50 transition-colors p-4 h-[180px]">
+                      {/* Utilisation de z-index pour s'assurer que l'input est au-dessus seulement quand il n'y a pas de prévisualisation */}
                       <input
                         type="file"
                         id="image"
                         name="image"
                         ref={fileInputRef}
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         onChange={handleImageChange}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        className={`absolute inset-0 w-full h-full opacity-0 cursor-pointer ${previewUrl ? 'z-0' : 'z-10'}`}
                       />
-                      <div className="flex flex-col items-center justify-center py-3 sm:py-4">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="40"
-                          height="40"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="text-violet-400 mb-2"
-                        >
-                          <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                          <circle cx="9" cy="9" r="2" />
-                          <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                        </svg>
-                        <p className="text-fuchsia-200/80 text-center text-sm sm:text-base">
-                          Drag and drop an image here or click to browse
-                        </p>
-                        <p className="text-gray-400 text-xs sm:text-sm mt-1">
-                          PNG, JPG, GIF up to 2 MB
-                        </p>
-                      </div>
-                    </div>
-
-                    {previewUrl && (
-                      <div className="relative mt-2 rounded-lg overflow-hidden bg-black/50 border border-violet-500/30">
-                        <img
-                          src={previewUrl}
-                          alt="Aperçu de l'image"
-                          className="w-full max-h-60 object-contain"
-                        />
-                        <button
-                          type="button"
-                          onClick={removeImage}
-                          className="absolute top-2 right-2 bg-black/70 text-white p-1.5 rounded-full hover:bg-red-600/80 transition-colors"
-                          title="Supprimer l'image"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
+                      {!previewUrl ? (
+                        <div className="flex flex-col items-center justify-center h-full">
+                          <FaRegImage size={34} className="mb-3" />
+                          <p className="text-fuchsia-200/80 text-center text-sm sm:text-base">
+                            Drag and drop an image here or click to browse
+                          </p>
+                          <p className="text-gray-400 text-xs sm:text-sm mt-1">
+                            PNG, JPG, GIF, WEBP up to 2 MB
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="relative h-full flex items-center justify-center">
+                          <img
+                            src={previewUrl}
+                            alt="Aperçu de l'image"
+                            className="max-w-full max-h-full object-contain"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation() // Empêche la propagation de l'événement
+                              e.preventDefault() // Empêche le comportement par défaut
+                              removeImage()
+                            }}
+                            className="absolute top-2 right-2 bg-black/70 text-white p-1.5 rounded-full hover:bg-red-600/80 transition-colors z-20"
+                            title="Supprimer l'image"
                           >
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
+                            <HiX />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {errors.image && <div className="text-red-500 text-sm mt-1">{errors.image}</div>}
                 </div>

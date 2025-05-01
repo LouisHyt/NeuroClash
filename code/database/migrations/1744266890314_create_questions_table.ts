@@ -7,7 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.text('name').notNullable()
-      table.string('image_url', 255).nullable()
+      table.json('image').nullable().defaultTo(null)
       table.uuid('user_uuid').nullable().references('users.uuid').onDelete('SET NULL')
       table.integer('theme_id').nullable().unsigned().references('themes.id').onDelete('SET NULL')
       table

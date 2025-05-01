@@ -1,10 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import User from '#models/user'
 import Theme from '#models/theme'
 import Answer from '#models/answer'
 import Difficulty from '#models/difficulty'
-import type { BelongsTo, HasOne, HasMany } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { attachment } from '@jrmc/adonis-attachment'
+import type { Attachment } from '@jrmc/adonis-attachment/types/attachment'
 
 export default class Question extends BaseModel {
   @column({ isPrimary: true })
@@ -22,8 +24,8 @@ export default class Question extends BaseModel {
   @column()
   declare name: string
 
-  @column()
-  declare image_url: string
+  @attachment({ folder: 'questions' })
+  declare image: Attachment | null
 
   @column()
   declare isApproved: boolean
