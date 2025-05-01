@@ -53,6 +53,9 @@ const Profile = () => {
     setIsEditing(false)
     setIsChangingPassword(false)
     setShowDeleteConfirm(false)
+    setProfileData('avatar', null)
+    setProfileData('bio', user?.bio || '')
+    setProfileData('username', user?.username || '')
   }
 
   const handleAvatarClick = () => {
