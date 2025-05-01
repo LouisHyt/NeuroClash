@@ -48,7 +48,7 @@ const Flashes = () => {
 
   return (
     <div className="cursor-pointer fixed bottom-5 right-10 z-50 flex flex-col gap-5 sm:right-10 sm:left-auto left-1/2 -translate-x-1/2 sm:translate-x-0 w-[85%] sm:w-auto max-w-md">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {flashesOpen.map((flash, index) => (
           <motion.div
             layout

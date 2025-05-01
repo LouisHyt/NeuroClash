@@ -6,6 +6,8 @@ import {
 } from '#validators/profile'
 import User from '#models/user'
 import FlashKeys from '#enums/Flashes'
+import { attachmentManager } from '@jrmc/adonis-attachment'
+import { cuid } from '@adonisjs/core/helpers'
 
 export default class ProfileController {
   async showProfile({ inertia }: HttpContext) {
@@ -15,34 +17,36 @@ export default class ProfileController {
   async editProfile(ctx: HttpContext) {
     const user = ctx.auth.user!
     const { username, bio } = ctx.request.all()
+    const avatarFile = ctx.request.file('avatar')
 
-    //If no information changed
-    if (user.username === username && user.bio === bio) {
+    const isUsernameChanged = user.username !== username
+    const isBioChanged = user.bio !== bio
+    const isAvatarChanged = avatarFile !== null
+
+    if (!isUsernameChanged && !isBioChanged && !isAvatarChanged) {
       ctx.session.flash(FlashKeys.WARNING, {
         W_NO_CHANGE: "You haven't done any changes. Your profile hasn't been updated",
       })
       return ctx.response.redirect().toRoute('profile')
     }
 
-    //Only the bio changed
-    if (user.username === username && user.bio !== bio) {
-      const { bio: newBio } = await ctx.request.validateUsing(updateProfileVarientValidator)
-      user.bio = newBio
-      await user.save()
-      ctx.session.flash(FlashKeys.SUCCESS, {
-        W_NO_CHANGE: 'Your profile has been successfully updated!',
-      })
-      return ctx.response.redirect().toRoute('profile')
+    const validator = isUsernameChanged ? updateProfileValidator : updateProfileVarientValidator
+    const data = await ctx.request.validateUsing(validator)
+
+    user.username = data.username
+    user.bio = data.bio
+
+    if (data.avatar) {
+      data.avatar.clientName = `${cuid()}.${data.avatar.extname}`
+      user.avatar = await attachmentManager.createFromFile(data.avatar)
     }
 
-    const { username: newUsername, bio: newBio } =
-      await ctx.request.validateUsing(updateProfileValidator)
-    user.username = newUsername
-    user.bio = newBio
     await user.save()
+
     ctx.session.flash(FlashKeys.SUCCESS, {
-      W_NO_CHANGE: 'Your profile has been successfully updated!',
+      W_NO_CHANGE: 'Your profile has been successfully updated !',
     })
+
     return ctx.response.redirect().toRoute('profile')
   }
 
@@ -71,5 +75,22 @@ export default class ProfileController {
       W_NO_CHANGE: 'Your account has been successfully deleted!',
     })
     return ctx.response.redirect().toRoute('auth.login')
+  }
+
+  async deleteAvatar(ctx: HttpContext) {
+    const user = ctx.auth.user!
+    if (!user.avatar) {
+      ctx.session.flash(FlashKeys.ERROR, {
+        E_NO_AVATAR: "You don't have an avatar to delete!",
+      })
+      return ctx.response.redirect().toRoute('profile')
+    }
+
+    user.avatar = null
+    await user.save()
+    ctx.session.flash(FlashKeys.SUCCESS, {
+      S_AVATAR_DELETED: 'Your avatar has been successfully deleted!',
+    })
+    return ctx.response.redirect().toRoute('profile')
   }
 }

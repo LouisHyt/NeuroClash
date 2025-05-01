@@ -22,6 +22,12 @@ export const updateProfileValidator = vine.compile(
         return !user
       }),
     bio: vine.string().maxLength(175).nullable(),
+    avatar: vine
+      .file({
+        size: '2mb',
+        extnames: ['jpg', 'jpeg', 'png', 'PNG', 'webp', 'WEBP'],
+      })
+      .nullable(),
   })
 )
 
@@ -29,6 +35,12 @@ export const updateProfileVarientValidator = vine.compile(
   vine.object({
     username: vine.string().trim().maxLength(25).minLength(3),
     bio: vine.string().maxLength(175).nullable(),
+    avatar: vine
+      .file({
+        size: '2mb',
+        extnames: ['jpg', 'jpeg', 'png', 'PNG', 'webp', 'WEBP'],
+      })
+      .nullable(),
   })
 )
 

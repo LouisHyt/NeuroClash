@@ -3,9 +3,10 @@ import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
 import Footer from '~/partials/Footer'
 import type { SharedProps } from '@adonisjs/inertia/types'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { DateTime } from 'luxon'
 import Flashes from '~/partials/Flashes'
+import { FaTrash } from 'react-icons/fa6'
 
 type TabTypes = 'info' | 'edit' | 'security'
 
@@ -20,6 +21,7 @@ const Profile = () => {
   const [isChangingPassword, setIsChangingPassword] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [activeTab, setActiveTab] = useState<TabTypes>('info')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const {
     data: profileData,
@@ -30,6 +32,7 @@ const Profile = () => {
   } = useForm({
     username: user?.username || '',
     bio: user?.bio || '',
+    avatar: null as File | null,
   })
 
   const {
@@ -52,13 +55,37 @@ const Profile = () => {
     setShowDeleteConfirm(false)
   }
 
+  const handleAvatarClick = () => {
+    if (isEditing && fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const handleCancelEdit = () => {
+    setIsEditing(false)
+    setProfileData('avatar', null)
+    setProfileData('bio', user?.bio || '')
+    setProfileData('username', user?.username || '')
+  }
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfileData('avatar', e.target.files[0])
+    }
+  }
+
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    postProfile('/profile/update/infos')
-    setActiveTab('info')
-    setIsEditing(false)
-    setIsChangingPassword(false)
-    setShowDeleteConfirm(false)
+    postProfile('/profile/update/infos', {
+      forceFormData: true,
+      preserveScroll: true,
+      onSuccess: () => {
+        setActiveTab('info')
+        setIsEditing(false)
+        setIsChangingPassword(false)
+        setShowDeleteConfirm(false)
+      },
+    })
   }
 
   const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -83,20 +110,52 @@ const Profile = () => {
             <div className="w-full md:w-1/3 lg:w-1/4">
               <div className="backdrop-blur-sm bg-black/40 border border-violet-500/30 rounded-xl p-6 flex flex-col items-center">
                 {/* Avatar */}
-                <div className="relative group mb-4">
-                  <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-violet-500/50 group-hover:border-fuchsia-400 transition-all duration-300">
-                    <img
-                      src={user?.avatarUrl}
-                      alt={`${user?.username}'s avatar`}
-                      className="w-full h-full object-cover"
+                <div className="relative mb-4">
+                  {/* Conteneur de l'avatar avec son propre groupe de survol */}
+                  <div className="relative group" onClick={handleAvatarClick}>
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-violet-500/50 group-hover:border-fuchsia-400 transition-all duration-300">
+                      <img
+                        src={
+                          profileData.avatar
+                            ? URL.createObjectURL(profileData.avatar as File)
+                            : user?.avatarUrl
+                        }
+                        alt={`${user?.username}'s avatar`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {isEditing && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <span className="text-sm text-white">Change</span>
+                      </div>
+                    )}
+                    {/* Input file caché pour l'upload d'avatar */}
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleAvatarChange}
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      className="hidden"
                     />
                   </div>
-                  {isEditing && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                      <span className="text-xs text-white">Changer</span>
+
+                  {isEditing && user?.avatar && (
+                    <div className="absolute z-10 bottom-0 right-0">
+                      <Link
+                        method="delete"
+                        href="/profile/delete/avatar"
+                        className="rounded-full bg-red-600/80 p-2 text-white border border-red-400/30 backdrop-blur-sm shadow-lg transform transition-all duration-300 hover:scale-110 cursor-pointer group"
+                        title="Delete avatar"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <FaTrash size={14} />
+                      </Link>
                     </div>
                   )}
                 </div>
+                {profileErrors.avatar && (
+                  <div className="text-red-500 text-sm mb-1">{profileErrors.avatar}</div>
+                )}
 
                 {/* Nom d'utilisateur */}
                 <h2 className="text-2xl font-bold text-white mb-1">{user?.username}</h2>
@@ -277,7 +336,7 @@ const Profile = () => {
                         <div className="flex justify-end gap-3">
                           <button
                             type="button"
-                            onClick={() => setIsEditing(false)}
+                            onClick={() => handleCancelEdit()}
                             className="px-4 py-2 border cursor-pointer  border-violet-500/50 text-violet-300 rounded-lg font-medium text-sm hover:bg-violet-500/10 transition-colors"
                           >
                             Cancel
@@ -450,7 +509,7 @@ const Profile = () => {
                               Cancel
                             </button>
                             <Link
-                              href="/profile/delete"
+                              href="/profile/delete/account"
                               method="delete"
                               className="px-4 py-2 cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium text-sm"
                             >

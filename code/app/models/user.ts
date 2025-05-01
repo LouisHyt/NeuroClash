@@ -59,7 +59,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare bannedUntil: DateTime | null
 
   @attachment({ folder: 'avatars', preComputeUrl: true })
-  declare avatar: Attachment
+  declare avatar: Attachment | null
 
   @computed()
   public get avatarUrl() {

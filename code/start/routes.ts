@@ -41,7 +41,12 @@ router
     router
       .post('/profile/update/password', [ProfileController, 'editPassword'])
       .as('profile.edit.password')
-    router.delete('/profile/delete', [ProfileController, 'deleteAccount']).as('profile.delete')
+    router
+      .delete('/profile/delete/account', [ProfileController, 'deleteAccount'])
+      .as('profile.delete.account')
+    router
+      .delete('/profile/delete/avatar', [ProfileController, 'deleteAvatar'])
+      .as('profile.delete.avatar')
 
     router
       .get('/suggest-question', [QuestionsController, 'showSuggestQuestion'])

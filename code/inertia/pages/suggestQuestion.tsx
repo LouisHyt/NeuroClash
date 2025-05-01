@@ -337,7 +337,7 @@ const SuggestQuestion = ({
                 disabled={processing}
                 className="cursor-pointer px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white font-semibold rounded-lg hover:from-violet-700 hover:to-fuchsia-700 transition-all disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-auto"
               >
-                {processing ? 'Envoi en cours...' : 'Soumettre la question'}
+                {processing ? 'Sending...' : 'Submit question'}
               </button>
             </div>
           </form>
