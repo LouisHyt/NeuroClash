@@ -10,6 +10,13 @@ export default class extends BaseSchema {
       table.string('image_url', 255).nullable()
       table.uuid('user_uuid').nullable().references('users.uuid').onDelete('SET NULL')
       table.integer('theme_id').nullable().unsigned().references('themes.id').onDelete('SET NULL')
+      table
+        .integer('difficulty_id')
+        .nullable()
+        .unsigned()
+        .references('difficulties.id')
+        .onDelete('SET NULL')
+      table.boolean('is_approved').notNullable().defaultTo(false)
       table.timestamp('created_at')
       table.timestamp('updated_at')
     })

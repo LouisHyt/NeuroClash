@@ -12,6 +12,9 @@ export default class Answer extends BaseModel {
   declare isCorrect: boolean
 
   @column()
+  declare slot: number
+
+  @column()
   declare questionId: number
 
   @column.dateTime({ autoCreate: true })

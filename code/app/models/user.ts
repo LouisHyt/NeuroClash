@@ -56,7 +56,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare bio: string | null
 
   @column()
-  declare bannedUntil: DateTime
+  declare bannedUntil: DateTime | null
 
   @attachment({ folder: 'avatars', preComputeUrl: true })
   declare avatar: Attachment

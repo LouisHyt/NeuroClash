@@ -3,7 +3,7 @@ import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import Question from '#models/question'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
-export default class Theme extends BaseModel {
+export default class Difficulty extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
 
