@@ -1,10 +1,11 @@
 import { useRef, useEffect } from 'react'
-import { Head } from '@inertiajs/react'
+import { Head, Link } from '@inertiajs/react'
 import { type Swapy, createSwapy } from 'swapy'
 import '~/css/swapyStyle.css'
 import Navbar from '~/partials/Navbar'
 import StatisticCard from '~/components/StatisticCard'
 import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-icons/hi'
+import { IoSend } from 'react-icons/io5'
 import type { InferPageProps } from '@adonisjs/inertia/types'
 import type DashboardController from '#controllers/dashboard_controller'
 import GeneralChat from '~/components/GeneralChat'
@@ -283,17 +284,13 @@ const Dashboard = ({
                         <p className="text-gray-400 text-sm sm:text-base mb-4">
                           Want to contribute ? You can suggest a question!
                         </p>
-                        <button className="cursor-pointer w-full bg-cyan-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                          </svg>
+                        <Link
+                          href="/suggest-question"
+                          className="cursor-pointer w-full bg-cyan-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
+                        >
+                          <IoSend size={18} className="-rotate-90" />
                           Submit Question
-                        </button>
+                        </Link>
                       </div>
                     </div>
 

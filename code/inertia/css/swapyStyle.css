@@ -1,19 +1,15 @@
 .slot {
+  transition: background-color 250ms ease-in-out;
 
-    transition: background-color 250ms ease-in-out;
-
-    &[data-swapy-highlighted] {
-        background-color: #1f26429f;
-    }
-
+  &[data-swapy-highlighted] {
+    background-color: #1f26429f;
+  }
 }
 
 .item {
+  transition: scale 250ms ease;
 
-    transition: scale 250ms ease;
-
-    &[data-swapy-dragging]{
-        scale: 1.1;
-    }
-
+  &[data-swapy-dragging] {
+    scale: 1;
+  }
 }

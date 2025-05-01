@@ -71,15 +71,13 @@ export default class QuestionsController {
       }))
     )
 
-    if (user.isAdmin) {
-      ctx.session.flash(FlashKeys.SUCCESS, {
-        S_CREATED: 'Your question has been successfully submitted! An admin will check it soon.',
-      })
-    } else {
-      ctx.session.flash(FlashKeys.SUCCESS, {
-        S_CREATED: 'Your question has been successfully submitted! An admin will check it soon.',
-      })
-    }
+    user.isAdmin
+      ? ctx.session.flash(FlashKeys.SUCCESS, {
+          S_CREATED: 'Your question has been successfully submitted!',
+        })
+      : ctx.session.flash(FlashKeys.SUCCESS, {
+          S_CREATED: 'Your question has been successfully submitted! An admin will check it soon.',
+        })
 
     ctx.response.redirect().toRoute('dashboard')
   }
