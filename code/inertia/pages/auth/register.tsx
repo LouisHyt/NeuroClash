@@ -1,6 +1,8 @@
 import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
-import { Head, Link, useForm } from '@inertiajs/react'
+import { Head, useForm } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
+import { tuyau } from '~/utils/api'
 
 const Register = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -13,7 +15,7 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    post('/register')
+    post(tuyau.register.$url())
   }
 
   return (
@@ -237,11 +239,11 @@ const Register = () => {
                   </div>
                   <p>
                     I agree to the{' '}
-                    <Link href="/register" className="underline text-cyan-500">
+                    <Link route="home.show" className="underline text-cyan-500">
                       Terms & Conditions
                     </Link>{' '}
                     And the{' '}
-                    <Link href="/rules" className="underline text-cyan-500">
+                    <Link route="rules.show" className="underline text-cyan-500">
                       Community rules
                     </Link>
                   </p>

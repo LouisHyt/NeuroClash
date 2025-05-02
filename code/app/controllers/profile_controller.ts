@@ -27,7 +27,7 @@ export default class ProfileController {
       ctx.session.flash(FlashKeys.WARNING, {
         W_NO_CHANGE: "You haven't done any changes. Your profile hasn't been updated",
       })
-      return ctx.response.redirect().toRoute('profile')
+      return ctx.response.redirect().toRoute('profile.show')
     }
 
     const validator = isUsernameChanged ? updateProfileValidator : updateProfileVarientValidator
@@ -47,7 +47,7 @@ export default class ProfileController {
       W_NO_CHANGE: 'Your profile has been successfully updated !',
     })
 
-    return ctx.response.redirect().toRoute('profile')
+    return ctx.response.redirect().toRoute('profile.show')
   }
 
   async editPassword(ctx: HttpContext) {
@@ -64,7 +64,7 @@ export default class ProfileController {
       W_NO_CHANGE: 'Your password has been successfully updated!',
     })
 
-    return ctx.response.redirect().toRoute('profile')
+    return ctx.response.redirect().toRoute('profile.show')
   }
 
   async deleteAccount(ctx: HttpContext) {
@@ -74,7 +74,7 @@ export default class ProfileController {
     ctx.session.flash(FlashKeys.SUCCESS, {
       W_NO_CHANGE: 'Your account has been successfully deleted!',
     })
-    return ctx.response.redirect().toRoute('auth.login')
+    return ctx.response.redirect().toRoute('auth.login.show')
   }
 
   async deleteAvatar(ctx: HttpContext) {
@@ -83,7 +83,7 @@ export default class ProfileController {
       ctx.session.flash(FlashKeys.ERROR, {
         E_NO_AVATAR: "You don't have an avatar to delete!",
       })
-      return ctx.response.redirect().toRoute('profile')
+      return ctx.response.redirect().toRoute('profile.show')
     }
 
     user.avatar = null
@@ -91,6 +91,6 @@ export default class ProfileController {
     ctx.session.flash(FlashKeys.SUCCESS, {
       S_AVATAR_DELETED: 'Your avatar has been successfully deleted!',
     })
-    return ctx.response.redirect().toRoute('profile')
+    return ctx.response.redirect().toRoute('profile.show')
   }
 }

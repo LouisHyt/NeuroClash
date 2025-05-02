@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 
 const Footer = () => {
   return (
@@ -13,7 +13,7 @@ const Footer = () => {
             Terms of Service
           </a>
           <span className="mx-2">•</span>
-          <Link href="/rules" className="hover:text-fuchsia-200/70 transition-colors">
+          <Link route="rules.show" className="hover:text-fuchsia-200/70 transition-colors">
             Community Rules
           </Link>
           <div className="mt-2 text-xs">2025 NeuroClash. All rights reserved.</div>

@@ -5,7 +5,7 @@ export default class AdminMiddleware {
   async handle(ctx: HttpContext, next: NextFn) {
     const user = ctx.auth.user!
     if (!user.isAdmin) {
-      return ctx.response.redirect().toRoute('home')
+      return ctx.response.redirect().toRoute('home.show')
     }
     return next()
   }

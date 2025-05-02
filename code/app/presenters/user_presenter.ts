@@ -1,4 +1,5 @@
 import User from '#models/user'
+import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class UserPresenter {
   oneToJSON(user: User) {
@@ -11,9 +12,13 @@ export default class UserPresenter {
     }
   }
 
-  manyToJSON(users: User[]) {
-    return users.map((user) => {
-      return this.oneToJSON(user)
-    })
+  manyToJSON(users: ModelPaginatorContract<User>) {
+    return users.all().map((user) => ({
+      username: user.username,
+      avatarUrl: user.avatarUrl,
+      statistic: {
+        elo: user.statistic.elo,
+      },
+    }))
   }
 }

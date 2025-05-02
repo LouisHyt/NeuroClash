@@ -26,7 +26,7 @@ export default class QuestionsController {
       ctx.session.flash(FlashKeys.WARNING, {
         W_NO_CHANGE: `You must wait ${user.timeUntilNextSuggestion} hours before submitting another question`,
       })
-      return ctx.response.redirect().toRoute('dashboard')
+      return ctx.response.redirect().toRoute('dashboard.show')
     }
 
     const themes = await Theme.all()
@@ -45,7 +45,7 @@ export default class QuestionsController {
       ctx.session.flash(FlashKeys.WARNING, {
         W_NO_CHANGE: `You must wait ${user.timeUntilNextSuggestion} hours before submitting another question`,
       })
-      return ctx.response.redirect().toRoute('dashboard')
+      return ctx.response.redirect().toRoute('dashboard.show')
     }
     const data = await ctx.request.validateUsing(questionValidator)
 
@@ -79,6 +79,6 @@ export default class QuestionsController {
           S_CREATED: 'Your question has been successfully submitted! An admin will check it soon.',
         })
 
-    ctx.response.redirect().toRoute('dashboard')
+    ctx.response.redirect().toRoute('dashboard.show')
   }
 }

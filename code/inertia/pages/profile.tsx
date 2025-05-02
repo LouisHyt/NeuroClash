@@ -1,4 +1,5 @@
-import { Head, usePage, useForm, Link } from '@inertiajs/react'
+import { Head, usePage, useForm } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
 import Footer from '~/partials/Footer'
@@ -145,8 +146,7 @@ const Profile = () => {
                   {isEditing && user?.avatar && (
                     <div className="absolute z-10 bottom-0 right-0">
                       <Link
-                        method="delete"
-                        href="/profile/delete/avatar"
+                        route="profile.delete.avatar"
                         className="rounded-full bg-red-600/80 p-2 text-white border border-red-400/30 backdrop-blur-sm shadow-lg transform transition-all duration-300 hover:scale-110 cursor-pointer group"
                         title="Delete avatar"
                         onClick={(e) => e.stopPropagation()}
@@ -512,8 +512,7 @@ const Profile = () => {
                               Cancel
                             </button>
                             <Link
-                              href="/profile/delete/account"
-                              method="delete"
+                              route="profile.delete.account"
                               className="px-4 py-2 cursor-pointer bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg font-medium text-sm"
                             >
                               Yes

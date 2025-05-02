@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react'
-import { Head, Link } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 import { type Swapy, createSwapy } from 'swapy'
 import '~/css/swapyStyle.css'
 import Navbar from '~/partials/Navbar'
@@ -285,7 +286,7 @@ const Dashboard = ({
                           Want to contribute ? You can suggest a question!
                         </p>
                         <Link
-                          href="/suggest-question"
+                          route="suggestquestions.show"
                           className="cursor-pointer w-full bg-cyan-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-semibold hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/20 flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-sm"
                         >
                           <IoSend size={18} className="-rotate-90" />

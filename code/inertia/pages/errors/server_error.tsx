@@ -1,4 +1,5 @@
-import { Head, Link } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 import GridBackground from '~/components/GridBackground'
 import { motion } from 'motion/react'
 
@@ -38,7 +39,10 @@ const NotFound = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <Link href="/" className="text-blue-500/70 hover:text-slate-400 transition-colors">
+          <Link
+            route="home.show"
+            className="text-blue-500/70 hover:text-slate-400 transition-colors"
+          >
             Please contact an administrator to adress the issue
           </Link>
         </motion.div>

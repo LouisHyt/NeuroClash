@@ -221,14 +221,11 @@ const Admin = () => {
       <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden text-fuchsia-200/80 grid grid-rows-[auto_1fr_auto]">
         <GridBackground animated={false} type="profile" />
         <Navbar />
-        <div className="admin-container w-full max-h-[calc(100vh-90px)] overflow-y-auto p-4 md:p-6">
-          <div className="grid grid-cols-1 xl:grid-cols-[1fr_350px] gap-4 h-full max-h-full">
+        <div className="admin-container w-full overflow-y-auto p-4">
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_350px] gap-4 h-full max-h-full p-4 md:p-6">
             {/* Section principale */}
-            <div className="grid grid-rows-[auto_1fr] gap-4">
-              {/* Statistiques et informations des parties en cours */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Statistiques utilisateurs */}
-
+            <div className="grid xl:grid-rows-[300px_1fr] gap-4">
+              <div className="grid grid-cols-1 grid-rows-[300px_auto] md:grid-cols-2 gap-4">
                 <UserList />
 
                 {/* Parties en cours */}

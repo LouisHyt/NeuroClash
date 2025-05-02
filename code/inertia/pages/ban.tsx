@@ -1,6 +1,7 @@
 import BanController from '#controllers/ban_controller'
 import type { InferPageProps } from '@adonisjs/inertia/types'
-import { Head, Link } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 import GridBackground from '~/components/GridBackground'
 import { useEffect, useState } from 'react'
 
@@ -64,7 +65,7 @@ const Ban = ({ bannedUntil }: InferPageProps<BanController, 'showBan'>) => {
           </div>
 
           <Link
-            href="/"
+            route="home.show"
             className="absolute bottom-10 left-1/2 -translate-x-1/2 text-sm text-blue-400 hover:underline"
           >
             Go back to the home Page

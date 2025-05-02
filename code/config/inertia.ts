@@ -23,6 +23,7 @@ const inertiaConfig = defineConfig({
    * Data that should be shared with all rendered pages
    */
   sharedData: {
+    _csrf: (ctx) => ctx.inertia.always(() => ctx.request.csrfToken),
     flashes: (ctx) =>
       ctx.inertia.always(() => {
         const flashes = ctx.session?.flashMessages.all()

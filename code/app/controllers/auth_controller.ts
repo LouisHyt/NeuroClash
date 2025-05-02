@@ -15,7 +15,7 @@ export default class AuthController {
     ctx.session.flash('success', {
       S_LOGIN_SUCCESS: 'Welcome back ' + user.username,
     })
-    return ctx.response.redirect().toRoute('dashboard')
+    return ctx.response.redirect().toRoute('dashboard.show')
   }
 
   async showRegister(ctx: HttpContext) {
@@ -29,7 +29,7 @@ export default class AuthController {
     ctx.session.flash('success', {
       S_REGISTER_SUCCESS: 'You account has been successfully created, please Login',
     })
-    return ctx.response.redirect().toRoute('auth.login')
+    return ctx.response.redirect().toRoute('auth.login.show')
   }
 
   async logout(ctx: HttpContext) {
@@ -37,6 +37,6 @@ export default class AuthController {
     ctx.session.flash('success', {
       S_LOGOUT_SUCCESS: 'Successfully logged out',
     })
-    return ctx.response.redirect().toRoute('auth.login')
+    return ctx.response.redirect().toRoute('auth.login.show')
   }
 }

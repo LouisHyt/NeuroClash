@@ -8,7 +8,7 @@ export default class BanMiddleware {
      */
     const user = ctx.auth.user!
     if (user.bannedUntil) {
-      return ctx.response.redirect().toRoute('ban')
+      return ctx.response.redirect().toRoute('ban.show')
     }
 
     return next()

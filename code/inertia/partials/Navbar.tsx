@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Link, usePage } from '@inertiajs/react'
+import { usePage } from '@inertiajs/react'
 import type { SharedProps } from '@adonisjs/inertia/types'
+import { Link } from '@tuyau/inertia/react'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -11,7 +12,7 @@ const Navbar = () => {
       <div className="max-w-7xl px-4 sm:px-6 lg:px-8 mx-auto">
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">
-            <Link className="text-2xl font-bold text-white" href="/">
+            <Link className="text-2xl font-bold text-white" route="home.show">
               Neuro
               <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
                 Clash
@@ -21,7 +22,7 @@ const Navbar = () => {
           {user ? (
             <div className="hidden md:flex items-center space-x-4">
               <Link
-                href={`/profile`}
+                route="profile.show"
                 className="flex items-center space-x-3 px-2 py-2 rounded-lg hover:bg-black/40 transition-colors"
               >
                 <div className="relative">
@@ -46,7 +47,7 @@ const Navbar = () => {
               <div className="h-8 w-px bg-violet-500/30 mx-2"></div>
               {user.isAdmin && (
                 <Link
-                  href="/admin"
+                  route="admin.show"
                   className="px-4 py-2 bg-gradient-to-r from-blue-400 to-cyan-500 text-transparent bg-clip-text font-semibold mr-0"
                 >
                   Admin Panel
@@ -54,15 +55,14 @@ const Navbar = () => {
               )}
               {user && (
                 <Link
-                  href="/dashboard"
+                  route="dashboard.show"
                   className="px-4 py-2 bg-gradient-to-r from-violet-400 to-fuchsia-500 text-transparent bg-clip-text font-semibold mr-0"
                 >
                   Dashboard
                 </Link>
               )}
               <Link
-                method="post"
-                href="/logout"
+                route="auth.logout"
                 className="text-red-500 hover:text-red-400 px-4 py-2 rounded-lg transition-colors cursor-pointer"
               >
                 Logout
@@ -71,13 +71,13 @@ const Navbar = () => {
           ) : (
             <div className="hidden md:flex space-x-4">
               <Link
-                href="/login"
+                route="auth.login.show"
                 className="text-fuchsia-400 hover:text-fuchsia-300 px-4 py-2 rounded-lg transition-colors"
               >
                 Log In
               </Link>
               <Link
-                href="/register"
+                route="auth.register.show"
                 className="bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white px-6 py-2 rounded-lg hover:opacity-90 transition-colors font-semibold"
               >
                 Sign Up
@@ -116,14 +116,13 @@ const Navbar = () => {
             {user ? (
               <>
                 <Link
-                  href="/profile"
+                  route="profile.show"
                   className="bg-gradient-to-r from-blue-500 to-cyan-400 text-white block px-3 py-2 rounded-md text-base font-medium hover:opacity-90 transition-colors w-full text-left"
                 >
                   Profile
                 </Link>
                 <Link
-                  method="post"
-                  href="/logout"
+                  route="auth.logout"
                   className="text-red-500 hover:text-red-400 px-3 py-2 rounded-lg transition-colors cursor-pointer"
                 >
                   Logout
@@ -132,13 +131,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
-                  href="/login"
+                  route="auth.login.show"
                   className="text-fuchsia-400 block px-3 py-2 rounded-md text-base font-medium hover:text-fuchsia-300 transition-colors w-full text-left hover:bg-fuchsia-500/10"
                 >
                   Log In
                 </Link>
                 <Link
-                  href="/register"
+                  route="auth.register.show"
                   className="bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white block px-3 py-2 rounded-md text-base font-medium hover:opacity-90 transition-colors w-full text-left"
                 >
                   Sign Up

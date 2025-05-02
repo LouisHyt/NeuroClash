@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 export default class BanController {
   showBan({ inertia, auth, response }: HttpContext) {
     const user = auth.user!
-    if (!user?.bannedUntil) return response.redirect().toRoute('home')
+    if (!user?.bannedUntil) return response.redirect().toRoute('home.show')
 
     auth.use('web').logout()
 

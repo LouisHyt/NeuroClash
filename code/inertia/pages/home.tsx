@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Navbar from '~/partials/Navbar'
-import { Head, Link } from '@inertiajs/react'
+import { Head } from '@inertiajs/react'
+import { Link } from '@tuyau/inertia/react'
 import GridBackground from '../components/GridBackground'
 import {
   FaArrowUpWideShort,
@@ -60,7 +61,7 @@ function Home() {
             </p>
             <div className="flex flex-col items-center sm:flex-row gap-4 justify-center">
               <Link
-                href="/register"
+                route="auth.register.show"
                 className="cursor-pointer bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:opacity-90 transition-colors max-w-max"
               >
                 <span>Start the Adventure</span>
