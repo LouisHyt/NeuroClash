@@ -9,6 +9,7 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import AdminController from '#controllers/admin_controller'
 
 const AuthController = () => import('#controllers/auth_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
@@ -59,5 +60,11 @@ router
   })
   .use(middleware.auth())
   .use(middleware.ban())
+
+router
+  .get('/admin', [AdminController, 'showDashboard'])
+  .as('admin')
+  .use(middleware.auth())
+  .use(middleware.admin())
 
 router.get('/ban', [BanController, 'showBan']).as('ban').use(middleware.auth())

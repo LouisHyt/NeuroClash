@@ -1,14 +1,14 @@
 import Statistic from '#models/statistic'
 
 export default class StatisticPresenter {
-  getWinRatio(statistic: Statistic) {
+  private getWinRatio(statistic: Statistic) {
     if (statistic.totalGames === 0) {
       return 'Undetermined'
     }
     return Math.round((statistic.victories / statistic.totalGames) * 100)
   }
 
-  getAveragePerformance(statistic: Statistic) {
+  private getAveragePerformance(statistic: Statistic) {
     if (
       statistic.totalGames === 0 ||
       statistic.questionsCorrect + statistic.questionsFailed === 0

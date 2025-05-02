@@ -1,7 +1,7 @@
 import User from '#models/user'
 
 export default class UserPresenter {
-  toJSON(user: User) {
+  oneToJSON(user: User) {
     return {
       username: user.username,
       avatarUrl: user.avatarUrl,
@@ -9,5 +9,11 @@ export default class UserPresenter {
         elo: user.statistic.elo,
       },
     }
+  }
+
+  manyToJSON(users: User[]) {
+    return users.map((user) => {
+      return this.oneToJSON(user)
+    })
   }
 }
