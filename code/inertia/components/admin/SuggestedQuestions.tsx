@@ -44,26 +44,28 @@ const SuggestedQuestions = () => {
             <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <img
-                    src={question.author.avatarUrl}
-                    alt={question.author.username}
-                    className="w-6 h-6 rounded-full"
-                  />
+                  <div className="relative">
+                    <img
+                      src={question.author.avatarUrl}
+                      alt={question.author.username}
+                      className="w-6 h-6 rounded-full"
+                    />
+                  </div>
                   <div className="flex flex-col">
                     <span className="text-sm">{question.author.username}</span>
                   </div>
                 </div>
                 <span className="text-xs text-gray-400 flex items-center gap-1">
-                  {5} suggested questions
+                  {question.author.suggestedQuestions} suggested questions
                 </span>
               </div>
               <div className="flex flex-row justify-between sm:justify-end items-center gap-3 sm:gap-5">
                 <span className="text-xs text-gray-400">{question.createdAt}</span>
                 <div className="flex items-center gap-2">
-                  <button className="p-1 rounded-full bg-green-500/20 text-green-300 hover:bg-green-500/30 transition-colors">
+                  <button className="cursor-pointer p-1 rounded-full bg-green-500/20 text-green-300 hover:bg-green-500/30 transition-colors">
                     <HiOutlineCheck className="w-4 h-4" />
                   </button>
-                  <button className="p-1 rounded-full bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors">
+                  <button className="cursor-pointer p-1 rounded-full bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors">
                     <HiOutlineTrash className="w-4 h-4" />
                   </button>
                 </div>
