@@ -55,7 +55,7 @@ const Dashboard = ({
     <>
       <Head title="Dashboard" />
       <Flashes />
-      <div className="min-h-screen bg-gray-950 text-white overflow-hidden relative grid grid-rows-[auto_1fr_auto]">
+      <div className="min-h-screen bg-[#0a0a0a] text-white overflow-hidden relative grid grid-rows-[auto_1fr_auto]">
         {/* Navigation */}
         <Navbar />
         <div className="overflow-y-auto grid place-items-center">
