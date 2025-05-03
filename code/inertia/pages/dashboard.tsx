@@ -71,15 +71,16 @@ const Dashboard = ({
                     className="item bg-gradient-to-br from-slate-800/80 via-indigo-900/10 to-slate-800/80 border border-indigo-400/30 rounded-lg p-3 sm:p-4 backdrop-blur-md shadow-lg transition-all duration-300 hover:border-indigo-400/50"
                   >
                     <h3 className="text-xl font-semibold mb-4 text-white">Jouer</h3>
+
+                    {/* Game buttons */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {/* Bouton Trouver une partie */}
+                      {/* Bouton trouver une partie */}
                       <button
                         className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
                         style={{
                           backgroundImage: "url('https://picsum.photos/seed/findgame/400/200')",
                         }}
                       >
-                        {/* Overlay avec dégradé plus subtil */}
                         <div className="absolute inset-0 bg-gradient-to-t from-blue-800/60 to-indigo-900/50 group-hover:from-blue-800/70 group-hover:to-indigo-900/60 transition-all duration-300"></div>
                         <div className="relative z-10 flex flex-col items-center">
                           <HiOutlineSearch className="w-8 h-8 mb-2" />
