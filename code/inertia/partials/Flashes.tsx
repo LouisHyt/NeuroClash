@@ -1,5 +1,5 @@
 import type { SharedProps } from '@adonisjs/inertia/types'
-import { usePage, router } from '@inertiajs/react'
+import { usePage } from '@inertiajs/react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { IoWarning } from 'react-icons/io5'

@@ -3,15 +3,12 @@ import { Head } from '@inertiajs/react'
 import { Link } from '@tuyau/inertia/react'
 import { type Swapy, createSwapy } from 'swapy'
 import '~/css/swapyStyle.css'
-import Navbar from '~/partials/Navbar'
 import StatisticCard from '~/components/StatisticCard'
 import { HiOutlineSearch, HiOutlineUserGroup, HiOutlinePlusCircle } from 'react-icons/hi'
 import { IoSend } from 'react-icons/io5'
 import type { InferPageProps } from '@adonisjs/inertia/types'
 import type DashboardController from '#controllers/dashboard_controller'
 import GeneralChat from '~/components/GeneralChat'
-import Flashes from '~/partials/Flashes'
-import GridBackground from '~/components/GridBackground'
 import AppLayout from '~/layouts/AppLayout'
 
 const Dashboard = ({
@@ -62,7 +59,7 @@ const Dashboard = ({
             className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_400px] gap-4 sm:gap-6 md:gap-8"
             ref={containerRef}
           >
-            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 md:max-h-[calc(100vh-189px)]">
+            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 md:max-h-screen">
               <div data-swapy-slot="a" className="slot">
                 <div
                   data-swapy-item="a"
