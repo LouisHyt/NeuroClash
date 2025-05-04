@@ -8,6 +8,7 @@ import {
 } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
 import { useState } from 'react'
+import { Link } from '@tuyau/inertia/react'
 
 import type AdminController from '#controllers/admin_controller'
 import type { InferPageProps } from '@adonisjs/inertia/types'
@@ -62,12 +63,22 @@ const SuggestedQuestions = () => {
               <div className="flex flex-row justify-between sm:justify-end items-center gap-3 sm:gap-5">
                 <span className="text-xs text-gray-400">{question.createdAt}</span>
                 <div className="flex items-center gap-2">
-                  <button className="cursor-pointer p-1 rounded-full bg-green-500/20 text-green-300 hover:bg-green-500/30 transition-colors">
+                  <Link
+                    route="admin.question.approve"
+                    data={{ questionId: question.id }}
+                    title="Approve question"
+                    className="cursor-pointer p-1 rounded-full bg-green-500/20 text-green-300 hover:bg-green-500/30 transition-colors"
+                  >
                     <HiOutlineCheck className="w-4 h-4" />
-                  </button>
-                  <button className="cursor-pointer p-1 rounded-full bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors">
+                  </Link>
+                  <Link
+                    route="admin.question.delete"
+                    title="Delete question"
+                    data={{ questionId: question.id }}
+                    className="cursor-pointer p-1 rounded-full bg-red-500/20 text-red-300 hover:bg-red-500/30 transition-colors"
+                  >
                     <HiOutlineTrash className="w-4 h-4" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

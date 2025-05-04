@@ -1,26 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
-import { io, type Socket } from 'socket.io-client'
 import { AnimatePresence, motion } from 'motion/react'
 import { usePage } from '@inertiajs/react'
 import { HiArrowSmDown, HiX } from 'react-icons/hi'
 import { SharedProps } from '@adonisjs/inertia/types'
-
-type ChatMessagesType = {
-  message: string
-  id: string
-  user: {
-    username: string
-    avatarUrl: string
-    rankIcon: string
-    isAdmin: boolean
-  }
-  time: string
-}[]
+import { useSocketStore } from '~/stores/socketStore'
+import { useGeneralChatStore } from '~/stores/generalChatStore'
 
 const GeneralChat = () => {
-  const [socket, setSocket] = useState<Socket | null>(null)
+  const socket = useSocketStore((state) => state.socket)
+  const chatMessages = useGeneralChatStore((state) => state.messages)
+  const addChatMessage = useGeneralChatStore((state) => state.addMessage)
+  const deleteChatMessage = useGeneralChatStore((state) => state.deleteMessage)
+
   const [chatVisible, setChatVisible] = useState(false)
-  const [chatMessages, setChatMessages] = useState<ChatMessagesType>([])
   const [autoScroll, setAutoScroll] = useState(true)
 
   const messageInputRef = useRef<HTMLInputElement>(null)
@@ -56,28 +48,27 @@ const GeneralChat = () => {
     e.preventDefault()
     const message = messageInputRef.current!.value
     messageInputRef.current!.value = ''
-
     socket?.emit('sendMessage', message)
   }
 
   //Websocket connection
   useEffect(() => {
-    const socketInstance = io('/general')
+    if (!socket) return
 
-    socketInstance.on('newChatMessage', (data) => {
-      setChatMessages((prev) => [...prev, data])
+    socket.on('newChatMessage', (message) => {
+      addChatMessage(message)
+      console.log(message)
     })
 
-    socketInstance.on('messageDeleted', (messageId) => {
-      setChatMessages((prev) => prev.filter((message) => message.id !== messageId))
+    socket.on('messageDeleted', (messageId) => {
+      deleteChatMessage(messageId)
     })
-
-    setSocket(socketInstance)
 
     return () => {
-      socketInstance.disconnect()
+      socket.off('newChatMessage')
+      socket.off('messageDeleted')
     }
-  }, [])
+  }, [socket])
 
   return (
     <>
@@ -143,7 +134,7 @@ const GeneralChat = () => {
             onScroll={handleChatScroll}
             className="flex-1 space-y-1.5 sm:space-y-3 mb-3 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-100px)] xl:max-h-[630px]"
           >
-            <AnimatePresence mode="sync">
+            <AnimatePresence initial={false} mode="sync">
               {chatMessages.map((msg) => (
                 <motion.div
                   layout

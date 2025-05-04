@@ -9,18 +9,19 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
-import AdminController from '#controllers/admin_controller'
 
 const AuthController = () => import('#controllers/auth_controller')
 const DashboardController = () => import('#controllers/dashboard_controller')
 const BanController = () => import('#controllers/ban_controller')
 const ProfileController = () => import('#controllers/profile_controller')
 const QuestionsController = () => import('#controllers/questions_controller')
+const AdminController = () => import('#controllers/admin_controller')
 
+//Public routes
 router.on('/').renderInertia('home').as('home.show')
 router.on('/rules').renderInertia('rules').as('rules.show')
 
-//Auth
+//Authentication
 router
   .group(() => {
     router.get('/login', [AuthController, 'showLogin']).as('auth.login.show')
@@ -30,6 +31,7 @@ router
   })
   .use(middleware.guest())
 
+// Authenticated routes
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard.show')
@@ -57,17 +59,27 @@ router
       .as('suggestquestions.post')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
+
+    router.get('/ban', [BanController, 'showBan']).as('ban.show').use(middleware.auth())
   })
   .use(middleware.auth())
   .use(middleware.ban())
 
+//Admin
 router
-  .get('/admin', [AdminController, 'showDashboard'])
-  .as('admin.show')
+  .group(() => {
+    router.get('/admin', [AdminController, 'showDashboard']).as('admin.show')
+
+    router
+      .delete('/admin/delete-question', [QuestionsController, 'deleteQuestion'])
+      .as('admin.question.delete')
+
+    router
+      .post('/admin/approve-question', [QuestionsController, 'approveQuestion'])
+      .as('admin.question.approve')
+  })
   .use(middleware.auth())
   .use(middleware.admin())
-
-router.get('/ban', [BanController, 'showBan']).as('ban.show').use(middleware.auth())
 
 //API
 const UserApiController = () => import('#controllers/api/user_api_controller')

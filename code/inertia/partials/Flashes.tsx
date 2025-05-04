@@ -1,5 +1,5 @@
 import type { SharedProps } from '@adonisjs/inertia/types'
-import { usePage } from '@inertiajs/react'
+import { usePage, router } from '@inertiajs/react'
 import { AnimatePresence, motion } from 'motion/react'
 import { FaCircleCheck } from 'react-icons/fa6'
 import { IoWarning } from 'react-icons/io5'
@@ -38,7 +38,6 @@ const Flashes = () => {
           [FlashKeys.SUCCESS, FlashKeys.WARNING, FlashKeys.ERROR].includes(item.type) &&
           item.message !== ''
       )
-
     setFlashesOpen(flatFlashes)
   }, [flashes])
 

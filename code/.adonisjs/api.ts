@@ -63,6 +63,18 @@ type BanGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/ban_controller.ts').default['showBan'], false>
 }
+type AdminGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/admin_controller.ts').default['showDashboard'], false>
+}
+type AdminDeletequestionDelete = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['deleteQuestion'], false>
+}
+type AdminApprovequestionPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['approveQuestion'], false>
+}
 type ApiGetusersPost = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/api/user_api_controller.ts').default['getUsers'], false>
@@ -135,6 +147,22 @@ export interface ApiDefinition {
     };
     '$get': BanGetHead;
     '$head': BanGetHead;
+  };
+  'admin': {
+    '$url': {
+    };
+    '$get': AdminGetHead;
+    '$head': AdminGetHead;
+    'delete-question': {
+      '$url': {
+      };
+      '$delete': AdminDeletequestionDelete;
+    };
+    'approve-question': {
+      '$url': {
+      };
+      '$post': AdminApprovequestionPost;
+    };
   };
   'api': {
     'getusers': {
@@ -259,17 +287,31 @@ const routes = [
   },
   {
     params: [],
-    name: 'admin.show',
-    path: '/admin',
-    method: ["GET","HEAD"],
-    types: {} as unknown,
-  },
-  {
-    params: [],
     name: 'ban.show',
     path: '/ban',
     method: ["GET","HEAD"],
     types: {} as BanGetHead,
+  },
+  {
+    params: [],
+    name: 'admin.show',
+    path: '/admin',
+    method: ["GET","HEAD"],
+    types: {} as AdminGetHead,
+  },
+  {
+    params: [],
+    name: 'admin.question.delete',
+    path: '/admin/delete-question',
+    method: ["DELETE"],
+    types: {} as AdminDeletequestionDelete,
+  },
+  {
+    params: [],
+    name: 'admin.question.approve',
+    path: '/admin/approve-question',
+    method: ["POST"],
+    types: {} as AdminApprovequestionPost,
   },
   {
     params: [],

@@ -4,7 +4,7 @@ import Difficulty from '#models/difficulty'
 import ThemesPresenter from '#presenters/themes_presenter'
 import { inject } from '@adonisjs/core'
 import DifficultiesPresenter from '#presenters/difficulty_presenter'
-import { questionValidator } from '#validators/question'
+import { questionIdValidator, questionValidator } from '#validators/question'
 import { attachmentManager } from '@jrmc/adonis-attachment'
 import Question from '#models/question'
 import Answer from '#models/answer'
@@ -80,5 +80,38 @@ export default class QuestionsController {
         })
 
     ctx.response.redirect().toRoute('dashboard.show')
+  }
+
+  async deleteQuestion(ctx: HttpContext) {
+    const { questionId } = await ctx.request.validateUsing(questionIdValidator)
+    const question = await Question.find(questionId)
+    if (!question) {
+      ctx.session.flash(FlashKeys.ERROR, {
+        E_NO_QUESTION: "This question doesn't exists.",
+      })
+      return ctx.response.redirect().back()
+    }
+    await question.delete()
+    ctx.session.flash(FlashKeys.SUCCESS, {
+      S_DELETED: 'The question has been successfully deleted!',
+    })
+    return ctx.response.redirect().back()
+  }
+
+  async approveQuestion(ctx: HttpContext) {
+    const { questionId } = await ctx.request.validateUsing(questionIdValidator)
+    const question = await Question.find(questionId)
+    if (!question) {
+      ctx.session.flash(FlashKeys.ERROR, {
+        E_NO_QUESTION: "This question doesn't exists.",
+      })
+      return ctx.response.redirect().back()
+    }
+    question.isApproved = true
+    await question.save()
+    ctx.session.flash(FlashKeys.SUCCESS, {
+      S_APPROVED: 'The question has been successfully approved!',
+    })
+    return ctx.response.redirect().back()
   }
 }

@@ -37,6 +37,6 @@ export default class AuthController {
     ctx.session.flash('success', {
       S_LOGOUT_SUCCESS: 'Successfully logged out',
     })
-    return ctx.response.redirect().toRoute('auth.login.show')
+    return ctx.response.redirect().toRoute('home.show')
   }
 }

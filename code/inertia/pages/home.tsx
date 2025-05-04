@@ -13,6 +13,7 @@ import {
   FaChevronDown,
 } from 'react-icons/fa6'
 import Footer from '~/partials/Footer'
+import Flashes from '~/partials/Flashes'
 
 function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -49,6 +50,7 @@ function Home() {
       <Head title="Home" />
       <div className="min-h-screen bg-[#0a0a0a] relative overflow-hidden grid grid-rows-[auto_1fr_auto]">
         <Navbar />
+        <Flashes />
         <GridBackground type="default" animated={true} />
 
         <section className="py-20 relative">

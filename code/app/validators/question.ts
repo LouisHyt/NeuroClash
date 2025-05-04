@@ -58,3 +58,9 @@ export const questionValidator = vine.compile(
       .nullable(),
   })
 )
+
+export const questionIdValidator = vine.compile(
+  vine.object({
+    questionId: vine.number().positive(),
+  })
+)

@@ -20,6 +20,7 @@ export default class AdminController {
       .preload('theme')
       .preload('difficulty')
       .preload('answers')
+      .orderBy('created_at', 'desc')
 
     return inertia.render('admin', {
       usersCount: Number(totalUsers[0].$extras.total),

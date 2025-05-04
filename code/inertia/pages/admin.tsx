@@ -9,6 +9,7 @@ import UserList from '~/components/admin/UserList'
 import GameList from '~/components/admin/GameList'
 import SuggestedQuestions from '~/components/admin/SuggestedQuestions'
 import ApprovedQuestions from '~/components/admin/ApprovedQuestions'
+import AppLayout from '~/layouts/AppLayout'
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<'suggested' | 'questions'>('suggested')
@@ -16,14 +17,12 @@ const Admin = () => {
   return (
     <>
       <Head title="Admin Dashboard" />
-      <Flashes />
-      <div className="min-h-screen bg-[#0a0a0a] relative text-fuchsia-200/80 grid grid-rows-[auto_1fr]">
-        <GridBackground animated={false} type="profile" />
-        <Navbar />
-        <div className="overflow-y-auto overflow-x-hidden">
-          <div className="grid grid-cols-1 xl:grid-cols-[1fr_350px] gap-6 p-6 md:p-8 box-border">
+      <GridBackground animated={false} type="profile" />
+      <div className="h-full flex flex-col overflow-hidden justify-center">
+        <div className="overflow-y-auto px-4 md:px-8 py-4">
+          <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-4 sm:gap-6 md:gap-8">
             {/* Section principale */}
-            <div className="grid xl:grid-rows-[auto_1fr] gap-6 md:max-h-[calc(100vh-130px)] min-h-0">
+            <div className="grid xl:grid-rows-[auto_1fr] gap-6 md:max-h-[calc(100vh-189px)] min-h-0">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 auto-rows-[minmax(200px,290px)]">
                 <UserList />
 
@@ -65,5 +64,7 @@ const Admin = () => {
     </>
   )
 }
+
+Admin.layout = (page: React.ReactNode) => <AppLayout children={page} />
 
 export default Admin
