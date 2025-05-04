@@ -1,8 +1,4 @@
-import Navbar from '~/partials/Navbar'
-import GridBackground from '~/components/GridBackground'
 import { Head, useForm } from '@inertiajs/react'
-import Flashes from '~/partials/Flashes'
-import Footer from '~/partials/Footer'
 import { useState } from 'react'
 import { VscEyeClosed, VscEye } from 'react-icons/vsc'
 import { FiUser } from 'react-icons/fi'

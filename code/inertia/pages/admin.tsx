@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { Head } from '@inertiajs/react'
 import GridBackground from '~/components/GridBackground'
-import Flashes from '~/partials/Flashes'
-import Navbar from '~/partials/Navbar'
 import GeneralChat from '~/components/GeneralChat'
 
 import UserList from '~/components/admin/UserList'

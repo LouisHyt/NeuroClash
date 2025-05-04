@@ -1,5 +1,3 @@
-import Navbar from '~/partials/Navbar'
-import GridBackground from '~/components/GridBackground'
 import { Head, useForm } from '@inertiajs/react'
 import { Link } from '@tuyau/inertia/react'
 import { tuyau } from '~/utils/api'
