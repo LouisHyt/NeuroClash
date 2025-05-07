@@ -57,7 +57,6 @@ const GeneralChat = () => {
 
     socket.on('newChatMessage', (message) => {
       addChatMessage(message)
-      console.log(message)
     })
 
     socket.on('messageDeleted', (messageId) => {

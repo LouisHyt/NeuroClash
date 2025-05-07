@@ -7,6 +7,7 @@ export type RoomData = {
   players: RoomPlayers[]
   isPrivate: Boolean
   roomCode?: string
+  isFinished: Boolean
   bannedThemes: Set<string>
 }
 

@@ -1,6 +1,7 @@
 import { Socket, Namespace } from 'socket.io'
 import { roomManager } from '#services/room_manager'
 import string from '@adonisjs/core/helpers/string'
+import User from '#models/user'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -42,20 +43,26 @@ export default class GameSocketController {
     console.log(`\u001b[1;32m Room : \u001b[0m Created a private room with code ${roomCode}`)
     roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
     socket.join(roomId)
-    this.io.to(roomId).emit('gameStart', {
-      roomId,
-    })
+    socket.emit('privateGameCreated', roomCode)
   }
 
-  public handleJoinPrivateGame(socket: Socket, roomCode: string) {
-    const room = roomManager.findPrivateRoom(roomCode)
-    if (!room) {
+  public async handleJoinPrivateGame(socket: Socket, roomCode: string) {
+    const roomId = roomManager.findPrivateRoom(roomCode)
+    if (!roomId) {
       socket.emit('privateGameNotFound')
       return
     }
-    roomManager.addPlayerToRoom(room, socket.data.userUuid, socket.id)
-    socket.join(room)
-    this.io.to(room).emit('privateGameJoined', room)
+    const room = roomManager.getRoom(roomId)!
+    const originalUser = await User.find(room.players[0].uuid)
+    const newUser = await User.find(socket.data.userUuid)
+    if (!originalUser || !newUser) return
+    roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
+    socket.join(roomId)
+    this.io.to(roomId).emit('privateGameJoined', {
+      gameId: roomId,
+      originalUser: originalUser.username,
+      newUser: newUser.username,
+    })
   }
 
   public handleGameStatus(socket: Socket, gameId: string) {
@@ -64,11 +71,23 @@ export default class GameSocketController {
     this.io.to(socket.id).emit('gameStatus', playerRoom)
   }
 
-  public handleDisconnect(socket: Socket) {
+  public async handleDisconnect(socket: Socket) {
     const playerRoom = roomManager.findPlayerRoom(socket.data.userUuid)
     if (!playerRoom) return
     console.log(`\u001b[1;32m Room : \u001b[0m Player ${socket.data.userUuid} disconnected`)
+    const room = roomManager.getRoom(playerRoom)!
+    if (!room.isFinished) {
+      if (!room.isPrivate) {
+        const user = await User.findOrFail(socket.data.userUuid)
+        await user.load('statistic')
+        user.statistic.elo > 540 ? (user!.statistic.elo -= 40) : null
+        await user.save()
+      }
+      this.io.to(playerRoom).emit('playerDisconnected', {
+        userUuid: socket.data.userUuid,
+        isPrivateGame: room.isPrivate,
+      })
+    }
     roomManager.deleteRoom(playerRoom)
-    this.io.to(playerRoom).emit('playerDisconnected', socket.data.userUuid)
   }
 }

@@ -22,6 +22,7 @@ class RoomManager {
     const newRoom: RoomData = {
       players: [],
       isPrivate: false,
+      isFinished: false,
       bannedThemes: new Set(),
     }
     this.rooms.set(roomId, newRoom)
@@ -33,6 +34,7 @@ class RoomManager {
       players: [],
       isPrivate: true,
       roomCode: roomCode,
+      isFinished: false,
       bannedThemes: new Set(),
     }
     this.rooms.set(roomId, newRoom)
@@ -82,11 +84,15 @@ class RoomManager {
 
   public findPrivateRoom(roomCode: string): string | null {
     for (const [roomId, roomData] of this.rooms.entries()) {
-      if (roomData.roomCode === roomCode) {
+      if (roomData.roomCode === roomCode && roomData.players.length < 2) {
         return roomId
       }
     }
     return null
+  }
+
+  public getAllRooms(): Rooms {
+    return this.rooms
   }
 }
 

@@ -7,22 +7,26 @@ import DidYouKnow from '~/components/game/DidYouKnow'
 import GameLayout from '~/layouts/GameLayout'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import { Link } from '@tuyau/inertia/react'
-import { FiCopy, FiCheck } from 'react-icons/fi'
+import type { PrivateGameJoinedType } from '#controllers/socket/game_socket_controller.types'
 
 const JoinPrivate = () => {
   const [searchStatus, setSearchStatus] = useState<'searching' | 'found' | 'error'>('searching')
-  const [statusMessage, setStatusMessage] = useState('Waiting for a player to join...')
+  const [statusMessage, setStatusMessage] = useState('Waiting for a game to join...')
   const [gameCode, setGameCode] = useState('')
+  const [codeError, setCodeError] = useState<string | null>(null)
 
   const socket = useGameSocketStore((state) => state.socket)
 
   useEffect(() => {
     socket?.on('privateGameNotFound', () => {
-      console.log('no room found')
+      setCodeError('The code you entered is invalid or the game is already full')
+      setGameCode('')
     })
 
-    socket?.on('gameStart', ({ gameId }: { gameId: string }) => {
-      console.log(gameId)
+    socket?.on('privateGameJoined', (data: PrivateGameJoinedType) => {
+      console.log(data)
+      setStatusMessage(`You joined the game of ${data.originalUser}!`)
+      setSearchStatus('found')
     })
   }, [socket])
 
@@ -46,7 +50,7 @@ const JoinPrivate = () => {
           </h1>
           <h2 className="text-lg md:text-2xl text-indigo-300 mb-12">Private lobby</h2>
 
-          <div className="flex flex-col items-center mb-8 sm:mb-12">
+          <div className="flex flex-col items-center">
             <LobbyLoader />
             <motion.p
               className="text-xl sm:text-2xl font-medium text-white mb-2 sm:mb-3"
@@ -58,40 +62,58 @@ const JoinPrivate = () => {
             >
               {statusMessage}
             </motion.p>
-          </div>
-
-          <form onSubmit={handleJoinGame} className="mb-6">
-            <div className="mb-4">
-              <input
-                type="text"
-                name="gameCode"
-                placeholder="Enter game code"
-                className="w-full py-3 px-4 bg-gray-900/60 text-white placeholder-gray-400 rounded-lg border border-indigo-500/30 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-sm sm:text-base"
-                value={gameCode}
-                onChange={(e) => setGameCode(e.target.value)}
-                required
-              />
-            </div>
-          </form>
-
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            {searchStatus === 'searching' && (
+            {searchStatus === 'searching' ? (
               <>
-                <button
-                  type="button"
-                  onClick={handleJoinGame}
-                  className="cursor-pointer py-3 px-6 sm:py-4 sm:px-8 inline-block bg-indigo-600 transition-all hover:bg-indigo-700 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base w-full sm:w-auto"
-                >
-                  Join
-                </button>
-                <Link
-                  route="dashboard.show"
-                  className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base w-full sm:w-auto"
-                >
-                  Cancel
-                </Link>
+                <form onSubmit={handleJoinGame} className="my-6">
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      name="gameCode"
+                      placeholder="Enter game code"
+                      className="sm:w-auto w-full py-3 px-4 bg-gray-900/60 text-white placeholder-gray-400 rounded-lg border border-indigo-500/30 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-sm sm:text-base"
+                      value={gameCode}
+                      onChange={(e) => setGameCode(e.target.value.toUpperCase())}
+                      required
+                    />
+                  </div>
+                  {codeError && (
+                    <motion.p
+                      className="text-red-500 text-sm"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {codeError}
+                    </motion.p>
+                  )}
+                </form>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <button
+                    type="button"
+                    onClick={handleJoinGame}
+                    className="cursor-pointer py-3 px-6 sm:py-4 sm:px-8 inline-block bg-indigo-600 transition-all hover:bg-indigo-700 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base w-full sm:w-auto"
+                  >
+                    Join
+                  </button>
+                  <Link
+                    route="dashboard.show"
+                    className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base w-full sm:w-auto"
+                  >
+                    Cancel
+                  </Link>
+                </div>
               </>
+            ) : (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, delay: 0.5 }}
+                className="text-indigo-300 text-base sm:text-lg"
+              >
+                You'll be redirected in a few seconds...
+              </motion.p>
             )}
           </div>
         </div>

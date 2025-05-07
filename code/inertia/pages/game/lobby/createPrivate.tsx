@@ -8,6 +8,7 @@ import GameLayout from '~/layouts/GameLayout'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import { Link } from '@tuyau/inertia/react'
 import { FiCopy, FiCheck } from 'react-icons/fi'
+import type { PrivateGameJoinedType } from '#controllers/socket/game_socket_controller.types'
 
 const CreatePrivate = () => {
   const [searchTime, setSearchTime] = useState(0)
@@ -37,8 +38,9 @@ const CreatePrivate = () => {
     socket?.on('privateGameCreated', (roomCode: string) => {
       setGameCode(roomCode)
     })
-    socket?.on('gameStart', ({ gameId }: { gameId: string }) => {
-      console.log(gameId)
+    socket?.on('privateGameJoined', (data: PrivateGameJoinedType) => {
+      setStatusMessage(`${data.newUser} joined the game!`)
+      setSearchStatus('found')
     })
   }, [socket])
 
@@ -55,7 +57,7 @@ const CreatePrivate = () => {
           </h1>
           <h2 className="text-lg md:text-2xl text-indigo-300 mb-12">Private lobby</h2>
 
-          <div className="flex flex-col items-center mb-8 sm:mb-12">
+          <div className="flex flex-col items-center">
             <LobbyLoader />
             <motion.p
               className="text-xl sm:text-2xl font-medium text-white mb-2 sm:mb-3"

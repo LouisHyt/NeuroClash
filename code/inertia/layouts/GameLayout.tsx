@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { io } from 'socket.io-client'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
-import { useRouter } from '@tuyau/inertia/react'
-import { usePage } from '@inertiajs/react'
+import { usePage, router } from '@inertiajs/react'
+import { tuyau } from '~/utils/api'
+import type { HandleDisconnectType } from '#controllers/socket/game_socket_controller.types'
 
 function GameLayout({ children }: { children: React.ReactNode }) {
   const setSocket = useGameSocketStore((state) => state.setSocket)
   const { gameId } = usePage().props
-  const router = useRouter()
 
   useEffect(() => {
     const socketInstance = io('/game')
@@ -20,11 +20,21 @@ function GameLayout({ children }: { children: React.ReactNode }) {
 
     socketInstance.on('gameStatus', (gameExists) => {
       if (gameExists) return
-      router.visit({ route: 'dashboard.show', replace: true })
+      router.visit(tuyau.$url('dashboard.show'), {
+        replace: true,
+        method: 'get',
+      })
     })
 
-    socketInstance.on('playerDisconnected', (playerUuid: string) => {
-      router.visit({ route: 'dashboard.show', replace: true })
+    socketInstance.on('playerDisconnected', async (data: HandleDisconnectType) => {
+      router.visit(tuyau.$url('dashboard.handle'), {
+        replace: true,
+        method: 'post',
+        data: {
+          userUuid: data.userUuid,
+          isPrivateGame: data.isPrivateGame,
+        },
+      })
     })
 
     setSocket(socketInstance)

@@ -12,6 +12,7 @@ export default class extends BaseSchema {
       table.string('email', 254).notNullable().unique()
       table.string('password', 255).notNullable()
       table.string('bio', 175).nullable().defaultTo(null)
+      table.boolean('has_penalty').notNullable().defaultTo(false)
       table.datetime('banned_until').nullable().defaultTo(null)
       table.json('avatar').nullable().defaultTo(null)
 

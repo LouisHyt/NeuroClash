@@ -16,7 +16,7 @@ const DidYouKnow = () => {
   }, [FunFacts.length])
 
   return (
-    <div className="fixed bottom-2 sm:bottom-8 left-0 right-0 z-10 px-4">
+    <div className="absolute bottom-2 sm:bottom-8 left-0 right-0 z-10 px-4">
       <div className="max-w-2xl mx-auto p-2 sm:p-3">
         <AnimatePresence mode="wait">
           <motion.div

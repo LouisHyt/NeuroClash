@@ -4,7 +4,6 @@ import {
   HiOutlineQuestionMarkCircle,
   HiOutlineTag,
   HiOutlineTrash,
-  HiOutlineQuestionMarkCircle as HiQuestion,
 } from 'react-icons/hi'
 import { IoChevronDown } from 'react-icons/io5'
 import { useState } from 'react'

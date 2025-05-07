@@ -18,6 +18,7 @@ const ProfileController = () => import('#controllers/profile_controller')
 const QuestionsController = () => import('#controllers/questions_controller')
 const AdminController = () => import('#controllers/admin_controller')
 const LobbyController = () => import('#controllers/lobby_controller')
+const GameController = () => import('#controllers/game_controller')
 
 //Public routes
 router.on('/').renderInertia('home').as('home.show')
@@ -37,6 +38,9 @@ router
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard.show')
+    router
+      .post('/dashboard', [DashboardController, 'handleDashboardDisconnected'])
+      .as('dashboard.handle')
     router.get('/profile', [ProfileController, 'showProfile']).as('profile.show')
 
     router
@@ -59,7 +63,7 @@ router
       .post('/suggest-question', [QuestionsController, 'handleSuggestQuestion'])
       .as('suggestquestions.post')
 
-    // Game routes
+    //Lobby
     router.get('/lobby/public', [LobbyController, 'showPublic']).as('lobby.public.show')
     router
       .get('/lobby/create-private', [LobbyController, 'showCreatePrivate'])
@@ -68,12 +72,20 @@ router
       .get('/lobby/join-private', [LobbyController, 'showJoinPrivate'])
       .as('lobby.join-private.show')
 
+    //Game
+    router
+      .get('/game/:id', [GameController, 'showGame'])
+      .where('id', {
+        match: /^gid.{15}$/,
+      })
+      .as('game.show')
+
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
 
     router.get('/ban', [BanController, 'showBan']).as('ban.show').use(middleware.auth())
   })
   .use(middleware.auth())
-  .use(middleware.ban())
+  .use(middleware.sanction())
 
 //Admin
 router

@@ -14,5 +14,15 @@ export default class extends BaseSeeder {
     }).then(async (user) => {
       await Statistic.create({ userUuid: user.uuid })
     })
+
+    await User.create({
+      roleId: Roles.USER,
+      username: 'Jean',
+      email: 'jean@neuroclash.com',
+      password: '123456789',
+      bio: 'Hello there !',
+    }).then(async (user) => {
+      await Statistic.create({ userUuid: user.uuid })
+    })
   }
 }

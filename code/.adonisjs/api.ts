@@ -27,6 +27,10 @@ type DashboardGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/dashboard_controller.ts').default['showDashboard'], false>
 }
+type DashboardPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/dashboard_controller.ts').default['handleDashboardDisconnected'], false>
+}
 type ProfileGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/profile_controller.ts').default['showProfile'], false>
@@ -66,6 +70,10 @@ type LobbyCreateprivateGetHead = {
 type LobbyJoinprivateGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/lobby_controller.ts').default['showJoinPrivate'], false>
+}
+type GameIdGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/game_controller.ts').default['showGame'], false>
 }
 type LogoutPost = {
   request: unknown
@@ -111,6 +119,7 @@ export interface ApiDefinition {
     };
     '$get': DashboardGetHead;
     '$head': DashboardGetHead;
+    '$post': DashboardPost;
   };
   'profile': {
     '$url': {
@@ -167,6 +176,14 @@ export interface ApiDefinition {
       };
       '$get': LobbyJoinprivateGetHead;
       '$head': LobbyJoinprivateGetHead;
+    };
+  };
+  'game': {
+    ':id': {
+      '$url': {
+      };
+      '$get': GameIdGetHead;
+      '$head': GameIdGetHead;
     };
   };
   'logout': {
@@ -263,6 +280,13 @@ const routes = [
   },
   {
     params: [],
+    name: 'dashboard.handle',
+    path: '/dashboard',
+    method: ["POST"],
+    types: {} as DashboardPost,
+  },
+  {
+    params: [],
     name: 'profile.show',
     path: '/profile',
     method: ["GET","HEAD"],
@@ -330,6 +354,13 @@ const routes = [
     path: '/lobby/join-private',
     method: ["GET","HEAD"],
     types: {} as LobbyJoinprivateGetHead,
+  },
+  {
+    params: ["id"],
+    name: 'game.show',
+    path: '/game/:id',
+    method: ["GET","HEAD"],
+    types: {} as GameIdGetHead,
   },
   {
     params: [],
