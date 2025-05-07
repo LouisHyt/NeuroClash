@@ -18,12 +18,17 @@ const GameLobby = () => {
   //Wait before looking for a game
   useEffect(() => {
     const waitBeforeSearch = setTimeout(() => {
-      setSearchStatus('found')
-      setStatusMessage('Game found!')
+      socket?.emit('joinGame')
     }, 7000)
 
+    socket?.on('gameStart', (gameId: string) => {
+      console.log(gameId)
+      setSearchStatus('found')
+      setStatusMessage('Game found!')
+    })
+
     return () => clearTimeout(waitBeforeSearch)
-  }, [])
+  }, [socket])
 
   // Wait before looking for a game & Update timer
   useEffect(() => {

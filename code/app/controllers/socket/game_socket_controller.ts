@@ -28,12 +28,9 @@ export default class GameSocketController {
     const room = roomManager.getRoom(availableRoom)
     if (room && room?.players.length === 2) {
       console.log('\u001b[1;32m Room : \u001b[0m Room found! Joined and start game')
-      this.io.to(availableRoom).emit('gameStart', {
-        roomId: availableRoom,
-      })
+      this.io.to(availableRoom).emit('gameStart', availableRoom)
       return
     }
-    socket.emit('roomJoined', availableRoom)
   }
 
   public handleCreatePrivateGame(socket: Socket) {
@@ -81,6 +78,7 @@ export default class GameSocketController {
         const user = await User.findOrFail(socket.data.userUuid)
         await user.load('statistic')
         user.statistic.elo > 540 ? (user!.statistic.elo -= 40) : null
+        user.hasPenalty = true
         await user.save()
       }
       this.io.to(playerRoom).emit('playerDisconnected', {
