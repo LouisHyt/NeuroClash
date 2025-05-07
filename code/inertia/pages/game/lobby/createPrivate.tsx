@@ -101,7 +101,7 @@ const CreatePrivate = () => {
                           {copied ? (
                             <FiCheck className="h-5 w-5" />
                           ) : (
-                            <FiCopy className="h-5 w-5" />
+                            <FiCopy className="h-5 w-5 cursor-pointer" />
                           )}
                         </button>
                       </div>
