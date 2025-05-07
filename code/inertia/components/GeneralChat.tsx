@@ -3,11 +3,11 @@ import { AnimatePresence, motion } from 'motion/react'
 import { usePage } from '@inertiajs/react'
 import { HiArrowSmDown, HiX } from 'react-icons/hi'
 import { SharedProps } from '@adonisjs/inertia/types'
-import { useSocketStore } from '~/stores/socketStore'
+import { useGeneralSocketStore } from '~/stores/generalSocketStore'
 import { useGeneralChatStore } from '~/stores/generalChatStore'
 
 const GeneralChat = () => {
-  const socket = useSocketStore((state) => state.socket)
+  const socket = useGeneralSocketStore((state) => state.socket)
   const chatMessages = useGeneralChatStore((state) => state.messages)
   const addChatMessage = useGeneralChatStore((state) => state.addMessage)
   const deleteChatMessage = useGeneralChatStore((state) => state.deleteMessage)

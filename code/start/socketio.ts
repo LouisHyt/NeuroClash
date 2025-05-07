@@ -7,12 +7,25 @@ import qs from 'qs'
 import { Request } from '@adonisjs/core/http'
 import sessionConfig from '#config/session'
 import Encryption from '@adonisjs/core/services/encryption'
+import { instrument } from '@socket.io/admin-ui'
 
 app.ready(() => {
-  const io = new Server(server.getNodeServer())
+  const io = new Server(server.getNodeServer(), {
+    cors: {
+      origin: ['https://admin.socket.io'],
+      credentials: true,
+    },
+  })
 
   const gameSocketController = new GameSocketController(io.of('/game'))
   const generalSocketController = new GeneralSocketController(io.of('/general'))
+
+  instrument(io, {
+    auth: false,
+    mode: 'development',
+    namespaceName: '/admin',
+    readonly: true,
+  })
 
   io.of('/game').use(AuthMiddleware)
   io.of('/general').use(AuthMiddleware)

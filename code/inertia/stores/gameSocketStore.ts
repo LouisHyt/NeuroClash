@@ -6,7 +6,7 @@ type SocketStoreType = {
   setSocket: (value: Socket | null) => void
 }
 
-export const useSocketStore = create<SocketStoreType>()((set) => ({
+export const useGameSocketStore = create<SocketStoreType>()((set) => ({
   socket: null,
   setSocket: (value) => set(() => ({ socket: value })),
 }))

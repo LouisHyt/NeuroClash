@@ -1,27 +1,26 @@
 import { useEffect } from 'react'
 import { io } from 'socket.io-client'
-import { useSocketStore } from '~/stores/socketStore'
+import { useGeneralSocketStore } from '~/stores/generalSocketStore'
 import Flashes from '~/partials/Flashes'
 import Navbar from '~/partials/Navbar'
 import Footer from '~/partials/Footer'
 import { usePage } from '@inertiajs/react'
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const setSocket = useSocketStore((state) => state.setSocket)
+  const setSocket = useGeneralSocketStore((state) => state.setSocket)
   const page = usePage()
 
   useEffect(() => {
     const socketInstance = io('/general')
-    console.log('connected to socket')
     setSocket(socketInstance)
 
     socketInstance.on('connect', () => {
-      console.log('connected to server !')
+      console.log('connected to general socket server !')
     })
 
     return () => {
       socketInstance.disconnect()
-      console.log('disconnected from socket')
+      console.log('disconnected from general socket')
       setSocket(null)
     }
   }, [])

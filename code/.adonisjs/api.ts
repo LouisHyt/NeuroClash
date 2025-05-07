@@ -55,6 +55,18 @@ type SuggestQuestionPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/question.ts')['questionValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['handleSuggestQuestion'], true>
 }
+type LobbyPublicGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/lobby_controller.ts').default['showPublic'], false>
+}
+type LobbyCreateprivateGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/lobby_controller.ts').default['showCreatePrivate'], false>
+}
+type LobbyJoinprivateGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/lobby_controller.ts').default['showJoinPrivate'], false>
+}
 type LogoutPost = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/auth_controller.ts').default['logout'], false>
@@ -68,12 +80,12 @@ type AdminGetHead = {
   response: MakeTuyauResponse<import('../app/controllers/admin_controller.ts').default['showDashboard'], false>
 }
 type AdminDeletequestionDelete = {
-  request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['deleteQuestion'], false>
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/question.ts')['questionIdValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['deleteQuestion'], true>
 }
 type AdminApprovequestionPost = {
-  request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['approveQuestion'], false>
+  request: MakeTuyauRequest<InferInput<typeof import('../app/validators/question.ts')['questionIdValidator']>>
+  response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['approveQuestion'], true>
 }
 type ApiGetusersPost = {
   request: unknown
@@ -136,6 +148,26 @@ export interface ApiDefinition {
     '$get': SuggestQuestionGetHead;
     '$head': SuggestQuestionGetHead;
     '$post': SuggestQuestionPost;
+  };
+  'lobby': {
+    'public': {
+      '$url': {
+      };
+      '$get': LobbyPublicGetHead;
+      '$head': LobbyPublicGetHead;
+    };
+    'create-private': {
+      '$url': {
+      };
+      '$get': LobbyCreateprivateGetHead;
+      '$head': LobbyCreateprivateGetHead;
+    };
+    'join-private': {
+      '$url': {
+      };
+      '$get': LobbyJoinprivateGetHead;
+      '$head': LobbyJoinprivateGetHead;
+    };
   };
   'logout': {
     '$url': {
@@ -277,6 +309,27 @@ const routes = [
     path: '/suggest-question',
     method: ["POST"],
     types: {} as SuggestQuestionPost,
+  },
+  {
+    params: [],
+    name: 'lobby.public.show',
+    path: '/lobby/public',
+    method: ["GET","HEAD"],
+    types: {} as LobbyPublicGetHead,
+  },
+  {
+    params: [],
+    name: 'lobby.create-private.show',
+    path: '/lobby/create-private',
+    method: ["GET","HEAD"],
+    types: {} as LobbyCreateprivateGetHead,
+  },
+  {
+    params: [],
+    name: 'lobby.join-private.show',
+    path: '/lobby/join-private',
+    method: ["GET","HEAD"],
+    types: {} as LobbyJoinprivateGetHead,
   },
   {
     params: [],

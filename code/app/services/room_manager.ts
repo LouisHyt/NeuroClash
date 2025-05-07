@@ -1,73 +1,93 @@
 // app/services/room_manager.ts
-import type {RoomData, Rooms} from "#services/room_manager.types";
+import type { RoomData, Rooms } from '#services/room_manager.types'
 
 class RoomManager {
-  private static instance: RoomManager;
-  private rooms: Rooms = new Map();
+  private static instance: RoomManager
+  private rooms: Rooms = new Map()
 
   private constructor() {}
 
   public static getInstance(): RoomManager {
-      if (!RoomManager.instance) {
-          RoomManager.instance = new RoomManager();
-      }
-      return RoomManager.instance;
+    if (!RoomManager.instance) {
+      RoomManager.instance = new RoomManager()
+    }
+    return RoomManager.instance
   }
 
   public getRoom(roomId: string): RoomData | undefined {
-      return this.rooms.get(roomId);
+    return this.rooms.get(roomId)
   }
 
   public createRoom(roomId: string): RoomData {
-      const newRoom: RoomData = { 
-        players: [],
-        isPrivate: false, 
-        bannedThemes: new Set() 
-    };
-      this.rooms.set(roomId, newRoom);
-      return newRoom;
+    const newRoom: RoomData = {
+      players: [],
+      isPrivate: false,
+      bannedThemes: new Set(),
+    }
+    this.rooms.set(roomId, newRoom)
+    return newRoom
+  }
+
+  public createPrivateRoom(roomId: string, roomCode: string): RoomData {
+    const newRoom: RoomData = {
+      players: [],
+      isPrivate: true,
+      roomCode: roomCode,
+      bannedThemes: new Set(),
+    }
+    this.rooms.set(roomId, newRoom)
+    return newRoom
   }
 
   public deleteRoom(roomId: string): boolean {
-      return this.rooms.delete(roomId);
+    return this.rooms.delete(roomId)
   }
 
   public addPlayerToRoom(roomId: string, playerUuid: string, playerSocketId: string): boolean {
-      const room = this.rooms.get(roomId);
-      if (room) {
-          room.players.push({ uuid: playerUuid, socketId: playerSocketId });
-          return true;
-      }
-      return false;
+    const room = this.rooms.get(roomId)
+    if (room) {
+      room.players.push({ uuid: playerUuid, socketId: playerSocketId })
+      return true
+    }
+    return false
   }
 
   public removePlayerFromRoom(roomId: string, playerUuid: string): boolean {
-      const room = this.rooms.get(roomId);
-      if (room) {
-        const initialLength = room.players.length;
-        room.players.filter(player => player.uuid !== playerUuid);
-        return room.players.length < initialLength;
-      }
-      return false;
+    const room = this.rooms.get(roomId)
+    if (room) {
+      const initialLength = room.players.length
+      room.players.filter((player) => player.uuid !== playerUuid)
+      return room.players.length < initialLength
+    }
+    return false
   }
 
   public findAvailableRoom(): string | null {
-      for (const [roomId, roomData] of this.rooms.entries()) {
-          if (roomData.players.length < 2) {
-              return roomId;
-          }
+    for (const [roomId, roomData] of this.rooms.entries()) {
+      if (roomData.players.length < 2) {
+        return roomId
       }
-      return null;
+    }
+    return null
   }
 
   public findPlayerRoom(playerUuid: string): string | null {
-      for (const [roomId, roomData] of this.rooms.entries()) {
-        if (roomData.players.some(player => player.uuid === playerUuid)) {
-            return roomId;
-        }
+    for (const [roomId, roomData] of this.rooms.entries()) {
+      if (roomData.players.some((player) => player.uuid === playerUuid)) {
+        return roomId
       }
-      return null;
+    }
+    return null
+  }
+
+  public findPrivateRoom(roomCode: string): string | null {
+    for (const [roomId, roomData] of this.rooms.entries()) {
+      if (roomData.roomCode === roomCode) {
+        return roomId
+      }
+    }
+    return null
   }
 }
 
-export const roomManager = RoomManager.getInstance();
+export const roomManager = RoomManager.getInstance()

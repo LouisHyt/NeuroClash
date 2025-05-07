@@ -70,7 +70,8 @@ const Dashboard = ({
                   {/* Game buttons */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Bouton trouver une partie */}
-                    <button
+                    <Link
+                      route="lobby.public.show"
                       className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
                       style={{
                         backgroundImage: "url('https://picsum.photos/seed/findgame/400/200')",
@@ -81,10 +82,11 @@ const Dashboard = ({
                         <HiOutlineSearch className="w-8 h-8 mb-2" />
                         <span>Find game</span>
                       </div>
-                    </button>
+                    </Link>
 
                     {/* Bouton Créer une partie privée */}
-                    <button
+                    <Link
+                      route="lobby.create-private.show"
                       className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
                       style={{
                         backgroundImage: "url('https://picsum.photos/seed/creategame/400/200')",
@@ -96,10 +98,11 @@ const Dashboard = ({
                         <HiOutlinePlusCircle className="w-8 h-8 mb-2" />
                         <span>Create private game</span>
                       </div>
-                    </button>
+                    </Link>
 
                     {/* Bouton Rejoindre une partie */}
-                    <button
+                    <Link
+                      route="lobby.join-private.show"
                       className="cursor-pointer relative text-white font-bold py-8 px-4 rounded-lg overflow-hidden group transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl bg-cover bg-center flex flex-col items-center justify-center text-center"
                       style={{
                         backgroundImage: "url('https://picsum.photos/seed/joingame/400/200')",
@@ -111,7 +114,7 @@ const Dashboard = ({
                         <HiOutlineUserGroup className="w-8 h-8 mb-2" />
                         <span>Join Game</span>
                       </div>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

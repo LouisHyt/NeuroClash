@@ -17,6 +17,7 @@ const BanController = () => import('#controllers/ban_controller')
 const ProfileController = () => import('#controllers/profile_controller')
 const QuestionsController = () => import('#controllers/questions_controller')
 const AdminController = () => import('#controllers/admin_controller')
+const LobbyController = () => import('#controllers/lobby_controller')
 
 //Public routes
 router.on('/').renderInertia('home').as('home.show')
@@ -36,7 +37,6 @@ router
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard.show')
-
     router.get('/profile', [ProfileController, 'showProfile']).as('profile.show')
 
     router
@@ -58,6 +58,15 @@ router
     router
       .post('/suggest-question', [QuestionsController, 'handleSuggestQuestion'])
       .as('suggestquestions.post')
+
+    // Game routes
+    router.get('/lobby/public', [LobbyController, 'showPublic']).as('lobby.public.show')
+    router
+      .get('/lobby/create-private', [LobbyController, 'showCreatePrivate'])
+      .as('lobby.create-private.show')
+    router
+      .get('/lobby/join-private', [LobbyController, 'showJoinPrivate'])
+      .as('lobby.join-private.show')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
 

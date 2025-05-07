@@ -1,11 +1,12 @@
 export type RoomPlayers = {
-    uuid: string,
-    socketId: string
-};
+  uuid: string
+  socketId: string
+}
 
 export type RoomData = {
-  players: RoomPlayers[],
-  isPrivate: Boolean,
+  players: RoomPlayers[]
+  isPrivate: Boolean
+  roomCode?: string
   bannedThemes: Set<string>
 }
 
