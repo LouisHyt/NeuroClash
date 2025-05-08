@@ -9,11 +9,15 @@ import PlayerCard from '~/components/game/PlayerCard'
 import { usePage } from '@inertiajs/react'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import type GameController from '#controllers/game_controller'
+import { tuyau } from '~/utils/api'
 
 // Composant principal
 const Start = () => {
   const handleEndTimer = () => {
-    // Redirection vers la page de jeu
+    router.visit(`${tuyau.$url('game.draft.show', { params: { id: gameId } })}`, {
+      replace: true,
+      method: 'get',
+    })
   }
 
   const { players, gameId } = usePage<InferPageProps<GameController, 'showStartGame'>>().props

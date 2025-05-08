@@ -1,5 +1,8 @@
 // app/services/room_manager.ts
-import type { RoomData, Rooms } from '#services/room_manager.types'
+import type { DraftPhase, RoomData, Rooms } from '#services/room_manager.types'
+import DraftPhases from '#enums/DraftPhases'
+import GamePhases from '#enums/gamePhases'
+import Theme from '#models/theme'
 
 class RoomManager {
   private static instance: RoomManager
@@ -18,11 +21,18 @@ class RoomManager {
     return this.rooms.get(roomId)
   }
 
+  public getAllRooms(): Rooms {
+    return this.rooms
+  }
+
   public createRoom(roomId: string): RoomData {
     const newRoom: RoomData = {
       players: [],
       isPrivate: false,
       isFinished: false,
+      draftActivePlayerUuid: '',
+      draftPhase: DraftPhases.WAIT,
+      phase: GamePhases.START,
       bannedThemes: new Set(),
     }
     this.rooms.set(roomId, newRoom)
@@ -35,6 +45,9 @@ class RoomManager {
       isPrivate: true,
       roomCode: roomCode,
       isFinished: false,
+      draftPhase: DraftPhases.WAIT,
+      draftActivePlayerUuid: '',
+      phase: GamePhases.START,
       bannedThemes: new Set(),
     }
     this.rooms.set(roomId, newRoom)
@@ -91,8 +104,43 @@ class RoomManager {
     return null
   }
 
-  public getAllRooms(): Rooms {
-    return this.rooms
+  public startDraftPhase(roomId: string): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    room.phase = GamePhases.DRAFT
+    room.draftPhase = DraftPhases.BAN1
+    room.draftActivePlayerUuid = room.players[0].uuid
+  }
+
+  public startPlayPhase(roomId: string): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    room.phase = GamePhases.PLAY
+  }
+
+  public switchDraftActivePlayer(roomId: string): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    const nextPlayer = room.players.find((user) => user.uuid !== room.draftActivePlayerUuid)
+    room.draftActivePlayerUuid = nextPlayer!.uuid
+  }
+
+  public setDraftPhase(roomId: string, nextPhase: DraftPhase): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    room.draftPhase = nextPhase
+  }
+
+  public getDraftActivePlayer(roomId: string): string | null {
+    const room = this.rooms.get(roomId)
+    if (!room) return null
+    return room.players.find((user) => user.uuid === room.draftActivePlayerUuid)!.uuid
+  }
+
+  public addBannedTheme(roomId: string, themeId: Theme | null): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    room.bannedThemes.add(themeId)
   }
 }
 

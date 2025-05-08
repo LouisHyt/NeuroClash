@@ -8,7 +8,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.uuid('uuid').notNullable().primary()
       table.integer('role_id').unsigned().references('id').inTable('roles').defaultTo(Roles.USER)
-      table.string('username', 80).notNullable().unique()
+      table.string('username', 20).notNullable().unique()
       table.string('email', 254).notNullable().unique()
       table.string('password', 255).notNullable()
       table.string('bio', 175).nullable().defaultTo(null)

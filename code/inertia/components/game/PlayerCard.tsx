@@ -6,9 +6,10 @@ import { FiActivity, FiUser } from 'react-icons/fi'
 type PlayerCardProps = {
   player: InferPageProps<GameController, 'showStartGame'>['players']['currentPlayer']
   position: 'left' | 'right'
+  displayRank?: boolean
 }
 
-const PlayerCard = ({ player, position }: PlayerCardProps) => {
+const PlayerCard = ({ player, position, displayRank = true }: PlayerCardProps) => {
   const isLeft = position === 'left'
 
   return (
@@ -21,13 +22,22 @@ const PlayerCard = ({ player, position }: PlayerCardProps) => {
       <div className="flex flex-col items-center h-full">
         {/* Avatar */}
         <div className="relative">
-          <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-indigo-600/30 border-2 border-indigo-500/50 flex items-center justify-center overflow-hidden">
+          <div className="relative w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-indigo-600/30 border-2 border-indigo-500/50 flex items-center justify-center">
             {player.avatarUrl ? (
-              <img
-                src={player.avatarUrl}
-                alt={player.username}
-                className="w-full h-full object-cover"
-              />
+              <>
+                <img
+                  src={player.avatarUrl}
+                  alt={`${player.username} avatar`}
+                  className="w-full h-full object-cover rounded-full"
+                />
+                {displayRank && player.rank && (
+                  <img
+                    src={player.rank.iconUrl}
+                    alt={`${player.username} rank icon`}
+                    className="absolute scale-110 scale-x-120"
+                  />
+                )}
+              </>
             ) : (
               <FiUser className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-300" />
             )}

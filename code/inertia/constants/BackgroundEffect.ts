@@ -53,6 +53,14 @@ export const BackgroundEffect = {
       overlay: 'from-red-500/2',
     },
   },
+  draft: {
+    icons: [FiSlash],
+    colors: ['text-red-500/50', 'text-orange-500/50', 'text-red-700/50', 'text-orange-800/50'],
+    theme: {
+      gradient: 'rgba(183, 36, 54, 0.1)',
+      overlay: 'from-red-500/2',
+    },
+  },
   game: {
     icons: [LuGamepad2, FaPlay, FaBoltLightning, HiMiniUsers],
     colors: ['text-sky-500/50', 'text-blue-500/40', 'text-cyan-600/50'],

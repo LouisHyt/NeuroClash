@@ -15,7 +15,7 @@ export const registerValidator = vine.compile(
     username: vine
       .string()
       .trim()
-      .maxLength(25)
+      .maxLength(20)
       .minLength(3)
       .unique(async (db, value) => {
         const user = await db.from('users').where('username', value).first()

@@ -5,7 +5,7 @@ import { StatisticFactory } from './statistic_factory.js'
 export const UserFactory = factory
   .define(User, async ({ faker }) => {
     return {
-      username: faker.internet.username(),
+      username: faker.internet.username().substring(0, 20),
       email: faker.internet.email(),
       password: faker.internet.password(),
     }

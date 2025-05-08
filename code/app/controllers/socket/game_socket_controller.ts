@@ -2,6 +2,8 @@ import { Socket, Namespace } from 'socket.io'
 import { roomManager } from '#services/room_manager'
 import string from '@adonisjs/core/helpers/string'
 import User from '#models/user'
+import DraftPhases from '#enums/DraftPhases'
+import Theme from '#models/theme'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -12,6 +14,11 @@ export default class GameSocketController {
     socket.on('joinPrivateGame', (props) => this.handleJoinPrivateGame(socket, props))
     socket.on('getGameStatus', (props) => this.handleGameStatus(socket, props))
     socket.on('disconnect', () => this.handleDisconnect(socket))
+
+    //Draft events
+    socket.on('draftStart', (props) => this.handleDraftStart(socket, props))
+    socket.on('draftTimerEnded', (props) => this.handleDraftTimerEnded(socket, props))
+    socket.on('draftBan', (props) => this.handleDraftBan(socket, props))
   }
 
   public handleJoinGame(socket: Socket) {
@@ -87,5 +94,61 @@ export default class GameSocketController {
       })
     }
     roomManager.deleteRoom(playerRoom)
+  }
+
+  public handleDraftStart(socket: Socket, gameId: string) {
+    if (!gameId) return
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    roomManager.startDraftPhase(gameId)
+    this.io.to(gameId).emit('draftUpdate', {
+      phase: room.phase,
+      draftPhase: room.draftPhase,
+      draftActivePlayerUuid: room.draftActivePlayerUuid,
+      bannedThemes: Array.from(room.bannedThemes),
+    })
+  }
+
+  public async handleDraftBan(socket: Socket, data: { gameId: string; themeId: number | null }) {
+    const { gameId, themeId } = data
+    if (!gameId) return
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+
+    //Si l'utilisateur n'est pas le joueur qui doit jouer ou n'existe pas
+    if (socket.data.userUuid !== room.draftActivePlayerUuid) return
+
+    const theme = await Theme.find(themeId)
+    roomManager.addBannedTheme(gameId, theme)
+    roomManager.switchDraftActivePlayer(gameId)
+    if (room.draftPhase === DraftPhases.BAN1) {
+      if (room.bannedThemes.size >= 2) {
+        roomManager.setDraftPhase(gameId, DraftPhases.BAN2)
+      }
+    } else if (room.draftPhase === DraftPhases.BAN2) {
+      if (room.bannedThemes.size >= 4) {
+        roomManager.setDraftPhase(gameId, DraftPhases.COMPLETE)
+      }
+    }
+
+    this.io.to(gameId).emit('draftUpdate', {
+      phase: room.phase,
+      draftPhase: room.draftPhase,
+      draftActivePlayerUuid: room.draftActivePlayerUuid,
+      bannedThemes: Array.from(room.bannedThemes),
+    })
+
+    if (room.draftPhase === DraftPhases.COMPLETE) {
+      setTimeout(() => {
+        roomManager.startPlayPhase(gameId)
+        this.io.to(gameId).emit('draftComplete')
+      }, 3000)
+    }
+  }
+
+  public handleDraftTimerEnded(socket: Socket, gameId: string) {
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    this.handleDraftBan(socket, { gameId, themeId: null })
   }
 }
