@@ -5,6 +5,7 @@ import type Theme from '#models/theme'
 export type RoomPlayers = {
   uuid: string
   socketId: string
+  life: number
 }
 
 export type Phase = GamePhases.START | GamePhases.DRAFT | GamePhases.PLAY

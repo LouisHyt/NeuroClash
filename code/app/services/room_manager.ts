@@ -61,7 +61,7 @@ class RoomManager {
   public addPlayerToRoom(roomId: string, playerUuid: string, playerSocketId: string): boolean {
     const room = this.rooms.get(roomId)
     if (room) {
-      room.players.push({ uuid: playerUuid, socketId: playerSocketId })
+      room.players.push({ uuid: playerUuid, socketId: playerSocketId, life: 100 })
       return true
     }
     return false
