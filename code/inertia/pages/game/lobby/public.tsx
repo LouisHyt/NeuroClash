@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'motion/react'
+import { motion } from 'motion/react'
 import LobbyBackground from '~/components/game/LobbyBackground'
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
 import LobbyLoader from '~/components/game/LobbyLoader'
 import DidYouKnow from '~/components/game/DidYouKnow'
 import GameLayout from '~/layouts/GameLayout'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import { Link } from '@tuyau/inertia/react'
+import { tuyau } from '~/utils/api'
 
 const GameLobby = () => {
   const [searchTime, setSearchTime] = useState(0)
@@ -17,17 +18,28 @@ const GameLobby = () => {
 
   //Wait before looking for a game
   useEffect(() => {
-    const waitBeforeSearch = setTimeout(() => {
+    let searchTimeout: NodeJS.Timeout
+    let startGameTimeout: NodeJS.Timeout
+
+    searchTimeout = setTimeout(() => {
       socket?.emit('joinGame')
     }, 7000)
 
     socket?.on('gameStart', (gameId: string) => {
-      console.log(gameId)
       setSearchStatus('found')
       setStatusMessage('Game found!')
+      startGameTimeout = setTimeout(() => {
+        router.visit(`${tuyau.$url('game.start.show', { params: { id: gameId } })}`, {
+          replace: true,
+          method: 'get',
+        })
+      }, 4000)
     })
 
-    return () => clearTimeout(waitBeforeSearch)
+    return () => {
+      clearTimeout(searchTimeout)
+      clearTimeout(startGameTimeout)
+    }
   }, [socket])
 
   // Wait before looking for a game & Update timer

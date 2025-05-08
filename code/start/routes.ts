@@ -19,6 +19,7 @@ const QuestionsController = () => import('#controllers/questions_controller')
 const AdminController = () => import('#controllers/admin_controller')
 const LobbyController = () => import('#controllers/lobby_controller')
 const GameController = () => import('#controllers/game_controller')
+const DisconnectController = () => import('#controllers/disconnect_controller')
 
 //Public routes
 router.on('/').renderInertia('home').as('home.show')
@@ -38,9 +39,6 @@ router
 router
   .group(() => {
     router.get('/dashboard', [DashboardController, 'showDashboard']).as('dashboard.show')
-    router
-      .post('/dashboard', [DashboardController, 'handleDashboardDisconnected'])
-      .as('dashboard.handle')
     router.get('/profile', [ProfileController, 'showProfile']).as('profile.show')
 
     router
@@ -74,11 +72,19 @@ router
 
     //Game
     router
-      .get('/game/:id', [GameController, 'showGame'])
+      .get('/game/start/:id', [GameController, 'showStartGame'])
       .where('id', {
         match: /^gid.{15}$/,
       })
-      .as('game.show')
+      .as('game.start.show')
+      .use(middleware.game())
+
+    router
+      .post('/disconnect/player', [DisconnectController, 'handlePlayerDisconnected'])
+      .as('disconnect.player')
+    router
+      .post('/disconnect/game', [DisconnectController, 'handleGameDisconnected'])
+      .as('disconnect.game')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
 

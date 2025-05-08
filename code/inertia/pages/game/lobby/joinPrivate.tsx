@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import LobbyBackground from '~/components/game/LobbyBackground'
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
 import LobbyLoader from '~/components/game/LobbyLoader'
 import DidYouKnow from '~/components/game/DidYouKnow'
 import GameLayout from '~/layouts/GameLayout'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import { Link } from '@tuyau/inertia/react'
 import type { PrivateGameJoinedType } from '#controllers/socket/game_socket_controller.types'
+import { tuyau } from '~/utils/api'
 
 const JoinPrivate = () => {
   const [searchStatus, setSearchStatus] = useState<'searching' | 'found' | 'error'>('searching')
@@ -18,16 +19,27 @@ const JoinPrivate = () => {
   const socket = useGameSocketStore((state) => state.socket)
 
   useEffect(() => {
+    let startGameTimeout: NodeJS.Timeout
+
     socket?.on('privateGameNotFound', () => {
       setCodeError('The code you entered is invalid or the game is already full')
       setGameCode('')
     })
 
     socket?.on('privateGameJoined', (data: PrivateGameJoinedType) => {
-      console.log(data)
       setStatusMessage(`You joined the game of ${data.originalUser}!`)
       setSearchStatus('found')
+      startGameTimeout = setTimeout(() => {
+        router.visit(`${tuyau.$url('game.start.show', { params: { id: data.gameId } })}`, {
+          replace: true,
+          method: 'get',
+        })
+      }, 4000)
     })
+
+    return () => {
+      clearTimeout(startGameTimeout)
+    }
   }, [socket])
 
   const handleJoinGame = (

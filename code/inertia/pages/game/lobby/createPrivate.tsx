@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'motion/react'
 import LobbyBackground from '~/components/game/LobbyBackground'
-import { Head } from '@inertiajs/react'
+import { Head, router } from '@inertiajs/react'
 import LobbyLoader from '~/components/game/LobbyLoader'
 import DidYouKnow from '~/components/game/DidYouKnow'
 import GameLayout from '~/layouts/GameLayout'
@@ -9,6 +9,7 @@ import { useGameSocketStore } from '~/stores/gameSocketStore'
 import { Link } from '@tuyau/inertia/react'
 import { FiCopy, FiCheck } from 'react-icons/fi'
 import type { PrivateGameJoinedType } from '#controllers/socket/game_socket_controller.types'
+import { tuyau } from '~/utils/api'
 
 const CreatePrivate = () => {
   const [searchTime, setSearchTime] = useState(0)
@@ -34,6 +35,8 @@ const CreatePrivate = () => {
 
   //Create private room and get code
   useEffect(() => {
+    let startGameTimeout: NodeJS.Timeout
+
     socket?.emit('createPrivateGame')
     socket?.on('privateGameCreated', (roomCode: string) => {
       setGameCode(roomCode)
@@ -41,7 +44,17 @@ const CreatePrivate = () => {
     socket?.on('privateGameJoined', (data: PrivateGameJoinedType) => {
       setStatusMessage(`${data.newUser} joined the game!`)
       setSearchStatus('found')
+      startGameTimeout = setTimeout(() => {
+        router.visit(`${tuyau.$url('game.start.show', { params: { id: data.gameId } })}`, {
+          replace: true,
+          method: 'get',
+        })
+      }, 4000)
     })
+
+    return () => {
+      clearTimeout(startGameTimeout)
+    }
   }, [socket])
 
   return (

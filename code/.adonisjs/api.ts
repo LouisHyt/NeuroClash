@@ -27,10 +27,6 @@ type DashboardGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/dashboard_controller.ts').default['showDashboard'], false>
 }
-type DashboardPost = {
-  request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/dashboard_controller.ts').default['handleDashboardDisconnected'], false>
-}
 type ProfileGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/profile_controller.ts').default['showProfile'], false>
@@ -71,9 +67,17 @@ type LobbyJoinprivateGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/lobby_controller.ts').default['showJoinPrivate'], false>
 }
-type GameIdGetHead = {
+type GameStartIdGetHead = {
   request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/game_controller.ts').default['showGame'], false>
+  response: MakeTuyauResponse<import('../app/controllers/game_controller.ts').default['showStartGame'], false>
+}
+type DisconnectPlayerPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/disconnect_controller.ts').default['handlePlayerDisconnected'], false>
+}
+type DisconnectGamePost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/disconnect_controller.ts').default['handleGameDisconnected'], false>
 }
 type LogoutPost = {
   request: unknown
@@ -119,7 +123,6 @@ export interface ApiDefinition {
     };
     '$get': DashboardGetHead;
     '$head': DashboardGetHead;
-    '$post': DashboardPost;
   };
   'profile': {
     '$url': {
@@ -179,11 +182,25 @@ export interface ApiDefinition {
     };
   };
   'game': {
-    ':id': {
+    'start': {
+      ':id': {
+        '$url': {
+        };
+        '$get': GameStartIdGetHead;
+        '$head': GameStartIdGetHead;
+      };
+    };
+  };
+  'disconnect': {
+    'player': {
       '$url': {
       };
-      '$get': GameIdGetHead;
-      '$head': GameIdGetHead;
+      '$post': DisconnectPlayerPost;
+    };
+    'game': {
+      '$url': {
+      };
+      '$post': DisconnectGamePost;
     };
   };
   'logout': {
@@ -280,13 +297,6 @@ const routes = [
   },
   {
     params: [],
-    name: 'dashboard.handle',
-    path: '/dashboard',
-    method: ["POST"],
-    types: {} as DashboardPost,
-  },
-  {
-    params: [],
     name: 'profile.show',
     path: '/profile',
     method: ["GET","HEAD"],
@@ -357,10 +367,24 @@ const routes = [
   },
   {
     params: ["id"],
-    name: 'game.show',
-    path: '/game/:id',
+    name: 'game.start.show',
+    path: '/game/start/:id',
     method: ["GET","HEAD"],
-    types: {} as GameIdGetHead,
+    types: {} as GameStartIdGetHead,
+  },
+  {
+    params: [],
+    name: 'disconnect.player',
+    path: '/disconnect/player',
+    method: ["POST"],
+    types: {} as DisconnectPlayerPost,
+  },
+  {
+    params: [],
+    name: 'disconnect.game',
+    path: '/disconnect/game',
+    method: ["POST"],
+    types: {} as DisconnectGamePost,
   },
   {
     params: [],

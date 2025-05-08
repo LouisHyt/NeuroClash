@@ -1,24 +1,49 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react'
 
-function useCountdown(initialCount: number, onComplete: () => void) : { count: number, reset: () => void } {
-  const [count, setCount] = useState(initialCount);
-
-  const reset = useCallback(() => setCount(initialCount), [initialCount]);
-
-  useEffect(() => {
-    if (count <= 0) {
-      onComplete();
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setCount(count - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [count, onComplete]);
-
-  return { count, reset };
+type UseCountdownReturnType = {
+  count: number
+  reset: () => void
+  pause: () => void
+  resume: () => void
+  isPaused: boolean
 }
 
-export default useCountdown;
+function useCountdown(initialCount: number, onComplete: () => void): UseCountdownReturnType {
+  const [count, setCount] = useState(initialCount)
+  const [isPaused, setIsPaused] = useState(false)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
+
+  const reset = useCallback(() => setCount(initialCount), [initialCount])
+
+  const pause = useCallback(() => {
+    setIsPaused(true)
+  }, [])
+
+  const resume = useCallback(() => {
+    setIsPaused(false)
+  }, [])
+
+  useEffect(() => {
+    if (isPaused) return
+
+    if (count <= 0) {
+      onComplete()
+      return
+    }
+
+    timerRef.current = setTimeout(() => {
+      setCount(count - 1)
+    }, 1000)
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+        timerRef.current = null
+      }
+    }
+  }, [count, onComplete, isPaused])
+
+  return { count, reset, pause, resume, isPaused }
+}
+
+export default useCountdown

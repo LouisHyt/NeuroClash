@@ -6,6 +6,7 @@ export default class UserPresenter {
     return {
       username: user.username,
       avatarUrl: user.avatarUrl,
+      bio: user.bio,
       statistic: {
         elo: user.statistic.elo,
       },
@@ -16,6 +17,7 @@ export default class UserPresenter {
     return users.all().map((user) => ({
       username: user.username,
       avatarUrl: user.avatarUrl,
+      bio: user.bio,
       statistic: {
         elo: user.statistic.elo,
       },

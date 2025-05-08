@@ -13,8 +13,10 @@ import {
   FiWifiOff,
 } from 'react-icons/fi'
 
-import { FaQuestion, FaRegFaceSadCry, FaUsers } from 'react-icons/fa6'
+import { FaQuestion, FaRegFaceSadCry, FaUsers, FaPlay, FaBoltLightning } from 'react-icons/fa6'
 import { BiSolidMessageRoundedAdd } from 'react-icons/bi'
+import { LuGamepad2 } from 'react-icons/lu'
+import { HiMiniUsers } from 'react-icons/hi2'
 
 export const BackgroundEffect = {
   default: {
@@ -52,11 +54,11 @@ export const BackgroundEffect = {
     },
   },
   game: {
-    icons: [FiKey, FiLock, FiUser, FiLogIn],
-    colors: ['from-violet-600/50', 'to-fuchsia-500/50', 'from-violet-600/50', 'to-fuchsia-500/50'],
+    icons: [LuGamepad2, FaPlay, FaBoltLightning, HiMiniUsers],
+    colors: ['text-sky-500/50', 'text-blue-500/40', 'text-cyan-600/50'],
     theme: {
-      gradient: 'rgba(99, 102, 241, 0.175)',
-      overlay: 'from-violet-500/5',
+      gradient: 'rgba(68, 181, 240, 0.09)',
+      overlay: 'from-blue-500/7',
     },
   },
   profile: {
