@@ -12,23 +12,12 @@ import GameLayout from '~/layouts/GameLayout'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import DraftPhases from '#enums/DraftPhases'
 import type { DraftUpdateType } from '#controllers/socket/game_socket_controller.types'
+import type { ThemeType, PlayerType, DraftPhaseType } from './draft.types'
 
 const Draft = () => {
   const { themes, players, gameId } =
     usePage<InferPageProps<GameController, 'showDraftGame'>>().props
   const socket = useGameSocketStore((state) => state.socket)
-
-  type ThemeType = (typeof themes)[0]
-
-  type PlayerType = typeof players.currentPlayer & {
-    bannedThemes: ThemeType[]
-  }
-
-  type DraftPhaseType =
-    | DraftPhases.WAIT
-    | DraftPhases.BAN1
-    | DraftPhases.BAN2
-    | DraftPhases.COMPLETE
 
   const [player1, setPlayer1] = useState<PlayerType>({
     ...players.currentPlayer,
@@ -51,7 +40,7 @@ const Draft = () => {
   // If timer ends
   function handleEndTimer() {
     if (draftphase === DraftPhases.COMPLETE) return
-    socket?.emit('draftTimerEnded', { gameId })
+    socket?.emit('draftTimerEnded', gameId)
   }
 
   const handleThemeSelect = (theme: ThemeType) => {
@@ -60,7 +49,7 @@ const Draft = () => {
 
     if (!isCurrentPlayerTurn) return
 
-    socket?.emit('draftBan', { gameId, themeId: theme.id })
+    socket?.emit('draftBan', { gameId, themeId: theme!.id })
   }
 
   const isThemeDisabled = (theme: ThemeType) => {
@@ -74,16 +63,13 @@ const Draft = () => {
   }, [searchQuery])
 
   useEffect(() => {
-    console.log('draft start client useEffect')
     socket?.emit('draftStart', gameId)
-
     socket?.on('draftUpdate', (data: DraftUpdateType) => {
-      console.log(data)
       setDraftPhase(data.draftPhase as DraftPhaseType)
       setActivePlayerUuid(data.draftActivePlayerUuid)
       const bannedThemes = data.bannedThemes || []
-      const player1Banned: ThemeType[] = []
-      const player2Banned: ThemeType[] = []
+      const player1Banned: (ThemeType | null)[] = []
+      const player2Banned: (ThemeType | null)[] = []
 
       //On défini les themes bannis pour chaque joueur en fonction de leur tour
       bannedThemes.forEach((theme: ThemeType, index: number) => {

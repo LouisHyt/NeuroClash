@@ -1,5 +1,6 @@
 import DraftPhases from '#enums/DraftPhases'
 import GamePhases from '#enums/gamePhases'
+import type Question from '#models/question'
 import type Theme from '#models/theme'
 
 export type RoomPlayers = {
@@ -20,10 +21,12 @@ export type RoomData = {
   isPrivate: Boolean
   roomCode?: string
   phase: Phase
+  questions: Question[]
+  round: number
   isFinished: Boolean
   draftActivePlayerUuid: string
   draftPhase: DraftPhase
-  bannedThemes: Set<Theme | null>
+  bannedThemes: Array<Theme | null>
 }
 
 export type Rooms = Map<string, RoomData>

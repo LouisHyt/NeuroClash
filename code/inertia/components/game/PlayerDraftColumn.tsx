@@ -1,11 +1,8 @@
-import type GameController from '#controllers/game_controller'
-import type { InferPageProps } from '@adonisjs/inertia/types'
 import { motion } from 'motion/react'
+import type { PlayerType } from '~/pages/game/draft.types'
 
 type PlayerDraftColumnProps = {
-  player: InferPageProps<GameController, 'showDraftGame'>['players']['currentPlayer'] & {
-    bannedThemes: InferPageProps<GameController, 'showDraftGame'>['themes']
-  }
+  player: PlayerType
   isActive: boolean
   displayRank?: boolean
 }
@@ -57,16 +54,29 @@ const PlayerDraftColumn = ({ player, isActive, displayRank = true }: PlayerDraft
         </div>
         <div className="flex flex-col gap-1 sm:gap-2 items-center">
           {player.bannedThemes.length > 0 ? (
-            player.bannedThemes.map((theme, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-900/50 border border-red-500/50 rounded text-xs sm:text-sm text-red-300 font-medium w-full text-center"
-              >
-                {theme.name}
-              </motion.div>
-            ))
+            player.bannedThemes.map((theme, index) => {
+              if (theme)
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-900/50 border border-red-500/50 rounded text-xs sm:text-sm text-red-300 font-medium w-full text-center"
+                  >
+                    {theme.name}
+                  </motion.div>
+                )
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="px-2 sm:px-3 py-1 sm:py-1.5 bg-gray-700/70 border border-gray-500/50 rounded text-xs sm:text-sm text-gray-300 font-medium w-full text-center"
+                >
+                  Skipped
+                </motion.div>
+              )
+            })
           ) : (
             <span className="text-gray-500 text-xs italic">No theme Banned</span>
           )}
