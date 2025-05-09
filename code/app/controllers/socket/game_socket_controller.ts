@@ -4,6 +4,7 @@ import string from '@adonisjs/core/helpers/string'
 import User from '#models/user'
 import DraftPhases from '#enums/DraftPhases'
 import Theme from '#models/theme'
+import LoggerManager from '#services/logger_manager'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -19,6 +20,9 @@ export default class GameSocketController {
     socket.on('draftStart', (props) => this.handleDraftStart(socket, props))
     socket.on('draftTimerEnded', (props) => this.handleDraftTimerEnded(socket, props))
     socket.on('draftBan', (props) => this.handleDraftBan(socket, props))
+
+    //Play events
+    socket.on('playStart', (props) => this.handlePlayStart(socket, props))
   }
 
   public handleJoinGame(socket: Socket) {
@@ -26,7 +30,7 @@ export default class GameSocketController {
     if (!availableRoom) {
       availableRoom = `gid${string.random(15)}`
       roomManager.createRoom(availableRoom)
-      console.log('\u001b[1;32m Room : \u001b[0m No room found, created one')
+      LoggerManager.room('No room found, created one')
     }
 
     roomManager.addPlayerToRoom(availableRoom, socket.data.userUuid, socket.id)
@@ -34,7 +38,7 @@ export default class GameSocketController {
 
     const room = roomManager.getRoom(availableRoom)
     if (room && room?.players.length === 2) {
-      console.log('\u001b[1;32m Room : \u001b[0m Room found! Joined and start game')
+      LoggerManager.room('Room found! Joined and start game')
       this.io.to(availableRoom).emit('gameStart', availableRoom)
       return
     }
@@ -44,7 +48,7 @@ export default class GameSocketController {
     const roomId = `gid${string.random(15)}`
     const roomCode = string.random(6).toUpperCase()
     roomManager.createPrivateRoom(roomId, roomCode)
-    console.log(`\u001b[1;32m Room : \u001b[0m Created a private room with code ${roomCode}`)
+    LoggerManager.room(`Created a private room with code ${roomCode}`)
     roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
     socket.join(roomId)
     socket.emit('privateGameCreated', roomCode)
@@ -78,7 +82,7 @@ export default class GameSocketController {
   public async handleDisconnect(socket: Socket) {
     const playerRoom = roomManager.findPlayerRoom(socket.data.userUuid)
     if (!playerRoom) return
-    console.log(`\u001b[1;32m Room : \u001b[0m Player ${socket.data.userUuid} disconnected`)
+    LoggerManager.room(`Player ${socket.data.userUuid} disconnected`)
     const room = roomManager.getRoom(playerRoom)!
     if (!room.isFinished) {
       if (!room.isPrivate) {
@@ -96,6 +100,7 @@ export default class GameSocketController {
     roomManager.deleteRoom(playerRoom)
   }
 
+  //Draft
   public handleDraftStart(socket: Socket, gameId: string) {
     if (!gameId) return
     const room = roomManager.getRoom(gameId)
@@ -117,20 +122,21 @@ export default class GameSocketController {
 
     //Si l'utilisateur n'est pas le joueur qui doit jouer ou n'existe pas
     if (socket.data.userUuid !== room.draftActivePlayerUuid) return
-
+    LoggerManager.room(`Added theme ${themeId} to banned themes`)
     const theme = await Theme.find(themeId)
     roomManager.addBannedTheme(gameId, theme)
     roomManager.switchDraftActivePlayer(gameId)
     if (room.draftPhase === DraftPhases.BAN1) {
-      if (room.bannedThemes.size >= 2) {
+      if (room.bannedThemes.length >= 2) {
         roomManager.setDraftPhase(gameId, DraftPhases.BAN2)
       }
     } else if (room.draftPhase === DraftPhases.BAN2) {
-      if (room.bannedThemes.size >= 4) {
+      if (room.bannedThemes.length >= 4) {
         roomManager.setDraftPhase(gameId, DraftPhases.COMPLETE)
       }
     }
 
+    LoggerManager.room(room.bannedThemes)
     this.io.to(gameId).emit('draftUpdate', {
       phase: room.phase,
       draftPhase: room.draftPhase,
@@ -149,6 +155,15 @@ export default class GameSocketController {
   public handleDraftTimerEnded(socket: Socket, gameId: string) {
     const room = roomManager.getRoom(gameId)
     if (!room) return
+    LoggerManager.room('Timer ended')
     this.handleDraftBan(socket, { gameId, themeId: null })
+  }
+
+  //Play
+  public handlePlayStart(socket: Socket, gameId: string) {
+    if (!gameId) return
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    roomManager.startPlayPhase(gameId)
   }
 }

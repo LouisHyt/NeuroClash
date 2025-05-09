@@ -8,6 +8,7 @@ import { Request } from '@adonisjs/core/http'
 import sessionConfig from '#config/session'
 import Encryption from '@adonisjs/core/services/encryption'
 import { instrument } from '@socket.io/admin-ui'
+import LoggerManager from '#services/logger_manager'
 
 app.ready(() => {
   const io = new Server(server.getNodeServer(), {
@@ -31,18 +32,12 @@ app.ready(() => {
   io.of('/general').use(AuthMiddleware)
 
   io.of('/game').on('connection', (socket) => {
-    console.log(
-      '\u001b[1;34m SocketIO :',
-      `\u001b[0m New connection from user ${socket.data.userUuid} on Namespace 'Game'`
-    )
+    LoggerManager.socket(`New connection from user ${socket.data.userUuid} on Namespace 'Game'`)
     gameSocketController.handleConnection(socket)
   })
 
   io.of('/general').on('connection', (socket) => {
-    console.log(
-      '\u001b[1;34m SocketIO :',
-      `\u001b[0m New connection from user ${socket.data.userUuid} on Namespace 'General'`
-    )
+    LoggerManager.socket(`New connection from user ${socket.data.userUuid} on Namespace 'General'`)
     generalSocketController.handleConnection(socket)
   })
 })
