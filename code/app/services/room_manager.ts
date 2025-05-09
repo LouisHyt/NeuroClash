@@ -2,7 +2,8 @@
 import type { DraftPhase, RoomData, Rooms } from '#services/room_manager.types'
 import DraftPhases from '#enums/DraftPhases'
 import GamePhases from '#enums/gamePhases'
-import Theme from '#models/theme'
+import type Theme from '#models/theme'
+import type Question from '#models/question'
 
 class RoomManager {
   private static instance: RoomManager
@@ -140,6 +141,19 @@ class RoomManager {
     const room = this.rooms.get(roomId)
     if (!room) return
     room.bannedThemes.push(themeId)
+  }
+
+  public addQuestionToRoom(roomId: string, question: Question): void {
+    const room = this.rooms.get(roomId)
+    if (!room) return
+    room.questions.push(question)
+  }
+
+  public addRound(roomId: string): number {
+    const room = this.rooms.get(roomId)
+    if (!room) return 0
+    room.round++
+    return room.round
   }
 
   //Play phase

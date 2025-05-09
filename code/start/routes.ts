@@ -77,7 +77,6 @@ router
         router.get('/game/start/:id', [GameController, 'showStartGame']).as('game.start.show')
         router.get('/game/draft/:id', [GameController, 'showDraftGame']).as('game.draft.show')
         router.get('/game/play/:id', [GameController, 'showPlayGame']).as('game.play.show')
-        router.get('/game/end/:id', [GameController, 'showEndGame']).as('game.end.show')
       })
       .where('id', {
         match: /^gid.{15}$/,

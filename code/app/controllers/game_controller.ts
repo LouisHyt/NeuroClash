@@ -52,8 +52,9 @@ export default class GameController {
 
   public async showPlayGame(ctx: HttpContext) {
     const props = await this.getGlobalProps(ctx)
-    roomManager.startPlayPhase(props.gameId)
-    return ctx.inertia.render('game/draft')
+    return ctx.inertia.render('game/play', {
+      ...props,
+    })
   }
 
   public showEndGame(ctx: HttpContext) {

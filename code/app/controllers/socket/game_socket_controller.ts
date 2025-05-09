@@ -5,6 +5,7 @@ import User from '#models/user'
 import DraftPhases from '#enums/DraftPhases'
 import Theme from '#models/theme'
 import LoggerManager from '#services/logger_manager'
+import Question from '#models/question'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -23,6 +24,7 @@ export default class GameSocketController {
 
     //Play events
     socket.on('playStart', (props) => this.handlePlayStart(socket, props))
+    socket.on('newQuestion', (props) => this.handleNewQuestion(socket, props))
   }
 
   public handleJoinGame(socket: Socket) {
@@ -165,5 +167,42 @@ export default class GameSocketController {
     const room = roomManager.getRoom(gameId)
     if (!room) return
     roomManager.startPlayPhase(gameId)
+  }
+
+  public async handleNewQuestion(socket: Socket, gameId: string) {
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    const bannedThemesId = room.bannedThemes
+      .filter((theme) => theme !== null)
+      .map((theme) => theme.id)
+    const questionsId = room.questions.map((question) => question.id)
+    const question = await Question.query()
+      .preload('answers')
+      .preload('theme')
+      .preload('difficulty')
+      .whereNotIn('theme_id', bannedThemesId)
+      .whereNotIn('id', questionsId)
+      .orderBy('random()')
+      .first()
+
+    if (!question) {
+      LoggerManager.room('No question available with the filters applied')
+      return
+    }
+
+    roomManager.addQuestionToRoom(gameId, question)
+    const newRound = roomManager.addRound(gameId)
+
+    let damageMultiplicator = 1.0
+    if (newRound >= 3) {
+      const additionnalMultiplier = Math.floor((newRound - 3) / 2) * 0.5
+      damageMultiplicator = 1.0 + additionnalMultiplier
+    }
+
+    this.io.to(gameId).emit('newQuestion', {
+      question,
+      damageMultiplicator,
+      round: newRound,
+    })
   }
 }
