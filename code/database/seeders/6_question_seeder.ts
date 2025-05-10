@@ -10,6 +10,7 @@ export default class extends BaseSeeder {
       for (let i = 0; i < 4; i++) {
         answers.push({
           isCorrect: i === correctIndex,
+          name: i === correctIndex ? 'Correct' : 'blablabla',
           slot: i,
         })
       }
@@ -18,12 +19,12 @@ export default class extends BaseSeeder {
 
     await QuestionFactory.with('answers', 4, (answer) => {
       answer.merge(randomAnswersArray())
-    }).createMany(7)
+    }).createMany(20)
 
     await QuestionFactory.with('answers', 4, (answer) => {
       answer.merge(randomAnswersArray())
     })
       .apply('approved')
-      .createMany(7)
+      .createMany(20)
   }
 }

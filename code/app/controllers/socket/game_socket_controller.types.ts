@@ -1,6 +1,7 @@
 import type DraftPhases from '#enums/DraftPhases'
 import type GamePhases from '#enums/gamePhases'
-import Theme from '#models/theme'
+import type Question from '#models/question'
+import type Theme from '#models/theme'
 
 export type PrivateGameJoinedType = {
   gameId: string
@@ -19,4 +20,24 @@ export type DraftUpdateType = {
   draftPhase: DraftPhases
   draftActivePlayerUuid: string
   bannedThemes: Theme[]
+}
+
+export type GameUpdateType = {
+  question: Question
+  damageMultiplicator: number
+  round: number
+  playersLife: {
+    uuid: string
+    life: number
+  }[]
+}
+
+export type RoundEndType = {
+  correctAnswerId: number
+  winnerUuid: string | null
+  damages: number
+  playersLife: {
+    uuid: string
+    life: number
+  }[]
 }

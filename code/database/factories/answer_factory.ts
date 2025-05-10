@@ -14,5 +14,6 @@ export const AnswerFactory = factory
   })
   .state('correct', (state) => {
     state.isCorrect = true
+    state.name = 'Correct'
   })
   .build()
