@@ -91,8 +91,6 @@ router
       .as('disconnect.game')
 
     router.post('/logout', [AuthController, 'logout']).as('auth.logout')
-
-    router.get('/ban', [BanController, 'showBan']).as('ban.show').use(middleware.auth())
   })
   .use(middleware.auth())
   .use(middleware.sanction())
@@ -112,6 +110,9 @@ router
   })
   .use(middleware.auth())
   .use(middleware.admin())
+
+//BAN
+router.get('/ban', [BanController, 'showBan']).as('ban.show').use(middleware.auth())
 
 //API
 const UserApiController = () => import('#controllers/api/user_api_controller')

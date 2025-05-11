@@ -280,7 +280,7 @@ const Profile = () => {
                     </div>
                   ) : (
                     <form className="space-y-6" onSubmit={handleProfileSubmit}>
-                      {/* Champ Username avec label flottant */}
+                      {/* Username  */}
                       <div className="relative">
                         <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                           <input
@@ -304,7 +304,7 @@ const Profile = () => {
                         )}
                       </div>
 
-                      {/* Champ Bio avec label flottant */}
+                      {/* bio*/}
                       <div className="relative">
                         <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                           <textarea
@@ -475,14 +475,14 @@ const Profile = () => {
 
                   {/* Suppression de compte */}
                   <div>
-                    <h3 className="text-lg font-semibold text-red-400 mb-4">Zone dangereuse</h3>
+                    <h3 className="text-lg font-semibold text-red-400 mb-4">Danger zone</h3>
 
                     {!showDeleteConfirm ? (
                       <button
                         onClick={() => setShowDeleteConfirm(true)}
                         className="px-4 py-2 cursor-pointer border border-red-500/50 text-red-400 rounded-lg font-medium text-sm hover:bg-red-500/10 transition-colors"
                       >
-                        Supprimer mon compte
+                        Delete my account
                       </button>
                     ) : (
                       <div className="border border-red-500/30 rounded-lg p-4 bg-red-900/10">

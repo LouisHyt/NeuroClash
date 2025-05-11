@@ -11,6 +11,7 @@ export default class SanctionMiddleware {
     if (user.bannedUntil) {
       return ctx.response.redirect().toRoute('ban.show')
     }
+
     if (user.hasPenalty) {
       ctx.session.flash(FlashKeys.WARNING, {
         W_PENALTY: `You have lost 40 ELO points for disconnecting from an ongoing game`,
