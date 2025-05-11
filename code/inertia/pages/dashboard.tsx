@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Head } from '@inertiajs/react'
 import { Link } from '@tuyau/inertia/react'
 import { type Swapy, createSwapy } from 'swapy'
@@ -19,10 +19,28 @@ const Dashboard = ({
 
   const swapyRef = useRef<Swapy | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkIfMobile()
+    
+    window.addEventListener('resize', checkIfMobile)
+    
+    return () => {
+      window.removeEventListener('resize', checkIfMobile)
+    }
+  }, [])
 
   //Swapy management
   useEffect(() => {
-    if (containerRef.current) {
+
+
+    if (!containerRef.current || isMobile) return
+
       swapyRef.current = createSwapy(containerRef.current)
 
       const savedLayout = localStorage.getItem('dashboardLayout')
@@ -43,12 +61,12 @@ const Dashboard = ({
         if (!event.hasChanged) return
         localStorage.setItem('dashboardLayout', JSON.stringify(event.slotItemMap.asArray))
       })
-    }
+
 
     return () => {
       swapyRef.current?.destroy()
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <>
@@ -56,10 +74,10 @@ const Dashboard = ({
       <div className="h-full flex flex-col overflow-hidden justify-center">
         <div className="overflow-y-auto px-4 md:px-8 py-4">
           <div
-            className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_400px] gap-4 sm:gap-6 md:gap-8"
+            className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-4 sm:gap-6 md:gap-8"
             ref={containerRef}
           >
-            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 md:max-h-screen">
+            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 min-h-0 md:max-h-[calc(100vh-100px)]">
               <div data-swapy-slot="a" className="slot">
                 <div
                   data-swapy-item="a"

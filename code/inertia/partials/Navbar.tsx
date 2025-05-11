@@ -112,7 +112,7 @@ const Navbar = () => {
 
       {isMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col gap-2">
             {user ? (
               <>
                 <Link
@@ -123,7 +123,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   route="auth.logout"
-                  className="text-red-500 hover:text-red-400 px-3 py-2 rounded-lg transition-colors cursor-pointer"
+                  className="text-red-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer"
                 >
                   Logout
                 </Link>

@@ -1,12 +1,9 @@
 import { Head, usePage, useForm } from '@inertiajs/react'
 import { Link } from '@tuyau/inertia/react'
-import Navbar from '~/partials/Navbar'
 import GridBackground from '~/components/GridBackground'
-import Footer from '~/partials/Footer'
 import type { SharedProps } from '@adonisjs/inertia/types'
 import { useState, useRef } from 'react'
 import { DateTime } from 'luxon'
-import Flashes from '~/partials/Flashes'
 import { FaTrash } from 'react-icons/fa6'
 import AppLayout from '~/layouts/AppLayout'
 
@@ -104,6 +101,7 @@ const Profile = () => {
 
   return (
     <>
+      <Head title="Profile" />
       <GridBackground animated={true} type="profile" />
       <div className="container mx-auto px-6 md:px-12 py-15 relative z-1">
         <div className="flex flex-col md:flex-row gap-8 items-start">
