@@ -1,6 +1,6 @@
 import type GameController from '#controllers/game_controller'
 import { InferPageProps } from '@adonisjs/inertia/types'
-import { Head, router, usePage } from '@inertiajs/react'
+import { Head, usePage } from '@inertiajs/react'
 import { useEffect, useState } from 'react'
 import GridBackground from '~/components/GridBackground'
 import useCountdown from '~/hooks/useCountdown'
@@ -13,7 +13,6 @@ import { useGameSocketStore } from '~/stores/gameSocketStore'
 import DraftPhases from '#enums/DraftPhases'
 import type { DraftUpdateType } from '#controllers/socket/game_socket_controller.types'
 import type { ThemeType, PlayerType, DraftPhaseType } from './draft.types'
-import { tuyau } from '~/utils/api'
 
 const Draft = () => {
   const { themes, players, gameId } =
@@ -53,11 +52,8 @@ const Draft = () => {
     socket?.emit('draftBan', { gameId, themeId: theme!.id })
   }
 
-  const isThemeDisabled = (themeId: number) => {
-    return (
-      player1.bannedThemes.some((theme) => theme && theme.id === themeId) ||
-      player2.bannedThemes.some((theme) => theme && theme.id === themeId)
-    )
+  const isThemeDisabled = (theme: ThemeType) => {
+    return player1.bannedThemes.includes(theme) || player2.bannedThemes.includes(theme)
   }
 
   useEffect(() => {
@@ -98,10 +94,7 @@ const Draft = () => {
     })
 
     socket?.on('draftComplete', () => {
-      router.visit(`${tuyau.$url('game.play.show', { params: { id: gameId } })}`, {
-        replace: true,
-        method: 'get',
-      })
+      console.log('end')
     })
 
     return () => {
@@ -211,7 +204,7 @@ const Draft = () => {
                           theme={theme}
                           onSelect={() => handleThemeSelect(theme)}
                           disabled={
-                            isThemeDisabled(theme.id) ||
+                            isThemeDisabled(theme) ||
                             draftphase === DraftPhases.COMPLETE ||
                             draftphase === DraftPhases.WAIT ||
                             activePlayerUuid !== player1.uuid

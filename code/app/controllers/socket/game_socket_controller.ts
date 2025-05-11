@@ -24,7 +24,7 @@ export default class GameSocketController {
 
     //Play events
     socket.on('playStart', (props) => this.handlePlayStart(socket, props))
-    socket.on('newAnswer', (props) => this.handleNewAnswer(socket, props))
+    socket.on('newQuestion', (props) => this.handleNewQuestion(socket, props))
   }
 
   public handleJoinGame(socket: Socket) {
@@ -104,6 +104,7 @@ export default class GameSocketController {
 
   //Draft
   public handleDraftStart(socket: Socket, gameId: string) {
+    if (!gameId) return
     const room = roomManager.getRoom(gameId)
     if (!room) return
     roomManager.startDraftPhase(gameId)
@@ -123,6 +124,7 @@ export default class GameSocketController {
 
     //Si l'utilisateur n'est pas le joueur qui doit jouer ou n'existe pas
     if (socket.data.userUuid !== room.draftActivePlayerUuid) return
+    LoggerManager.room(`Added theme ${themeId} to banned themes`)
     const theme = await Theme.find(themeId)
     roomManager.addBannedTheme(gameId, theme)
     roomManager.switchDraftActivePlayer(gameId)
@@ -136,6 +138,7 @@ export default class GameSocketController {
       }
     }
 
+    LoggerManager.room(room.bannedThemes)
     this.io.to(gameId).emit('draftUpdate', {
       phase: room.phase,
       draftPhase: room.draftPhase,
@@ -159,32 +162,14 @@ export default class GameSocketController {
   }
 
   //Play
-  public handlePlayStart(socket: Socket, gameId: string): void {
+  public handlePlayStart(socket: Socket, gameId: string) {
+    if (!gameId) return
     const room = roomManager.getRoom(gameId)
     if (!room) return
     roomManager.startPlayPhase(gameId)
-    roomManager.setPlayerReadyForGame(gameId, socket.data.userUuid)
-    if (room.players.every((player) => player.readyForGame)) {
-      this.getNewQuestion(gameId)
-    }
   }
 
-  public async handleNewAnswer(socket: Socket, data: { gameId: string; answerId: number }) {
-    const { gameId, answerId } = data
-    const room = roomManager.getRoom(gameId)
-    if (!room) return
-    if (
-      room.players.find((player) => player.uuid === socket.data.userUuid)?.selectedAnswer !== null
-    )
-      return
-    roomManager.setPlayerSelectedAnswer(gameId, socket.data.userUuid, answerId)
-    if (room.players.every((player) => player.selectedAnswer !== null)) {
-      this.processRoundEnd(gameId)
-    }
-  }
-
-  //Private methods
-  private async getNewQuestion(gameId: string) {
+  public async handleNewQuestion(socket: Socket, gameId: string) {
     const room = roomManager.getRoom(gameId)
     if (!room) return
     const bannedThemesId = room.bannedThemes
@@ -197,7 +182,7 @@ export default class GameSocketController {
       .preload('difficulty')
       .whereNotIn('theme_id', bannedThemesId)
       .whereNotIn('id', questionsId)
-      .orderByRaw('RAND()')
+      .orderBy('random()')
       .first()
 
     if (!question) {
@@ -208,78 +193,16 @@ export default class GameSocketController {
     roomManager.addQuestionToRoom(gameId, question)
     const newRound = roomManager.addRound(gameId)
 
-    let damageMultiplicator = this.getDamageMultiplicator(newRound)
+    let damageMultiplicator = 1.0
+    if (newRound >= 3) {
+      const additionnalMultiplier = Math.floor((newRound - 3) / 2) * 0.5
+      damageMultiplicator = 1.0 + additionnalMultiplier
+    }
 
-    this.io.to(gameId).emit('gameUpdate', {
+    this.io.to(gameId).emit('newQuestion', {
       question,
       damageMultiplicator,
       round: newRound,
-      playersLife: room.players.map((player) => ({
-        uuid: player.uuid,
-        life: player.life,
-      })),
-    })
-    room.questionTimer = setTimeout(() => {
-      this.processRoundEnd(gameId)
-    }, 20000)
-  }
-
-  private getDamageMultiplicator(round: number): number {
-    let damageMultiplicator = 1.0
-    if (round >= 3) {
-      const additionnalMultiplier = Math.floor((round - 3) / 2) * 0.5
-      damageMultiplicator = 1.0 + additionnalMultiplier
-    }
-    return damageMultiplicator
-  }
-
-  private processRoundEnd(gameId: string) {
-    const room = roomManager.getRoom(gameId)
-    if (!room) return
-    clearTimeout(room.questionTimer)
-
-    const multiplicator = this.getDamageMultiplicator(room.round)
-    const question = room.questions[room.questions.length - 1]
-    const correctAnswerId = question.answers.find((answer) => answer.isCorrect)!.id
-
-    let winnerUuid: string | null = null
-    let damages: number = 0
-
-    const playersWithAnswers = room.players.filter((player) => player.selectedAnswer !== null)
-    if (playersWithAnswers.length > 0) {
-      const playersWithCorrectAnswer = playersWithAnswers.filter(
-        (player) => player.selectedAnswer?.answerId === correctAnswerId
-      )
-
-      if (playersWithCorrectAnswer.length === 1) {
-        winnerUuid = playersWithCorrectAnswer[0].uuid
-        const loser = room.players.find((player) => player.uuid !== winnerUuid)!
-        damages = roomManager.dealPlayerDamage(gameId, loser.uuid, multiplicator)
-      } else if (playersWithCorrectAnswer.length > 1) {
-        winnerUuid =
-          playersWithCorrectAnswer[0].selectedAnswer!.timestamp.valueOf() <
-          playersWithCorrectAnswer[1].selectedAnswer!.timestamp.valueOf()
-            ? playersWithCorrectAnswer[0].uuid
-            : playersWithCorrectAnswer[1].uuid
-
-        const loser = room.players.find((player) => player.uuid !== winnerUuid)!
-        damages = roomManager.dealPlayerDamage(gameId, loser.uuid, multiplicator)
-      }
-    }
-
-    for (const player of room.players) {
-      LoggerManager.room(player.selectedAnswer)
-      roomManager.setPlayerSelectedAnswer(gameId, player.uuid, null)
-    }
-
-    this.io.to(gameId).emit('roundEnd', {
-      correctAnswerId,
-      winnerUuid,
-      damages,
-      playersLife: room.players.map((player) => ({
-        uuid: player.uuid,
-        life: player.life,
-      })),
     })
   }
 }

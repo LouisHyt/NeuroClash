@@ -4,7 +4,6 @@ import DraftPhases from '#enums/DraftPhases'
 import GamePhases from '#enums/gamePhases'
 import type Theme from '#models/theme'
 import type Question from '#models/question'
-import { DateTime } from 'luxon'
 
 class RoomManager {
   private static instance: RoomManager
@@ -67,13 +66,7 @@ class RoomManager {
   public addPlayerToRoom(roomId: string, playerUuid: string, playerSocketId: string): boolean {
     const room = this.rooms.get(roomId)
     if (room) {
-      room.players.push({
-        uuid: playerUuid,
-        socketId: playerSocketId,
-        life: 100,
-        readyForGame: false,
-        selectedAnswer: null,
-      })
+      room.players.push({ uuid: playerUuid, socketId: playerSocketId, life: 100 })
       return true
     }
     return false
@@ -87,30 +80,6 @@ class RoomManager {
       return room.players.length < initialLength
     }
     return false
-  }
-
-  public setPlayerReadyForGame(roomId: string, playerUuid: string): void {
-    const room = this.rooms.get(roomId)
-    if (!room) return
-    const player = room.players.find((player) => player.uuid === playerUuid)
-    if (player) player.readyForGame = true
-  }
-
-  public setPlayerSelectedAnswer(
-    roomId: string,
-    playerUuid: string,
-    answerId: number | null
-  ): void {
-    const room = this.rooms.get(roomId)
-    if (!room) return
-    const player = room.players.find((player) => player.uuid === playerUuid)
-    if (player)
-      player.selectedAnswer = answerId
-        ? {
-            answerId,
-            timestamp: DateTime.now(),
-          }
-        : null
   }
 
   public findAvailableRoom(): string | null {
@@ -129,15 +98,6 @@ class RoomManager {
       }
     }
     return null
-  }
-
-  public dealPlayerDamage(roomId: string, playerUuid: string, multiplicator: number): number {
-    const room = this.rooms.get(roomId)
-    if (!room) return 0
-    const player = room.players.find((player) => player.uuid === playerUuid)
-    const damages = Math.max(10 * multiplicator)
-    if (player) player.life -= damages
-    return damages
   }
 
   public findPrivateRoom(roomCode: string): string | null {
