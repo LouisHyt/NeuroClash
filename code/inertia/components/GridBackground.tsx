@@ -50,8 +50,8 @@ const GridBackground = memo((props: GridProps) => {
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `
-                    linear-gradient(to right, ${backgroundTheme.gradient} 1px, transparent 1px),
-                    linear-gradient(to bottom, ${backgroundTheme.gradient} 1px, transparent 1px)
+                    linear-gradient(to right, ${backgroundTheme.gradient} 2px, transparent 1px),
+                    linear-gradient(to bottom, ${backgroundTheme.gradient} 2px, transparent 1px)
                     `,
           backgroundSize: '2.5rem 2.5rem',
           maskImage: 'radial-gradient(circle at center, black, transparent 90%)',
