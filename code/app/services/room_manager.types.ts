@@ -4,7 +4,7 @@ import type Question from '#models/question'
 import type Theme from '#models/theme'
 import type { DateTime } from 'luxon'
 
-export type RoomPlayers = {
+export type RoomPlayer = {
   uuid: string
   socketId: string
   life: number
@@ -15,7 +15,7 @@ export type RoomPlayers = {
   } | null
 }
 
-export type Phase = GamePhases.START | GamePhases.DRAFT | GamePhases.PLAY
+export type Phase = GamePhases.LOBBY | GamePhases.START | GamePhases.DRAFT | GamePhases.PLAY
 export type DraftPhase =
   | DraftPhases.WAIT
   | DraftPhases.BAN1
@@ -23,7 +23,7 @@ export type DraftPhase =
   | DraftPhases.COMPLETE
 
 export type RoomData = {
-  players: RoomPlayers[]
+  players: RoomPlayer[]
   isPrivate: Boolean
   roomCode?: string
   phase: Phase
