@@ -91,10 +91,6 @@ type LogoutPost = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/auth_controller.ts').default['logout'], false>
 }
-type BanGetHead = {
-  request: unknown
-  response: MakeTuyauResponse<import('../app/controllers/ban_controller.ts').default['showBan'], false>
-}
 type AdminGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/admin_controller.ts').default['showDashboard'], false>
@@ -106,6 +102,10 @@ type AdminDeletequestionDelete = {
 type AdminApprovequestionPost = {
   request: MakeTuyauRequest<InferInput<typeof import('../app/validators/question.ts')['questionIdValidator']>>
   response: MakeTuyauResponse<import('../app/controllers/questions_controller.ts').default['approveQuestion'], true>
+}
+type BanGetHead = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/ban_controller.ts').default['showBan'], false>
 }
 type ApiGetusersPost = {
   request: unknown
@@ -232,12 +232,6 @@ export interface ApiDefinition {
     };
     '$post': LogoutPost;
   };
-  'ban': {
-    '$url': {
-    };
-    '$get': BanGetHead;
-    '$head': BanGetHead;
-  };
   'admin': {
     '$url': {
     };
@@ -253,6 +247,12 @@ export interface ApiDefinition {
       };
       '$post': AdminApprovequestionPost;
     };
+  };
+  'ban': {
+    '$url': {
+    };
+    '$get': BanGetHead;
+    '$head': BanGetHead;
   };
   'api': {
     'getusers': {
@@ -433,13 +433,6 @@ const routes = [
   },
   {
     params: [],
-    name: 'ban.show',
-    path: '/ban',
-    method: ["GET","HEAD"],
-    types: {} as BanGetHead,
-  },
-  {
-    params: [],
     name: 'admin.show',
     path: '/admin',
     method: ["GET","HEAD"],
@@ -458,6 +451,13 @@ const routes = [
     path: '/admin/approve-question',
     method: ["POST"],
     types: {} as AdminApprovequestionPost,
+  },
+  {
+    params: [],
+    name: 'ban.show',
+    path: '/ban',
+    method: ["GET","HEAD"],
+    types: {} as BanGetHead,
   },
   {
     params: [],
