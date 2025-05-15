@@ -15,6 +15,7 @@ export type QuestionPanelProps = {
   question: Question
   timeLeft: number
   maxTime: number
+  gameEnded: boolean
   damageMultiplier: number
   correctAnswerId: number | null
   selectedAnswer: number | null

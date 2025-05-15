@@ -268,18 +268,36 @@ export default class GameSocketController {
     }
 
     for (const player of room.players) {
-      LoggerManager.room(player.selectedAnswer)
       roomManager.setPlayerSelectedAnswer(gameId, player.uuid, null)
     }
+
+    const playerDead = roomManager.isPlayerDead(gameId)
 
     this.io.to(gameId).emit('roundEnd', {
       correctAnswerId,
       winnerUuid,
       damages,
+      endGame: playerDead,
       playersLife: room.players.map((player) => ({
         uuid: player.uuid,
         life: player.life,
       })),
     })
+
+    setTimeout(() => {
+      if (playerDead) {
+        this.processGameEnd(gameId)
+        return
+      }
+
+      this.getNewQuestion(gameId)
+    }, 7000)
+  }
+
+  private processGameEnd(gameId: string) {
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    this.io.to(gameId).emit('gameEnd', {})
+    room.isFinished = true
   }
 }

@@ -40,7 +40,7 @@ const PlayerCard = ({
         <AnimatePresence mode="wait">
           {winnerUuid && winnerUuid === player.uuid && (
             <motion.p
-              key={1}
+              key="winner"
               className="absolute -bottom-8 sm:-bottom-12 left-1/2 -translate-x-1/2 text-white bg-green-400/50 rounded-md py-1 px-2 text-xs md:text-sm"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ const PlayerCard = ({
           )}
           {winnerUuid && winnerUuid !== player.uuid && (
             <motion.p
-              key={2}
+              key="looser"
               className="absolute -bottom-8 sm:-bottom-12 left-1/2 -translate-x-1/2 text-white bg-red-400/50 rounded-md py-1 px-2 text-xs md:text-sm"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ const PlayerCard = ({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4 }}
-                  className="absolute -bottom-9 right-0 -translate-y-1/2 text-sm text-red-800/90 font-bold"
+                  className={`absolute -bottom-9 ${isLeft ? 'right-0' : 'left-0'} -translate-y-1/2 text-sm text-red-800/90 font-bold`}
                 >
                   -{damages} HP
                 </motion.p>

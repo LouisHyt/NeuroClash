@@ -31,6 +31,7 @@ const Play = () => {
   const [damageMultiplier, setDamageMultiplier] = useState<number>(1)
   const [waitForPlayer, setWaitForPlayer] = useState<boolean>(true)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
+  const [gameEnded, setGameEnded] = useState<boolean>(false)
 
   const [correctAnswerId, setCorrectAnswerId] = useState<number | null>(null)
   const [winnerUuid, setWinnerUuid] = useState<string | null>(null)
@@ -50,9 +51,12 @@ const Play = () => {
     socket?.emit('playStart', gameId)
 
     socket?.on('gameUpdate', (data: GameUpdateType) => {
+      const { question, damageMultiplicator, round, playersLife } = data
       setSelectedAnswer(null)
       setWaitForPlayer(false)
-      const { question, damageMultiplicator, round, playersLife } = data
+      setCorrectAnswerId(null)
+      setWinnerUuid(null)
+      setDamages(0)
       setCurrentQuestion(question)
       setDamageMultiplier(damageMultiplicator)
       setRound(round)
@@ -67,7 +71,8 @@ const Play = () => {
     })
 
     socket?.on('roundEnd', (data: RoundEndType) => {
-      const { correctAnswerId, winnerUuid, damages, playersLife } = data
+      const { correctAnswerId, winnerUuid, damages, playersLife, endGame } = data
+      setGameEnded(endGame)
       setCorrectAnswerId(correctAnswerId)
       setWinnerUuid(winnerUuid)
       setDamages(damages)
@@ -78,9 +83,17 @@ const Play = () => {
           setPlayer2({ ...player2, life: player.life })
         }
       }
-
-      console.log(correctAnswerId, winnerUuid, damages, playersLife)
     })
+
+    socket?.on('gameEnd', () => {
+      console.log('Game ended')
+    })
+
+    return () => {
+      socket?.off('gameUpdate')
+      socket?.off('roundEnd')
+      socket?.off('gameEnd')
+    }
   }, [socket])
 
   return (
@@ -159,6 +172,7 @@ const Play = () => {
                     handleAnswer={handleAnswer}
                     selectedAnswer={selectedAnswer}
                     correctAnswerId={correctAnswerId}
+                    gameEnded={gameEnded}
                   />
                 )}
               </div>

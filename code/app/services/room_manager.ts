@@ -1,5 +1,5 @@
 // app/services/room_manager.ts
-import type { DraftPhase, RoomData, Rooms } from '#services/room_manager.types'
+import type { DraftPhase, RoomData, RoomPlayer, Rooms } from '#services/room_manager.types'
 import DraftPhases from '#enums/DraftPhases'
 import GamePhases from '#enums/gamePhases'
 import type Theme from '#models/theme'
@@ -113,6 +113,21 @@ class RoomManager {
         : null
   }
 
+  public dealPlayerDamage(roomId: string, playerUuid: string, multiplicator: number): number {
+    const room = this.rooms.get(roomId)
+    if (!room) return 0
+    const player = room.players.find((player) => player.uuid === playerUuid)
+    const damages = Math.max(10 * multiplicator)
+    if (player) player.life = Math.max(0, player.life - damages)
+    return damages
+  }
+
+  public isPlayerDead(roomId: string): boolean {
+    const room = this.rooms.get(roomId)
+    if (!room) return false
+    return room.players.some((player) => player.life <= 0)
+  }
+
   public findAvailableRoom(): string | null {
     for (const [roomId, roomData] of this.rooms.entries()) {
       if (roomData.players.length < 2) {
@@ -129,15 +144,6 @@ class RoomManager {
       }
     }
     return null
-  }
-
-  public dealPlayerDamage(roomId: string, playerUuid: string, multiplicator: number): number {
-    const room = this.rooms.get(roomId)
-    if (!room) return 0
-    const player = room.players.find((player) => player.uuid === playerUuid)
-    const damages = Math.max(10 * multiplicator)
-    if (player) player.life -= damages
-    return damages
   }
 
   public findPrivateRoom(roomCode: string): string | null {

@@ -122,8 +122,14 @@ const Navbar = () => {
                   Profile
                 </Link>
                 <Link
+                  route="dashboard.show"
+                  className="px-3 py-2 bg-gradient-to-r from-violet-400 to-fuchsia-500 block text-transparent bg-clip-text text-base font-semibold w-full text-left"
+                >
+                  Dashboard
+                </Link>
+                <Link
                   route="auth.logout"
-                  className="text-red-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer"
+                  className="text-red-500 hover:text-red-400 rounded-lg transition-colors cursor-pointer block px-3 py-2 w-full text-left"
                 >
                   Logout
                 </Link>

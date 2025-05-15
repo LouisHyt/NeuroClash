@@ -36,8 +36,11 @@ export type RoundEndType = {
   correctAnswerId: number
   winnerUuid: string | null
   damages: number
+  endGame: boolean
   playersLife: {
     uuid: string
     life: number
   }[]
 }
+
+export type GameEndType = {}
