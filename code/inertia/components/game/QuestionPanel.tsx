@@ -54,7 +54,7 @@ const QuestionPanel = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <p className="text-white">Hello guys !!</p>
+            <p className="text-white">Prepare for the next question...</p>
           </motion.div>
         )}
       </AnimatePresence>

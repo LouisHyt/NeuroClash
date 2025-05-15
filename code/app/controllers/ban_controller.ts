@@ -2,7 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class BanController {
-  showBan({ inertia, auth, response }: HttpContext) {
+  async showBan({ inertia, auth, response }: HttpContext) {
     const user = auth.user!
     if (!user?.bannedUntil) return response.redirect().toRoute('home.show')
 
