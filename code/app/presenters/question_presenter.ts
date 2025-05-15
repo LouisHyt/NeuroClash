@@ -23,9 +23,9 @@ export default class QuestionPresenter {
         name: question.difficulty.name,
       },
       author: {
-        username: question.author.username,
-        avatarUrl: question.author.avatarUrl,
-        suggestedQuestions: question.author.suggestedQuestions.length,
+        username: question.author?.username,
+        avatarUrl: question.author?.avatarUrl,
+        suggestedQuestions: question.author?.suggestedQuestions.length,
       },
     }))
   }
