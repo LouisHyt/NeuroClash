@@ -110,7 +110,7 @@ const End = () => {
                   transition={{ duration: 0.2 }}
                   className={`text-2xl sm:text-3xl md:text-4xl font-bold 
                     ${
-                      !eloAnimationStarted
+                      !eloAnimationStarted || gameData.newElo === gameData.previousElo
                         ? 'text-gray-300 '
                         : `text-transparent bg-clip-text bg-gradient-to-r 
                         ${
