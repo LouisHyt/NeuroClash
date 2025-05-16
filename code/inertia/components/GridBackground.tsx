@@ -5,7 +5,17 @@ import { useEffect, memo } from 'react'
 
 export type GridProps = {
   animated: boolean
-  type: 'auth' | 'ban' | 'game' | 'draft' | 'profile' | 'default' | 'questions' | 'error'
+  type:
+    | 'auth'
+    | 'ban'
+    | 'game'
+    | 'draft'
+    | 'profile'
+    | 'default'
+    | 'questions'
+    | 'error'
+    | 'winner'
+    | 'loser'
   iconsDensity?: number
 }
 

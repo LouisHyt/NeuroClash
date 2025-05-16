@@ -58,6 +58,6 @@ export default class GameController {
   }
 
   public showEndGame(ctx: HttpContext) {
-    return ctx.inertia.render('game/draft')
+    return ctx.inertia.render('game/end')
   }
 }

@@ -93,4 +93,20 @@ export const BackgroundEffect = {
       overlay: 'from-red-500/2',
     },
   },
+  winner: {
+    icons: [LuGamepad2, FaPlay, FaBoltLightning, HiMiniUsers],
+    colors: ['text-green-500/50', 'text-emerald-500/40', 'text-green-700/50'],
+    theme: {
+      gradient: 'rgba(52, 202, 93, 0.09)',
+      overlay: 'from-green-500/2',
+    },
+  },
+  loser: {
+    icons: [LuGamepad2, FaPlay, FaBoltLightning, HiMiniUsers],
+    colors: ['text-red-500/50', 'text-orange-700/50', 'text-red-700/50', 'text-orange-800/50'],
+    theme: {
+      gradient: 'rgba(183, 36, 54, 0.1)',
+      overlay: 'from-red-500/2',
+    },
+  },
 }

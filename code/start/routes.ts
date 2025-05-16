@@ -83,6 +83,8 @@ router
       })
       .use(middleware.game())
 
+    router.get('/game/end', [GameController, 'showEndGame']).as('game.end.show')
+
     router
       .post('/disconnect/player', [DisconnectController, 'handlePlayerDisconnected'])
       .as('disconnect.player')
