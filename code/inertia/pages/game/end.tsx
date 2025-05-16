@@ -1,6 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react'
 import GridBackground from '~/components/GridBackground'
-import { motion, AnimatePresence, useSpring, useTransform, useMotionValue } from 'motion/react'
+import { motion, AnimatePresence, useSpring, useTransform } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { FaGamepad } from 'react-icons/fa6'
 import { RiDashboard3Fill } from 'react-icons/ri'
