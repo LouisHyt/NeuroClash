@@ -122,10 +122,10 @@ class RoomManager {
     return damages
   }
 
-  public isPlayerDead(roomId: string): boolean {
+  public getDeadPlayer(roomId: string): RoomPlayer | undefined {
     const room = this.rooms.get(roomId)
-    if (!room) return false
-    return room.players.some((player) => player.life <= 0)
+    if (!room) return undefined
+    return room.players.find((player) => player.life <= 0)
   }
 
   public findAvailableRoom(): string | null {

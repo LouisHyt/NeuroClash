@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
     await Rank.createMany([
       {
         name: 'Bronze',
-        eloRequired: 500,
+        eloRequired: 600,
         iconUrl: '/assets/images/ranks/bronze.png',
       },
       {

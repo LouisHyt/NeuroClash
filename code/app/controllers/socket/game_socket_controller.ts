@@ -6,6 +6,8 @@ import DraftPhases from '#enums/DraftPhases'
 import Theme from '#models/theme'
 import LoggerManager from '#services/logger_manager'
 import Question from '#models/question'
+import StatisticManager from '#services/statistic_manager'
+import type { RoomData, RoomPlayer } from '#services/room_manager.types'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -271,13 +273,13 @@ export default class GameSocketController {
       roomManager.setPlayerSelectedAnswer(gameId, player.uuid, null)
     }
 
-    const playerDead = roomManager.isPlayerDead(gameId)
+    const deadPlayer = roomManager.getDeadPlayer(gameId)
 
     this.io.to(gameId).emit('roundEnd', {
       correctAnswerId,
       winnerUuid,
       damages,
-      endGame: playerDead,
+      endGame: deadPlayer ? true : false,
       playersLife: room.players.map((player) => ({
         uuid: player.uuid,
         life: player.life,
@@ -285,8 +287,8 @@ export default class GameSocketController {
     })
 
     setTimeout(() => {
-      if (playerDead) {
-        this.processGameEnd(gameId)
+      if (deadPlayer) {
+        this.processGameEnd(gameId, deadPlayer)
         return
       }
 
@@ -294,10 +296,13 @@ export default class GameSocketController {
     }, 7000)
   }
 
-  private processGameEnd(gameId: string) {
+  private async processGameEnd(gameId: string, deadPlayer: RoomPlayer) {
     const room = roomManager.getRoom(gameId)
     if (!room) return
-    this.io.to(gameId).emit('gameEnd', {})
+
+    const winner = room.players.find((player) => player.uuid !== deadPlayer.uuid)!
+    await StatisticManager.updateElo(winner.uuid, deadPlayer.uuid)
     room.isFinished = true
+    this.io.to(gameId).emit('gameEnd', {})
   }
 }
