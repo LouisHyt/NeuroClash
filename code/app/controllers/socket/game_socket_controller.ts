@@ -269,8 +269,10 @@ export default class GameSocketController {
       if (playersWithCorrectAnswer.length === 1) {
         winnerUuid = playersWithCorrectAnswer[0].uuid
         const loserUuid = room.players.find((player) => player.uuid !== winnerUuid)!.uuid
-        await StatisticManager.addQuestionCorrect(winnerUuid)
-        await StatisticManager.addQuestionFailed(loserUuid)
+        if (!room.isPrivate) {
+          await StatisticManager.addQuestionCorrect(winnerUuid)
+          await StatisticManager.addQuestionFailed(loserUuid)
+        }
         damages = roomManager.dealPlayerDamage(gameId, loserUuid, multiplicator)
       } else if (playersWithCorrectAnswer.length > 1) {
         winnerUuid =
@@ -280,14 +282,14 @@ export default class GameSocketController {
             : playersWithCorrectAnswer[1].uuid
 
         const loserUuid = room.players.find((player) => player.uuid !== winnerUuid)!.uuid
-        await StatisticManager.addQuestionCorrect(winnerUuid)
-        await StatisticManager.addQuestionCorrect(loserUuid)
+        if (!room.isPrivate) {
+          await StatisticManager.addQuestionCorrect(winnerUuid)
+          await StatisticManager.addQuestionCorrect(loserUuid)
+        }
         damages = roomManager.dealPlayerDamage(gameId, loserUuid, multiplicator)
-      } else {
-        await StatisticManager.addQuestionFailed(room.players[0].uuid)
-        await StatisticManager.addQuestionFailed(room.players[1].uuid)
       }
     } else {
+      if (room.isPrivate) return
       await StatisticManager.addQuestionFailed(room.players[0].uuid)
       await StatisticManager.addQuestionFailed(room.players[1].uuid)
     }
