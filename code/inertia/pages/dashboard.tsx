@@ -258,7 +258,7 @@ const Dashboard = ({
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 h-full text-sm">
                         {/* Game played */}
                         <StatisticCard value={statistics.gamesPlayed} label="Games Played" />
-                        <StatisticCard value={statistics.winRatio} label="Win Ratio" />
+                        <StatisticCard value={`${statistics.winRatio}%`} label="Win Ratio" />
                         <StatisticCard value={statistics.winStreak} label="Win Streak" />
                         <StatisticCard
                           value={statistics.correctQuestions}
@@ -266,7 +266,7 @@ const Dashboard = ({
                         />
                         <StatisticCard value={statistics.wrongQuestions} label="Wrong Answers " />
                         <StatisticCard
-                          value={statistics.averagePerformance}
+                          value={`${statistics.averagePerformance}%`}
                           label="Average Performance"
                         />
                       </div>

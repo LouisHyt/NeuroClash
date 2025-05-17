@@ -1,10 +1,10 @@
-// app/services/room_manager.ts
 import type { DraftPhase, RoomData, RoomPlayer, Rooms } from '#services/room_manager.types'
 import DraftPhases from '#enums/DraftPhases'
 import GamePhases from '#enums/gamePhases'
 import type Theme from '#models/theme'
 import type Question from '#models/question'
 import { DateTime } from 'luxon'
+import User from '#models/user'
 
 class RoomManager {
   private static instance: RoomManager
@@ -64,11 +64,17 @@ class RoomManager {
     return this.rooms.delete(roomId)
   }
 
-  public addPlayerToRoom(roomId: string, playerUuid: string, playerSocketId: string): boolean {
+  public async addPlayerToRoom(
+    roomId: string,
+    playerUuid: string,
+    playerSocketId: string
+  ): Promise<boolean> {
     const room = this.rooms.get(roomId)
     if (room) {
+      const username = await this.getPlayerUsername(playerUuid)
       room.players.push({
         uuid: playerUuid,
+        username,
         socketId: playerSocketId,
         life: 100,
         readyForGame: false,
@@ -207,6 +213,11 @@ class RoomManager {
     const room = this.rooms.get(roomId)
     if (!room) return
     room.phase = GamePhases.PLAY
+  }
+
+  private async getPlayerUsername(userUuid: string): Promise<string> {
+    const user = await User.findOrFail(userUuid)
+    return user.username
   }
 }
 

@@ -10,9 +10,12 @@ import { usePage } from '@inertiajs/react'
 import { InferPageProps } from '@adonisjs/inertia/types'
 import type GameController from '#controllers/game_controller'
 import { tuyau } from '~/utils/api'
+import { useGameSocketStore } from '~/stores/gameSocketStore'
 
 // Composant principal
 const Start = () => {
+  const socket = useGameSocketStore((state) => state.socket)
+
   const handleEndTimer = () => {
     router.visit(`${tuyau.$url('game.draft.show', { params: { id: gameId } })}`, {
       replace: true,
@@ -25,10 +28,13 @@ const Start = () => {
   const timeSec = 20 // 5 secondes pour le compte à rebours
   const { count, reset } = useCountdown(timeSec, handleEndTimer)
 
-  // Effet pour réinitialiser le timer si nécessaire
   useEffect(() => {
     reset()
   }, [])
+
+  useEffect(() => {
+    socket?.emit('confirmGameStarted', gameId)
+  }, [socket])
 
   return (
     <>

@@ -7,6 +7,7 @@ import type { DateTime } from 'luxon'
 export type RoomPlayer = {
   uuid: string
   socketId: string
+  username: string
   life: number
   readyForGame: boolean
   selectedAnswer: {

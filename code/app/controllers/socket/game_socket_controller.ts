@@ -7,7 +7,9 @@ import Theme from '#models/theme'
 import LoggerManager from '#services/logger_manager'
 import Question from '#models/question'
 import StatisticManager from '#services/statistic_manager'
-import type { RoomData, RoomPlayer } from '#services/room_manager.types'
+import type { RoomPlayer } from '#services/room_manager.types'
+import type { GameEndType } from './game_socket_controller.types.js'
+import RankElo from '#enums/RankElo'
 
 export default class GameSocketController {
   constructor(private io: Namespace) {}
@@ -17,6 +19,7 @@ export default class GameSocketController {
     socket.on('createPrivateGame', () => this.handleCreatePrivateGame(socket))
     socket.on('joinPrivateGame', (props) => this.handleJoinPrivateGame(socket, props))
     socket.on('getGameStatus', (props) => this.handleGameStatus(socket, props))
+    socket.on('confirmGameStarted', (props) => this.handleConfirmGameStarted(socket, props))
     socket.on('disconnect', () => this.handleDisconnect(socket))
 
     //Draft events
@@ -29,7 +32,7 @@ export default class GameSocketController {
     socket.on('newAnswer', (props) => this.handleNewAnswer(socket, props))
   }
 
-  public handleJoinGame(socket: Socket) {
+  public async handleJoinGame(socket: Socket) {
     let availableRoom = roomManager.findAvailableRoom()
     if (!availableRoom) {
       availableRoom = `gid${string.random(15)}`
@@ -37,7 +40,7 @@ export default class GameSocketController {
       LoggerManager.room('No room found, created one')
     }
 
-    roomManager.addPlayerToRoom(availableRoom, socket.data.userUuid, socket.id)
+    await roomManager.addPlayerToRoom(availableRoom, socket.data.userUuid, socket.id)
     socket.join(availableRoom)
 
     const room = roomManager.getRoom(availableRoom)
@@ -48,12 +51,12 @@ export default class GameSocketController {
     }
   }
 
-  public handleCreatePrivateGame(socket: Socket) {
+  public async handleCreatePrivateGame(socket: Socket) {
     const roomId = `gid${string.random(15)}`
     const roomCode = string.random(6).toUpperCase()
     roomManager.createPrivateRoom(roomId, roomCode)
     LoggerManager.room(`Created a private room with code ${roomCode}`)
-    roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
+    await roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
     socket.join(roomId)
     socket.emit('privateGameCreated', roomCode)
   }
@@ -68,7 +71,7 @@ export default class GameSocketController {
     const originalUser = await User.find(room.players[0].uuid)
     const newUser = await User.find(socket.data.userUuid)
     if (!originalUser || !newUser) return
-    roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
+    await roomManager.addPlayerToRoom(roomId, socket.data.userUuid, socket.id)
     socket.join(roomId)
     this.io.to(roomId).emit('privateGameJoined', {
       gameId: roomId,
@@ -83,6 +86,13 @@ export default class GameSocketController {
     this.io.to(socket.id).emit('gameStatus', playerRoom)
   }
 
+  public async handleConfirmGameStarted(socket: Socket, gameId: string) {
+    const room = roomManager.getRoom(gameId)
+    if (!room) return
+    if (room.isPrivate) return
+    await StatisticManager.updateTotalGames(socket.data.userUuid)
+  }
+
   public async handleDisconnect(socket: Socket) {
     const playerRoom = roomManager.findPlayerRoom(socket.data.userUuid)
     if (!playerRoom) return
@@ -92,8 +102,11 @@ export default class GameSocketController {
       if (!room.isPrivate) {
         const user = await User.findOrFail(socket.data.userUuid)
         await user.load('statistic')
-        user.statistic.elo > 540 ? (user!.statistic.elo -= 40) : null
+        user.statistic.elo > RankElo.BRONZE + 40
+          ? (user!.statistic.elo -= 40)
+          : (user!.statistic.elo = RankElo.BRONZE)
         user.hasPenalty = true
+        await user.statistic.save()
         await user.save()
       }
       this.io.to(playerRoom).emit('playerDisconnected', {
@@ -235,7 +248,7 @@ export default class GameSocketController {
     return damageMultiplicator
   }
 
-  private processRoundEnd(gameId: string) {
+  private async processRoundEnd(gameId: string) {
     const room = roomManager.getRoom(gameId)
     if (!room) return
     clearTimeout(room.questionTimer)
@@ -255,8 +268,10 @@ export default class GameSocketController {
 
       if (playersWithCorrectAnswer.length === 1) {
         winnerUuid = playersWithCorrectAnswer[0].uuid
-        const loser = room.players.find((player) => player.uuid !== winnerUuid)!
-        damages = roomManager.dealPlayerDamage(gameId, loser.uuid, multiplicator)
+        const loserUuid = room.players.find((player) => player.uuid !== winnerUuid)!.uuid
+        await StatisticManager.addQuestionCorrect(winnerUuid)
+        await StatisticManager.addQuestionFailed(loserUuid)
+        damages = roomManager.dealPlayerDamage(gameId, loserUuid, multiplicator)
       } else if (playersWithCorrectAnswer.length > 1) {
         winnerUuid =
           playersWithCorrectAnswer[0].selectedAnswer!.timestamp.valueOf() <
@@ -264,9 +279,17 @@ export default class GameSocketController {
             ? playersWithCorrectAnswer[0].uuid
             : playersWithCorrectAnswer[1].uuid
 
-        const loser = room.players.find((player) => player.uuid !== winnerUuid)!
-        damages = roomManager.dealPlayerDamage(gameId, loser.uuid, multiplicator)
+        const loserUuid = room.players.find((player) => player.uuid !== winnerUuid)!.uuid
+        await StatisticManager.addQuestionCorrect(winnerUuid)
+        await StatisticManager.addQuestionCorrect(loserUuid)
+        damages = roomManager.dealPlayerDamage(gameId, loserUuid, multiplicator)
+      } else {
+        await StatisticManager.addQuestionFailed(room.players[0].uuid)
+        await StatisticManager.addQuestionFailed(room.players[1].uuid)
       }
+    } else {
+      await StatisticManager.addQuestionFailed(room.players[0].uuid)
+      await StatisticManager.addQuestionFailed(room.players[1].uuid)
     }
 
     for (const player of room.players) {
@@ -301,8 +324,38 @@ export default class GameSocketController {
     if (!room) return
 
     const winner = room.players.find((player) => player.uuid !== deadPlayer.uuid)!
-    await StatisticManager.updateElo(winner.uuid, deadPlayer.uuid)
+    const winnerUser = {
+      uuid: winner.uuid,
+      username: winner.username,
+      isWinner: true,
+    }
+    const loserUser = {
+      uuid: deadPlayer.uuid,
+      username: deadPlayer.username,
+      isWinner: false,
+    }
+    if (!room.isPrivate) {
+      //Update stats
+      await StatisticManager.addVictory(winner.uuid)
+      await StatisticManager.addLoss(deadPlayer.uuid)
+      await StatisticManager.updateStreak(winner.uuid, true)
+      await StatisticManager.updateStreak(deadPlayer.uuid, false)
+
+      const eloResults = await StatisticManager.updateElo(winner.uuid, deadPlayer.uuid)
+      Object.assign(winnerUser, {
+        previousElo: eloResults.winnerUser.previousElo,
+        updatedElo: eloResults.winnerUser.updatedElo,
+      })
+      Object.assign(loserUser, {
+        previousElo: eloResults.loserUser.previousElo,
+        updatedElo: eloResults.loserUser.updatedElo,
+      })
+    }
     room.isFinished = true
-    this.io.to(gameId).emit('gameEnd', {})
+    const data = {
+      users: [winnerUser, loserUser],
+      isPrivate: room.isPrivate,
+    } as GameEndType
+    this.io.to(gameId).emit('gameEnd', data)
   }
 }

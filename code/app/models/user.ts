@@ -72,7 +72,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
     const eyesVariant = 'variant2W10,variant3W10,variant4W10,variant5W14,variant9W10'
     const mouthVariant = 'variant1,variant2,variant3'
     const shapeColors = '0a5b83,1c799f,69d2e7'
-    return `https://api.dicebear.com/9.x/thumbs/svg?seed=${this.uuid}&scale=100&size=80&backgroundColor=172d3d&eyes=${eyesVariant}&mouth=${mouthVariant}&shapeColor=${shapeColors}`
+    return `https://api.dicebear.com/9.x/thumbs/svg?seed=${this.uuid}&scale=100&size=80&backgroundColor=1D1E1E&eyes=${eyesVariant}&mouth=${mouthVariant}&shapeColor=${shapeColors}`
   }
 
   @computed()

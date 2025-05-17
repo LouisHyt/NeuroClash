@@ -58,7 +58,7 @@ const QuestionPanel = ({
           >
             <p>
               {gameEnded
-                ? "The game is over, you'l be redirected..."
+                ? "The game is over, you'll be redirected..."
                 : 'Get ready for the next question...'}
             </p>
           </motion.div>
@@ -174,8 +174,8 @@ const QuestionPanel = ({
                       ${!correctAnswerId && selectedAnswer && selectedAnswer === answer.id && 'bg-indigo-600/20 text-white'}
                       ${!correctAnswerId && selectedAnswer && selectedAnswer !== answer.id && 'bg-gray-800/50 text-gray-600 cursor-not-allowed'}
                       ${!selectedAnswer && 'text-white cursor-pointer bg-gray-900/80 hover:bg-indigo-600/20'}
-                      ${correctAnswerId && selectedAnswer && answer.id === correctAnswerId && 'bg-green-600/20 text-white'}
-                      ${correctAnswerId && selectedAnswer && answer.id !== correctAnswerId && 'bg-red-600/20 text-white'}
+                      ${correctAnswerId && answer.id === correctAnswerId && 'bg-green-600/20 text-white'}
+                      ${correctAnswerId && answer.id !== correctAnswerId && 'bg-red-600/20 text-white'}
                     `}
                     whileHover={!selectedAnswer ? { scale: 1.02 } : {}}
                     whileTap={!selectedAnswer ? { scale: 0.98 } : {}}

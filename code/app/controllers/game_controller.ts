@@ -5,6 +5,7 @@ import UserPresenter from '#presenters/user_presenter'
 import { inject } from '@adonisjs/core'
 import Theme from '#models/theme'
 import ThemesPresenter from '#presenters/themes_presenter'
+import type { GameEndType } from './socket/game_socket_controller.types.js'
 
 @inject()
 export default class GameController {
@@ -57,7 +58,22 @@ export default class GameController {
     })
   }
 
+  public handleEndGame(ctx: HttpContext) {
+    const users = ctx.request.input('users')
+    const isPrivate = ctx.request.input('isPrivate')
+    ctx.session.flash('gameData', {
+      users,
+      isPrivate,
+    })
+    return ctx.response.redirect().toRoute('game.end.show')
+  }
+
   public showEndGame(ctx: HttpContext) {
-    return ctx.inertia.render('game/end')
+    const gameData = ctx.session.flashMessages.get('gameData')
+    if (!gameData || gameData?.users.length !== 2)
+      return ctx.response.redirect().toRoute('dashboard.show')
+    return ctx.inertia.render('game/end', {
+      gameData: gameData as GameEndType,
+    })
   }
 }

@@ -1,6 +1,6 @@
 import type GameController from '#controllers/game_controller'
 import type { InferPageProps } from '@adonisjs/inertia/types'
-import { Head, usePage } from '@inertiajs/react'
+import { Head, router, usePage } from '@inertiajs/react'
 import { AnimatePresence, motion } from 'motion/react'
 import GridBackground from '~/components/GridBackground'
 import VisualEffects from '~/components/game/VisualEffect'
@@ -10,8 +10,13 @@ import PlayerGameCard from '~/components/game/PlayerGameCard'
 import { useGameSocketStore } from '~/stores/gameSocketStore'
 import useCountdown from '~/hooks/useCountdown'
 import QuestionPanel from '~/components/game/QuestionPanel'
-import type { GameUpdateType, RoundEndType } from '#controllers/socket/game_socket_controller.types'
+import type {
+  GameEndType,
+  GameUpdateType,
+  RoundEndType,
+} from '#controllers/socket/game_socket_controller.types'
 import GameLayout from '~/layouts/GameLayout'
+import { tuyau } from '~/utils/api'
 
 const Play = () => {
   const { players, gameId } = usePage<InferPageProps<GameController, 'showPlayGame'>>().props
@@ -85,8 +90,12 @@ const Play = () => {
       }
     })
 
-    socket?.on('gameEnd', () => {
-      console.log('Game ended')
+    socket?.on('gameEnd', (gameData: GameEndType) => {
+      router.visit(tuyau.$url('game.end.handle'), {
+        method: 'post',
+        data: gameData,
+        replace: true,
+      })
     })
 
     return () => {

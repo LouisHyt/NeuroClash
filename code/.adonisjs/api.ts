@@ -83,6 +83,10 @@ type GameEndGetHead = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/game_controller.ts').default['showEndGame'], false>
 }
+type GameEndPost = {
+  request: unknown
+  response: MakeTuyauResponse<import('../app/controllers/game_controller.ts').default['handleEndGame'], false>
+}
 type DisconnectPlayerPost = {
   request: unknown
   response: MakeTuyauResponse<import('../app/controllers/disconnect_controller.ts').default['handlePlayerDisconnected'], false>
@@ -223,6 +227,7 @@ export interface ApiDefinition {
       };
       '$get': GameEndGetHead;
       '$head': GameEndGetHead;
+      '$post': GameEndPost;
     };
   };
   'disconnect': {
@@ -426,6 +431,13 @@ const routes = [
     path: '/game/end',
     method: ["GET","HEAD"],
     types: {} as GameEndGetHead,
+  },
+  {
+    params: [],
+    name: 'game.end.handle',
+    path: '/game/end',
+    method: ["POST"],
+    types: {} as GameEndPost,
   },
   {
     params: [],

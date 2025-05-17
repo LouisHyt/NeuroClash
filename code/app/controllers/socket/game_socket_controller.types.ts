@@ -43,4 +43,13 @@ export type RoundEndType = {
   }[]
 }
 
-export type GameEndType = {}
+export type GameEndType = {
+  users: {
+    uuid: string
+    username: string
+    previousElo?: number
+    updatedElo?: number
+    isWinner: boolean
+  }[]
+  isPrivate: boolean
+}
