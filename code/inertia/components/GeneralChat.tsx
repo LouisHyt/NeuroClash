@@ -73,7 +73,7 @@ const GeneralChat = () => {
     <>
       <button
         onClick={() => setChatVisible(!chatVisible)}
-        className={`fixed bottom-4 right-4 z-30 bg-violet-600 text-white p-3 rounded-full shadow-lg shadow-violet-600/20 lg:hidden ${chatVisible ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-4 right-4 z-30 bg-violet-600 text-white p-3 rounded-full shadow-lg shadow-violet-600/20 flex md:flex lg:flex xl:hidden ${chatVisible ? 'hidden' : 'block'}`}
         aria-label="Toggle chat"
       >
         <svg
@@ -90,7 +90,7 @@ const GeneralChat = () => {
       </button>
 
       <div
-        className={`fixed top-0 right-0 bottom-0 w-[80%] sm:w-[350px] xl:w-auto xl:static bg-gray-900 border border-gray-800 p-2 sm:p-4 backdrop-blur-md transition-all duration-300 hover:border-gray-700 hover:bg-gray-850 h-full z-40 transform ${chatVisible ? 'translate-x-0 rounded-l-lg' : 'rounded-lg translate-x-full xl:translate-x-0'} lg:transform-none transition-transform duration-300 ease-in-out overflow-hidden flex-shrink-0`}
+        className={`fixed top-0 right-0 bottom-0 w-[80%] sm:w-[350px] xl:w-auto xl:static bg-gray-900 border border-gray-800 p-2 sm:p-4 backdrop-blur-md transition-all duration-300 hover:border-gray-700 hover:bg-gray-850 h-full z-40 transform ${chatVisible ? 'translate-x-0 rounded-l-lg' : 'rounded-lg translate-x-full'} xl:translate-x-0 xl:transform-none transition-transform duration-300 ease-in-out overflow-hidden flex-shrink-0`}
       >
         <div className="flex flex-col h-full justify-between max-h-full">
           <div className="flex items-center justify-between mb-4">

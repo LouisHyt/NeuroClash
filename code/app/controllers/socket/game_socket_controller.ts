@@ -212,6 +212,7 @@ export default class GameSocketController {
       .preload('difficulty')
       .whereNotIn('theme_id', bannedThemesId)
       .whereNotIn('id', questionsId)
+      .where('is_approved', true)
       .orderByRaw('RAND()')
       .first()
 
