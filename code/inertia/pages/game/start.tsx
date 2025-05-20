@@ -68,7 +68,7 @@ const Start = () => {
           </motion.div>
 
           {/* Joueurs */}
-          <div className="w-full max-w-3xl mx-auto flex justify-center items-center px-2 sm:px-4">
+          <div className="w-full max-w-3xl mx-auto flex justify-center items-center px-2 sm:px-4 overflow-hidden">
             <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full gap-5 md:gap-16">
               <PlayerCard player={players.currentPlayer} position="left" />
 

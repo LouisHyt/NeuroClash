@@ -29,9 +29,9 @@ const Register = () => {
           <h2 className="xl:text-4xl text-2xl font-bold text-white">Join the adventure!</h2>
           <p>
             Already a member?{' '}
-            <a href="/register" className="underline text-cyan-500">
+            <Link route="auth.login.show" className="underline text-cyan-500">
               Log in
-            </a>
+            </Link>
           </p>
         </div>
         <form
@@ -39,7 +39,7 @@ const Register = () => {
           onSubmit={handleSubmit}
         >
           {/* Champ Username avec label flottant */}
-          <div className="relative mb-3 flex flex-col sm:flex-row gap-3 lg:gap-5">
+          <div className="relative flex flex-col sm:flex-row gap-3">
             <div className="flex-1 justify-start flex flex-col gap-1">
               <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                 <input
@@ -159,6 +159,7 @@ const Register = () => {
             </div>
             {errors.password && <div className="text-red-500 text-sm mt-1">{errors.password}</div>}
           </div>
+
           <div className="relative mb-1 flex flex-col gap-1">
             <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
               <input
@@ -213,9 +214,9 @@ const Register = () => {
               />
               <label
                 htmlFor="remember"
-                className="text-sm text-gray-300 cursor-pointer flex items-center"
+                className="text-sm text-gray-300 cursor-pointer grid grid-cols-[auto_1fr] gap-2"
               >
-                <div className="w-5 h-5 border border-violet-500/50 rounded flex items-center justify-center bg-black/30 mr-3">
+                <div className="w-5 h-5 border border-violet-500/50 rounded flex items-center justify-center bg-black/30">
                   {data.approve_conditions && (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

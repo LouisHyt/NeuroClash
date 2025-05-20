@@ -19,12 +19,12 @@ export default class extends BaseSeeder {
 
     await QuestionFactory.with('answers', 4, (answer) => {
       answer.merge(randomAnswersArray())
-    }).createMany(20)
+    }).createMany(15)
 
     await QuestionFactory.with('answers', 4, (answer) => {
       answer.merge(randomAnswersArray())
     })
       .apply('approved')
-      .createMany(20)
+      .createMany(45)
   }
 }

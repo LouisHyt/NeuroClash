@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { VscEyeClosed, VscEye } from 'react-icons/vsc'
 import { FiUser } from 'react-icons/fi'
 import AuthLayout from '~/layouts/AuthLayout'
+import { Link } from '@tuyau/inertia/react'
 
 const Login = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -31,14 +32,14 @@ const Login = () => {
           <h2 className="xl:text-4xl text-2xl font-bold text-white">Welcome back!</h2>
           <p>
             Not a member ?{' '}
-            <a href="/register" className="underline text-cyan-500">
+            <Link route="auth.register.show" className="underline text-cyan-500">
               Register
-            </a>
+            </Link>
           </p>
         </div>
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-4 max-w-md mt-8 text-sm xl:text-base"
+          className="flex flex-col gap-1 xl:gap-4 max-w-md mt-8 text-sm xl:text-base"
         >
           {/* Champ Username avec label flottant */}
           <div className="relative mb-4 flex flex-col gap-1">

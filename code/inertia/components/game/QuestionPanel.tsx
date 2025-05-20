@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react'
 import type { QuestionPanelProps } from '~/pages/game/play.types'
+import HorizontalTimer from './HorizontalTimer'
 import Difficulties from '#enums/Difficulties'
 
 const QuestionPanel = ({
@@ -12,39 +13,20 @@ const QuestionPanel = ({
   gameEnded,
   handleAnswer,
 }: QuestionPanelProps) => {
-  const percentage = (timeLeft / maxTime) * 100
-
   return (
     <div className="w-full mb-7 sm:mb-0">
       <AnimatePresence mode="popLayout">
         {!correctAnswerId ? (
           <motion.div
             layout
-            className="flex flex-col items-center mb-9 sm:mb-7 lg:mb-10"
+            className="flex flex-col items-center mb-5 sm:mb-6 xl:mb-10"
             key={1}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="mb-0.5 sm:mb-2">
-              <span
-                className={`text-2xl sm:text-3xl lg:text-4xl font-bold ${
-                  timeLeft <= 5 ? 'text-red-500' : 'text-white'
-                }`}
-              >
-                {timeLeft}
-              </span>
-              <span className="text-sm sm:text-lg lg:text-xl text-indigo-300 ml-1">s</span>
-            </div>
-            <div className="w-3/4 lg:w-full max-w-md h-1.5 sm:h-2 bg-gray-900/80 border border-indigo-500/30 overflow-hidden rounded-md">
-              <motion.div
-                className="h-full bg-indigo-600"
-                initial={{ width: '100%' }}
-                animate={{ width: `${percentage}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
+            <HorizontalTimer timeLeft={timeLeft} initialTime={maxTime} />
           </motion.div>
         ) : (
           <motion.div

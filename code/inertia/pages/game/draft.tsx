@@ -14,6 +14,7 @@ import DraftPhases from '#enums/DraftPhases'
 import type { DraftUpdateType } from '#controllers/socket/game_socket_controller.types'
 import type { ThemeType, PlayerType, DraftPhaseType } from './draft.types'
 import { tuyau } from '~/utils/api'
+import HorizontalTimer from '~/components/game/HorizontalTimer'
 
 const Draft = () => {
   const { themes, players, gameId } =
@@ -41,7 +42,7 @@ const Draft = () => {
   // If timer ends
   function handleEndTimer() {
     if (draftphase === DraftPhases.COMPLETE) return
-    // socket?.emit('draftTimerEnded', gameId)
+    socket?.emit('draftTimerEnded', gameId)
   }
 
   const handleThemeSelect = (theme: ThemeType) => {
@@ -50,7 +51,7 @@ const Draft = () => {
 
     if (!isCurrentPlayerTurn) return
 
-    // socket?.emit('draftBan', { gameId, themeId: theme!.id })
+    socket?.emit('draftBan', { gameId, themeId: theme!.id })
   }
 
   const isThemeDisabled = (themeId: number) => {
@@ -113,12 +114,12 @@ const Draft = () => {
   return (
     <>
       <Head title="Game Draft" />
-      <div className="h-screen bg-gray-950 relative flex items-center md:items-start">
+      <div className="min-h-screen bg-gray-950 relative flex items-center md:items-start">
         <GridBackground animated={true} type="draft" iconsDensity={18} />
-        <div className="relative z-10 flex-1 flex flex-col p-2 sm:p-3 md:p-4 max-w-7xl mx-auto w-full mt-0 md:mt-12">
+        <div className="relative z-10 flex-1 flex flex-col p-2 sm:p-3 md:p-4 max-w-7xl mx-auto w-full mt-0">
           {/* Title */}
           <div className="text-center mb-6 sm:mb-4 md:mb-4">
-            <h1 className="text-lg md:text-3xl font-bold">
+            <h1 className="text-lg md:text-xl xl:text-3xl font-bold">
               <span className="relative inline-block px-3 sm:px-4 md:px-6 py-1 sm:py-2">
                 <span className="relative z-10 text-red-50">Draft Phase</span>
                 <span className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 rounded-lg"></span>
@@ -126,7 +127,7 @@ const Draft = () => {
                 <span className="absolute -inset-0.5 bg-red-500 rounded-lg opacity-30 blur-[4px]"></span>
               </span>
             </h1>
-            <p className="text-red-300 mt-1 sm:mt-3 text-xs sm:text-sm font-bold sm:block hidden">
+            <p className="text-red-300 mt-1 sm:mt-3 text-sm font-bold sm:block hidden">
               {draftphase === DraftPhases.COMPLETE
                 ? 'Draft phase over ! The game is about to begin...'
                 : draftphase === DraftPhases.WAIT
@@ -163,7 +164,15 @@ const Draft = () => {
             </div>
             <div className="w-full flex flex-col items-center flex-1">
               {draftphase !== DraftPhases.COMPLETE && draftphase !== DraftPhases.WAIT && (
-                <RoundTimer timeLeft={count} initialTime={timeSec} />
+                <>
+                  <div className="hidden xl:block">
+                    <RoundTimer timeLeft={count} initialTime={timeSec} />
+                  </div>
+
+                  <div className="block xl:hidden w-full">
+                    <HorizontalTimer timeLeft={count} initialTime={timeSec} />
+                  </div>
+                </>
               )}
               {draftphase === DraftPhases.COMPLETE && (
                 <motion.div
@@ -181,7 +190,7 @@ const Draft = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Rechercher un thème..."
+                      placeholder="Look for a theme..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full bg-gray-900/80 border border-red-500/30 rounded-lg py-2 sm:py-3 px-2 sm:px-4 pl-8 sm:pl-10 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -197,7 +206,7 @@ const Draft = () => {
 
                 {/* Themes List */}
                 <div className="relative flex-1 grid grid-rows-[auto_1fr] overflow-hidden">
-                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-2 p-1 stretch sm:p-2 auto-rows-max overflow-y-auto pr-1 max-h-[250px]">
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-2 p-1 sm:p-2 auto-rows-max overflow-y-auto pr-1 max-h-[250px]">
                     <AnimatePresence mode="popLayout">
                       {filteredThemes.map((theme) => (
                         <motion.div

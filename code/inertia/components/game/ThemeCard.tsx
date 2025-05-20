@@ -25,7 +25,7 @@ const ThemeCard = ({ theme, onSelect, disabled }: ThemeProps) => {
 
       {/* Contenu du thème */}
       <div className="flex items-center gap-2 sm:gap-3 justify-center">
-        <span className="text-xs md:text-base">{theme.name}</span>
+        <span className="text-xs md:text-sm xl:text-base">{theme.name}</span>
       </div>
     </motion.button>
   )
