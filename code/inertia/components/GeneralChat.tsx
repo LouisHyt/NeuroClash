@@ -15,6 +15,8 @@ const GeneralChat = () => {
   const [chatVisible, setChatVisible] = useState(false)
   const [autoScroll, setAutoScroll] = useState(true)
 
+  console.log(chatVisible)
+
   const messageInputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 
@@ -110,7 +112,7 @@ const GeneralChat = () => {
             </h3>
             <button
               onClick={() => setChatVisible(false)}
-              className="lg:hidden text-gray-400 hover:text-white transition-colors"
+              className="xl:hidden text-gray-400 hover:text-white transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

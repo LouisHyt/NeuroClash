@@ -74,7 +74,7 @@ const Dashboard = ({
             className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-4 sm:gap-6 md:gap-8"
             ref={containerRef}
           >
-            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 min-h-0 md:max-h-[calc(100vh-100px)]">
+            <div className="grid grid-rows-[auto_auto_1fr] gap-3 sm:gap-4 md:gap-6 min-w-0 min-h-0">
               <div data-swapy-slot="a" className="slot">
                 <div
                   data-swapy-item="a"
