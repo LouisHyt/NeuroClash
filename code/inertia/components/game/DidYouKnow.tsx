@@ -16,7 +16,7 @@ const DidYouKnow = () => {
   }, [FunFacts.length])
 
   return (
-    <div className="absolute bottom-2 sm:bottom-8 left-0 right-0 z-10 px-4">
+    <div className="absolute bottom-2 xl:bottom-8 left-0 right-0 z-10 px-4">
       <div className="max-w-2xl mx-auto p-2 sm:p-3">
         <AnimatePresence mode="wait">
           <motion.div
@@ -30,9 +30,7 @@ const DidYouKnow = () => {
             <p className="text-indigo-300 text-xs sm:text-sm font-medium mb-0.5 sm:mb-1">
               Did you know ?
             </p>
-            <p className="text-white text-xs sm:text-sm md:text-base">
-              {FunFacts[currentFactIndex]}
-            </p>
+            <p className="text-white text-[13px] xl:text-base">{FunFacts[currentFactIndex]}</p>
           </motion.div>
         </AnimatePresence>
       </div>

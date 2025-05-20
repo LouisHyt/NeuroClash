@@ -9,7 +9,7 @@ const RoundTimer = ({ timeLeft, initialTime }: { timeLeft: number; initialTime: 
 
   return (
     <div className="flex flex-col items-center">
-      <div className={`relative w-28 h-28 md:w-32 md:h-32 flex items-center justify-center`}>
+      <div className={`relative w-25 h-25 xl:w-32 xl:h-32 flex items-center justify-center`}>
         <svg className="w-full h-full absolute top-0 left-0">
           <circle
             cx="50%"

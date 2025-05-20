@@ -23,12 +23,12 @@ const Login = () => {
     <>
       <Head title="Login" />
       {/* Zone de connexion */}
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-1 text-fuchsia-200/80">
+      <div className="max-w-7xl mx-auto flex flex-col justify-center px-4 sm:px-6 lg:px-15 xl:px-10 py-10 xl:py-32 relative z-1 text-fuchsia-200/80">
         <div className="flex flex-col gap-5">
-          <p className="text-2xl color-gray-200 uppercase font-bold text-pretty">
+          <p className="xl:block hidden text-xl color-gray-200 uppercase font-bold text-pretty">
             Ready for another round ?
           </p>
-          <h2 className="text-4xl font-bold text-white">Welcome back!</h2>
+          <h2 className="xl:text-4xl text-2xl font-bold text-white">Welcome back!</h2>
           <p>
             Not a member ?{' '}
             <a href="/register" className="underline text-cyan-500">
@@ -36,7 +36,10 @@ const Login = () => {
             </a>
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mt-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-4 max-w-md mt-8 text-sm xl:text-base"
+        >
           {/* Champ Username avec label flottant */}
           <div className="relative mb-4 flex flex-col gap-1">
             <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">

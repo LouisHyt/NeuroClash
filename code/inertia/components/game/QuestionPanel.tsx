@@ -66,6 +66,7 @@ const QuestionPanel = ({
 
         {/* Question */}
         <AnimatePresence mode="wait">
+          {/* Question */}
           <motion.div
             layout
             key={`question-${question.id}`}
@@ -73,6 +74,7 @@ const QuestionPanel = ({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.97, transition: { delay: 0.35 } }}
             transition={{ duration: 0.3 }}
+            className="md:mx-15 xl:mx-0"
           >
             <div className="mb-2 sm:mb-4 lg:mb-6 relative">
               <motion.div
@@ -101,7 +103,6 @@ const QuestionPanel = ({
               <div className="absolute -top-2 -left-2 flex items-center z-10 scale-[0.7] sm:scale-90 lg:scale-100">
                 {/* Catégory */}
                 <div className="bg-blue-500 text-white text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-l-md shadow-md flex items-center">
-                  <span className="mr-0.5 sm:mr-1">🌐</span>
                   {question.theme.name}
                 </div>
 
@@ -156,7 +157,7 @@ const QuestionPanel = ({
                   </div>
                 )}
 
-                <p className="text-white text-sm sm:text-xl lg:text-2xl text-center font-medium">
+                <p className="text-white text-sm md:text-lg xl:text-xl text-center font-medium">
                   {question.name}
                 </p>
               </div>
@@ -170,7 +171,7 @@ const QuestionPanel = ({
                   <motion.button
                     key={answer.id}
                     className={`
-                      p-1.5 sm:p-3 lg:p-4 rounded-lg border border-indigo-500/30 text-xs xs:text-sm sm:text-base lg:text-lg font-medium transition-colors relative overflow-hidden group
+                      p-1.5 sm:p-3 lg:p-4 rounded-lg border border-indigo-500/30 text-sm md:text-base xl:text-lg font-medium transition-colors relative overflow-hidden group
                       ${!correctAnswerId && selectedAnswer && selectedAnswer === answer.id && 'bg-indigo-600/20 text-white'}
                       ${!correctAnswerId && selectedAnswer && selectedAnswer !== answer.id && 'bg-gray-800/50 text-gray-600 cursor-not-allowed'}
                       ${!selectedAnswer && 'text-white cursor-pointer bg-gray-900/80 hover:bg-indigo-600/20'}

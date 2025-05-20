@@ -33,6 +33,7 @@ export default class GameSocketController {
   }
 
   public async handleJoinGame(socket: Socket) {
+    LoggerManager.room('Join game event from ' + socket.data)
     let availableRoom = roomManager.findAvailableRoom()
     if (!availableRoom) {
       availableRoom = `gid${string.random(15)}`

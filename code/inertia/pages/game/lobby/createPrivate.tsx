@@ -31,10 +31,12 @@ const CreatePrivate = () => {
     }
 
     return () => clearInterval(interval)
-  }, [searchTime])
+  }, [])
 
   //Create private room and get code
   useEffect(() => {
+    if (!socket) return
+
     let startGameTimeout: NodeJS.Timeout
 
     socket?.emit('createPrivateGame')
@@ -64,16 +66,19 @@ const CreatePrivate = () => {
         <LobbyBackground />
 
         {/* Contenu principal */}
-        <div className="text-center z-10 max-w-md w-full mb-32 sm:mb-24">
-          <h1 className="text-2xl md:text-4xl font-bold text-white mb-2 text-shadow-lg">
-            NeuroClash
+        <div className="text-center z-10 max-w-md w-full mb-24 sm:mb-16">
+          <h1 className="text-3xl xl:text-4xl font-bold text-white mb-2 text-shadow-lg">
+            <span>Neuro</span>
+            <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
+              Clash
+            </span>
           </h1>
-          <h2 className="text-lg md:text-2xl text-indigo-300 mb-12">Private lobby</h2>
+          <h2 className="text-lg xl:text-2xl text-indigo-300 mb-12">Public lobby</h2>
 
           <div className="flex flex-col items-center">
             <LobbyLoader />
             <motion.p
-              className="text-xl sm:text-2xl font-medium text-white mb-2 sm:mb-3"
+              className="text-lg xl:text-2xl font-medium text-white mb-2 sm:mb-3"
               key={statusMessage}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -91,7 +96,7 @@ const CreatePrivate = () => {
 
                 {gameCode ? (
                   <motion.div
-                    className="w-full max-w-xs bg-gray-800/70 backdrop-blur-sm rounded-lg border border-indigo-500/30 p-6 mb-6"
+                    className="w-full max-w-sm bg-gray-800/70 backdrop-blur-sm rounded-lg border border-indigo-500/30 p-6 mb-6"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
@@ -151,7 +156,7 @@ const CreatePrivate = () => {
           {searchStatus === 'searching' && (
             <Link
               route="dashboard.show"
-              className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 hover:scale-105 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base"
+              className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 hover:scale-105 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm xl:text-base mb-10"
             >
               Cancel
             </Link>

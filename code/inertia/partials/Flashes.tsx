@@ -55,9 +55,9 @@ const Flashes = () => {
             data-id={flash.id}
             className={`
               py-4 px-7 relative rounded-lg border shadow-md w-fit
-              ${flash.type === FlashKeys.SUCCESS && 'sm:bg-green-500/20 bg-green-500/90 text-white sm:text-green-400 border-green-500/30'}
-              ${flash.type === FlashKeys.WARNING && 'sm:bg-yellow-500/20 bg-yellow-600/90 text-white sm:text-yellow-400 border-yellow-500/30'}
-              ${flash.type === FlashKeys.ERROR && 'sm:bg-red-500/20 bg-red-500/90 text-white sm:text-red-400 border-red-500/30'}
+              ${flash.type === FlashKeys.SUCCESS && 'sm:bg-green-500/90 bg-green-500/90 text-white border-green-500/30'}
+              ${flash.type === FlashKeys.WARNING && 'sm:bg-yellow-700/90 bg-yellow-600/90 text-white border-yellow-500/30'}
+              ${flash.type === FlashKeys.ERROR && 'sm:bg-red-500/90 bg-red-500/90 text-white border-red-500/30'}
             `}
             initial={{ opacity: 0, x: 35 }}
             animate={{ opacity: 1, x: 0 }}

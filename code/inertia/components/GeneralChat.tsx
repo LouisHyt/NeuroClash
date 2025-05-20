@@ -15,8 +15,6 @@ const GeneralChat = () => {
   const [chatVisible, setChatVisible] = useState(false)
   const [autoScroll, setAutoScroll] = useState(true)
 
-  console.log(chatVisible)
-
   const messageInputRef = useRef<HTMLInputElement>(null)
   const chatContainerRef = useRef<HTMLDivElement>(null)
 

@@ -41,7 +41,7 @@ const Draft = () => {
   // If timer ends
   function handleEndTimer() {
     if (draftphase === DraftPhases.COMPLETE) return
-    socket?.emit('draftTimerEnded', gameId)
+    // socket?.emit('draftTimerEnded', gameId)
   }
 
   const handleThemeSelect = (theme: ThemeType) => {
@@ -50,7 +50,7 @@ const Draft = () => {
 
     if (!isCurrentPlayerTurn) return
 
-    socket?.emit('draftBan', { gameId, themeId: theme!.id })
+    // socket?.emit('draftBan', { gameId, themeId: theme!.id })
   }
 
   const isThemeDisabled = (themeId: number) => {
@@ -113,12 +113,12 @@ const Draft = () => {
   return (
     <>
       <Head title="Game Draft" />
-      <div className="h-screen bg-gray-950 relative overflow-hidden flex items-center md:items-start">
+      <div className="h-screen bg-gray-950 relative flex items-center md:items-start">
         <GridBackground animated={true} type="draft" iconsDensity={18} />
         <div className="relative z-10 flex-1 flex flex-col p-2 sm:p-3 md:p-4 max-w-7xl mx-auto w-full mt-0 md:mt-12">
           {/* Title */}
           <div className="text-center mb-6 sm:mb-4 md:mb-4">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
+            <h1 className="text-lg md:text-3xl font-bold">
               <span className="relative inline-block px-3 sm:px-4 md:px-6 py-1 sm:py-2">
                 <span className="relative z-10 text-red-50">Draft Phase</span>
                 <span className="absolute inset-0 bg-gradient-to-r from-red-700 to-red-800 rounded-lg"></span>
@@ -175,51 +175,53 @@ const Draft = () => {
                 </motion.div>
               )}
 
-              {/* Search Bar */}
-              <div className="w-full mb-2 sm:mb-4 mt-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Rechercher un thème..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-gray-900/80 border border-red-500/30 rounded-lg py-2 sm:py-3 px-2 sm:px-4 pl-8 sm:pl-10 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-red-500"
-                    disabled={
-                      draftphase === DraftPhases.COMPLETE || draftphase === DraftPhases.WAIT
-                    }
-                  />
-                  <div className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-red-400">
-                    🔍
+              <div className="w-full max-w-[75vw]">
+                {/* Search Bar */}
+                <div className="mb-2 sm:mb-4 mt-4">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Rechercher un thème..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full bg-gray-900/80 border border-red-500/30 rounded-lg py-2 sm:py-3 px-2 sm:px-4 pl-8 sm:pl-10 text-sm sm:text-base text-white focus:outline-none focus:ring-2 focus:ring-red-500"
+                      disabled={
+                        draftphase === DraftPhases.COMPLETE || draftphase === DraftPhases.WAIT
+                      }
+                    />
+                    <div className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 text-red-400">
+                      🔍
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Themes List */}
-              <div className="w-full relative flex-1 grid grid-rows-[auto_1fr] overflow-hidden">
-                <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-2 p-1 sm:p-2 auto-rows-max overflow-y-auto pr-1 max-h-[250px]">
-                  <AnimatePresence mode="popLayout">
-                    {filteredThemes.map((theme) => (
-                      <motion.div
-                        layout
-                        key={theme.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ThemeCard
-                          theme={theme}
-                          onSelect={() => handleThemeSelect(theme)}
-                          disabled={
-                            isThemeDisabled(theme.id) ||
-                            draftphase === DraftPhases.COMPLETE ||
-                            draftphase === DraftPhases.WAIT ||
-                            activePlayerUuid !== player1.uuid
-                          }
-                        />
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
+                {/* Themes List */}
+                <div className="relative flex-1 grid grid-rows-[auto_1fr] overflow-hidden">
+                  <div className="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-2 gap-y-2 p-1 stretch sm:p-2 auto-rows-max overflow-y-auto pr-1 max-h-[250px]">
+                    <AnimatePresence mode="popLayout">
+                      {filteredThemes.map((theme) => (
+                        <motion.div
+                          layout
+                          key={theme.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ThemeCard
+                            theme={theme}
+                            onSelect={() => handleThemeSelect(theme)}
+                            disabled={
+                              isThemeDisabled(theme.id) ||
+                              draftphase === DraftPhases.COMPLETE ||
+                              draftphase === DraftPhases.WAIT ||
+                              activePlayerUuid !== player1.uuid
+                            }
+                          />
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+                  </div>
                 </div>
               </div>
             </div>

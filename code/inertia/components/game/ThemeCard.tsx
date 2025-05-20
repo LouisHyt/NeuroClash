@@ -11,7 +11,7 @@ type ThemeProps = {
 const ThemeCard = ({ theme, onSelect, disabled }: ThemeProps) => {
   return (
     <motion.button
-      className={`bg-gray-900/80 p-2 sm:p-3 md:p-4 rounded-lg w-full border ${
+      className={`bg-gray-900/80 p-2 sm:p-3 md:p-4 rounded-lg h-full w-full border ${
         disabled ? 'border-gray-700/30' : 'border-red-500/30'
       } text-white text-sm sm:text-base md:text-lg font-medium hover:bg-red-600/20 transition-colors relative overflow-hidden group ${
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
@@ -24,7 +24,7 @@ const ThemeCard = ({ theme, onSelect, disabled }: ThemeProps) => {
       <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-600/10 to-red-500/0 opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
       {/* Contenu du thème */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 justify-center">
         <span className="text-xs md:text-base">{theme.name}</span>
       </div>
     </motion.button>

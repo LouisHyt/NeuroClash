@@ -55,7 +55,7 @@ const GridBackground = memo((props: GridProps) => {
   })
 
   return (
-    <div className="absolute inset-0 z-0 grid">
+    <div className="absolute inset-0 z-0 grid overflow-hidden">
       <motion.div
         className="absolute inset-0 z-0"
         style={{

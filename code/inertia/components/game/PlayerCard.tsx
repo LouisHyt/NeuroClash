@@ -22,7 +22,7 @@ const PlayerCard = ({ player, position, displayRank = true }: PlayerCardProps) =
       <div className="flex flex-col items-center h-full">
         {/* Avatar */}
         <div className="relative">
-          <div className="relative w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-indigo-600/30 border-2 border-indigo-500/50 flex items-center justify-center">
+          <div className="relative w-16 h-16 sm:w-22 sm:h-22 xl:w-28 xl:h-28 rounded-full bg-indigo-600/30 border-2 border-indigo-500/50 flex items-center justify-center">
             {player.avatarUrl ? (
               <>
                 <img
@@ -45,7 +45,7 @@ const PlayerCard = ({ player, position, displayRank = true }: PlayerCardProps) =
         </div>
 
         {/* Nom et Elo */}
-        <h3 className="text-base sm:text-xl md:text-2xl font-bold text-white mt-2 sm:mt-3 text-shadow-lg truncate max-w-[100px] sm:max-w-[150px] md:max-w-[200px]">
+        <h3 className="text-base sm:text-xl xl:text-2xl font-bold text-white mt-2 sm:mt-3 text-shadow-lg truncate max-w-[100px] sm:max-w-[150px] md:max-w-[200px]">
           {player.username}
         </h3>
         <div className="flex items-center gap-1 text-indigo-300 mb-1 sm:mb-2">
@@ -54,10 +54,10 @@ const PlayerCard = ({ player, position, displayRank = true }: PlayerCardProps) =
         </div>
 
         {/* Bio - Visible uniquement sur les écrans moyens et grands */}
-        <div className="hidden md:block h-[80px] mt-1">
+        <div className="h-[80px] mt-1">
           {player.bio && (
             <motion.p
-              className="text-sm text-gray-300 max-w-[250px] text-center bg-gray-800/50 backdrop-blur-sm p-2 rounded-lg border border-indigo-500/20"
+              className="text-[12px] md:text-[14px] xl:text-sm text-gray-300 max-w-[350px] text-center bg-gray-800/50 backdrop-blur-sm p-2 rounded-lg border border-indigo-500/20"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 1 }}

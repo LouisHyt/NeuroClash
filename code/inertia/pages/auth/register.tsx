@@ -21,12 +21,12 @@ const Register = () => {
     <>
       <Head title="Register" />
       {/* Zone de connexion */}
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-1 text-fuchsia-200/80">
+      <div className="max-w-7xl flex flex-col justify-center mx-auto px-4 sm:px-6 lg:px-15 xl:px-10 py-10 xl:py-32 relative z-1 text-fuchsia-200/80">
         <div className="flex flex-col gap-5">
-          <p className="text-2xl color-gray-200 uppercase font-bold text-pretty">
+          <p className="xl:block hidden text-xl color-gray-200 uppercase font-bold text-pretty">
             Where it all begins
           </p>
-          <h2 className="text-4xl font-bold text-white">Join the adventure!</h2>
+          <h2 className="xl:text-4xl text-2xl font-bold text-white">Join the adventure!</h2>
           <p>
             Already a member?{' '}
             <a href="/register" className="underline text-cyan-500">
@@ -34,9 +34,12 @@ const Register = () => {
             </a>
           </p>
         </div>
-        <form className="flex flex-col gap-4 max-w-xl mt-8" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col gap-3 max-w-xl mt-5 lg:mt-8 text-sm xl:text-base"
+          onSubmit={handleSubmit}
+        >
           {/* Champ Username avec label flottant */}
-          <div className="relative mb-4 flex flex-col sm:flex-row gap-5">
+          <div className="relative mb-3 flex flex-col sm:flex-row gap-3 lg:gap-5">
             <div className="flex-1 justify-start flex flex-col gap-1">
               <div className="relative border border-violet-500/30 rounded-lg bg-black/30 focus-within:border-violet-500 transition-colors">
                 <input
@@ -47,7 +50,7 @@ const Register = () => {
                   required
                   value={data.username}
                   onChange={(e) => setData('username', e.target.value)}
-                  className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 pr-10 peer"
+                  className="w-full bg-transparent placeholder-transparent px-4 py-2 lg:py-3 text-white outline-none pt-4 lg:pt-5 pb-1 lg:pb-2 pr-10 peer"
                 />
                 <label
                   htmlFor="username"
@@ -87,7 +90,7 @@ const Register = () => {
                   onChange={(e) => setData('email', e.target.value)}
                   required
                   placeholder="Email"
-                  className="w-full bg-transparent placeholder-transparent px-4 py-3 text-white outline-none pt-5 pb-2 pr-10 peer"
+                  className="w-full bg-transparent placeholder-transparent px-4 py-2 lg:py-3 text-white outline-none pt-4 lg:pt-5 pb-1 lg:pb-2 pr-10 peer"
                 />
                 <label
                   htmlFor="email"
@@ -251,7 +254,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={processing}
-            className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-3 rounded-lg font-semibold mt-6 cursor-pointer"
+            className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white py-2 lg:py-3 rounded-lg font-semibold mt-4 lg:mt-6 cursor-pointer"
           >
             Create account
           </button>

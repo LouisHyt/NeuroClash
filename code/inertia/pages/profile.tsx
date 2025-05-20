@@ -103,7 +103,7 @@ const Profile = () => {
     <>
       <Head title="Profile" />
       <GridBackground animated={true} type="profile" />
-      <div className="container mx-auto px-6 md:px-12 py-15 relative z-1">
+      <div className="container mx-auto px-4 xl:px-6 py-5 xl:py-15 relative z-1">
         <div className="flex flex-col md:flex-row gap-8 items-start">
           {/* Panneau de gauche - Avatar et stats */}
           <div className="w-full md:w-1/3 lg:w-1/4">

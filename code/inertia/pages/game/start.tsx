@@ -39,11 +39,11 @@ const Start = () => {
   return (
     <>
       <Head title="Game Starting" />
-      <div className="min-h-screen bg-gray-950 relative overflow-hidden flex flex-col">
+      <div className="min-h-screen bg-gray-950 relative flex flex-col">
         <GridBackground animated={true} type="game" iconsDensity={18} />
 
         {/* Contenu principal */}
-        <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 relative z-10  -mt-8 md:-mt-28">
+        <div className="flex-1 flex flex-col items-center p-4 xl:p-8 relative z-10">
           {/* Titre animé */}
           <motion.div
             className="text-center mb-4 sm:mb-6 md:mb-8"
@@ -51,15 +51,15 @@ const Start = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-1 sm:mb-2 text-shadow-lg">
+            <h1 className="text-2xl sm:text-3xl md:text-2xl xl:text-4xl font-bold text-white mb-1 sm:mb-2 text-shadow-lg">
               Prepare Yourself!
             </h1>
-            <p className="text-base sm:text-lg text-indigo-300">The game is starting in</p>
+            <p className="text-base xl:text-lg text-indigo-300">The game is starting in</p>
           </motion.div>
 
           {/* Timer central */}
           <motion.div
-            className="mb-15 md:mb-20"
+            className="mb-15 md:mb-10 xl:mb-20"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -69,10 +69,8 @@ const Start = () => {
 
           {/* Joueurs */}
           <div className="w-full max-w-3xl mx-auto flex justify-center items-center px-2 sm:px-4">
-            <div className="flex justify-between items-center w-full md:gap-16">
-              <div className="flex-1 flex justify-center md:justify-end">
-                <PlayerCard player={players.currentPlayer} position="left" />
-              </div>
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center w-full gap-5 md:gap-16">
+              <PlayerCard player={players.currentPlayer} position="left" />
 
               {/* VS au centre */}
               <motion.div
@@ -88,15 +86,13 @@ const Start = () => {
                 </div>
               </motion.div>
 
-              <div className="flex-1 flex justify-center md:justify-start">
-                <PlayerCard player={players.opponentPlayer} position="right" />
-              </div>
+              <PlayerCard player={players.opponentPlayer} position="right" />
             </div>
           </div>
 
           {/* Message en bas */}
           <motion.p
-            className="absolute bottom-6 text-center text-indigo-300 text-xs sm:text-sm md:text-base px-4 max-w-full"
+            className="absolute bottom-6 text-center text-indigo-300 text-sm xl:text-base px-4 max-w-full"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}

@@ -89,7 +89,7 @@ const ApprovedQuestions = () => {
         <HiOutlineQuestionMarkCircle className="text-purple-400" />
         <span>Toutes les questions</span>
       </h3>
-      <div className="overflow-x-auto">
+      <div className="overflow-y-auto snap-y">
         <table className="min-w-full divide-y divide-purple-500/20">
           <thead>
             <tr>

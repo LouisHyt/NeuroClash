@@ -18,6 +18,8 @@ const GameLobby = () => {
 
   //Wait before looking for a game
   useEffect(() => {
+    if (!socket) return
+
     let searchTimeout: NodeJS.Timeout
     let startGameTimeout: NodeJS.Timeout
 
@@ -53,23 +55,28 @@ const GameLobby = () => {
     }
 
     return () => clearInterval(interval)
-  }, [searchTime])
+  }, [])
 
   return (
     <>
       <Head title="Public Lobby" />
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
         <LobbyBackground />
 
         {/* Contenu principal */}
         <div className="text-center z-10 max-w-md w-full mb-24 sm:mb-16">
-          <h1 className="text-4xl font-bold text-white mb-2 text-shadow-lg">NeuroClash</h1>
-          <h2 className="text-2xl text-indigo-300 mb-12">Public lobby</h2>
+          <h1 className="text-3xl xl:text-4xl font-bold text-white mb-2 text-shadow-lg">
+            <span>Neuro</span>
+            <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-violet-500 text-transparent bg-clip-text">
+              Clash
+            </span>
+          </h1>
+          <h2 className="text-lg xl:text-2xl text-indigo-300 mb-12">Public lobby</h2>
 
-          <div className="flex flex-col items-center mb-8 sm:mb-12">
+          <div className="flex flex-col items-center mb-5 xl:mb-8">
             <LobbyLoader />
             <motion.p
-              className="text-xl sm:text-2xl font-medium text-white mb-2 sm:mb-3"
+              className="text-lg xl:text-2xl font-medium text-white mb-2 sm:mb-3"
               key={statusMessage}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -121,7 +128,7 @@ const GameLobby = () => {
           {searchStatus === 'searching' && (
             <Link
               route="dashboard.show"
-              className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 hover:scale-105 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm sm:text-base"
+              className="py-3 px-6 sm:py-4 sm:px-8 inline-block bg-gray-900/60 hover:scale-105 transition-all hover:bg-gray-800/80 text-white font-medium rounded-lg border border-indigo-500/30 backdrop-blur-sm text-sm xl:text-base"
             >
               Cancel search
             </Link>

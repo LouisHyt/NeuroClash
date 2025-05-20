@@ -31,7 +31,7 @@ const SuggestedQuestions = () => {
         <HiOutlineQuestionMarkCircle className="text-purple-400 text-xl" />
         <span>Recent suggested questions</span>
       </h3>
-      <div className="overflow-y-auto flex-1 flex flex-col gap-4 min-h-0 px-4">
+      <div className="overflow-y-auto snap-y flex-1 flex flex-col gap-4 min-h-0 px-4">
         {suggestedQuestions.map((question) => (
           <motion.div
             key={question.id}
@@ -39,7 +39,7 @@ const SuggestedQuestions = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="p-4 rounded-lg border border-blue-800/40 bg-blue-600/5 shadow-md hover:shadow-lg transition-all duration-200 hover:border-blue-700/50"
+            className="p-4 rounded-lg border snap-start border-blue-800/40 bg-blue-600/5 shadow-md hover:shadow-lg transition-all duration-200 hover:border-blue-700/50"
           >
             <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-start gap-3 mb-4">
               <div className="flex flex-col gap-1">
