@@ -169,7 +169,7 @@ const Draft = () => {
                     <RoundTimer timeLeft={count} initialTime={timeSec} />
                   </div>
 
-                  <div className="block xl:hidden w-full">
+                  <div className=" xl:hidden flex flex-col items-center mb-5 xl:mb-10 w-full">
                     <HorizontalTimer timeLeft={count} initialTime={timeSec} />
                   </div>
                 </>
