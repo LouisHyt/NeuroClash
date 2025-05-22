@@ -31,14 +31,6 @@ const GameList = () => {
           username: 'BrainMaster',
           avatarUrl: 'https://i.pravatar.cc/150?img=2',
         },
-        {
-          username: 'MindQuest',
-          avatarUrl: 'https://i.pravatar.cc/150?img=3',
-        },
-        {
-          username: 'SynapseKing',
-          avatarUrl: 'https://i.pravatar.cc/150?img=4',
-        },
       ],
     },
     {

@@ -5,5 +5,5 @@ import { api } from '#adonis/api'
 
 export const tuyau = createTuyau({
   api,
-  baseUrl: 'http://192.168.1.125:3333',
+  baseUrl: 'http://localhost:3333',
 })
