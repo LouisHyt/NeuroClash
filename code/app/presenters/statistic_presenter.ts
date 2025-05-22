@@ -3,7 +3,7 @@ import Statistic from '#models/statistic'
 export default class StatisticPresenter {
   private getWinRatio(statistic: Statistic) {
     if (statistic.totalGames === 0) {
-      return 'Undetermined'
+      return '0'
     }
     return Math.round((statistic.victories / statistic.totalGames) * 100)
   }
@@ -13,7 +13,7 @@ export default class StatisticPresenter {
       statistic.totalGames === 0 ||
       statistic.questionsCorrect + statistic.questionsFailed === 0
     ) {
-      return 'Undetermined'
+      return '0'
     }
 
     return Math.round(
