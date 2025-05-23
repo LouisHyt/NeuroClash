@@ -1,4 +1,5 @@
 import { defineConfig } from '@adonisjs/shield'
+import env from '#start/env'
 
 const shieldConfig = defineConfig({
   /**
@@ -6,8 +7,21 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csp: {
-    enabled: false,
-    directives: {},
+    enabled: true,
+    directives: {
+      defaultSrc: [`'self'`],
+      fontSrc: [`'self'`, 'https://fonts.bunny.net'],
+      scriptSrc: [`'self'`, `'unsafe-inline'`, `'unsafe-eval'`, 'https://cdnjs.cloudflare.com'],
+      styleSrc: [`'self'`, `'unsafe-inline'`, 'https://fonts.bunny.net'],
+      imgSrc: [
+        `'self'`,
+        'data:',
+        'https://api.dicebear.com',
+        'https://picsum.photos',
+        'https://fastly.picsum.photos',
+      ],
+      connectSrc: [`'self'`, `ws://${env.get('HOST')}:*`, `wss://${env.get('HOST')}:*`],
+    },
     reportOnly: false,
   },
 

@@ -25,11 +25,13 @@ const GameList = () => {
       players: [
         {
           username: 'NeuroPro',
-          avatarUrl: 'https://i.pravatar.cc/150?img=1',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=1&scale=100&size=80&backgroundColor=1D1E1E',
         },
         {
           username: 'BrainMaster',
-          avatarUrl: 'https://i.pravatar.cc/150?img=2',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=2&scale=100&size=80&backgroundColor=1D1E1E',
         },
       ],
     },
@@ -42,11 +44,13 @@ const GameList = () => {
       players: [
         {
           username: 'CortexQueen',
-          avatarUrl: 'https://i.pravatar.cc/150?img=5',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=3&scale=100&size=80&backgroundColor=1D1E1E',
         },
         {
           username: 'BrainWave',
-          avatarUrl: 'https://i.pravatar.cc/150?img=6',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=4&scale=100&size=80&backgroundColor=1D1E1E',
         },
       ],
     },
@@ -59,11 +63,13 @@ const GameList = () => {
       players: [
         {
           username: 'CortexQueen',
-          avatarUrl: 'https://i.pravatar.cc/150?img=5',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=5&scale=100&size=80&backgroundColor=1D1E1E',
         },
         {
           username: 'BrainWave',
-          avatarUrl: 'https://i.pravatar.cc/150?img=6',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=6&scale=100&size=80&backgroundColor=1D1E1E',
         },
       ],
     },
@@ -76,11 +82,13 @@ const GameList = () => {
       players: [
         {
           username: 'CortexQueen',
-          avatarUrl: 'https://i.pravatar.cc/150?img=5',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=7&scale=100&size=80&backgroundColor=1D1E1E',
         },
         {
           username: 'BrainWave',
-          avatarUrl: 'https://i.pravatar.cc/150?img=6',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=8&scale=100&size=80&backgroundColor=1D1E1E',
         },
       ],
     },
@@ -93,11 +101,13 @@ const GameList = () => {
       players: [
         {
           username: 'CortexQueen',
-          avatarUrl: 'https://i.pravatar.cc/150?img=5',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=9&scale=100&size=80&backgroundColor=1D1E1E',
         },
         {
           username: 'BrainWave',
-          avatarUrl: 'https://i.pravatar.cc/150?img=6',
+          avatarUrl:
+            'https://api.dicebear.com/9.x/thumbs/svg?seed=10&scale=100&size=80&backgroundColor=1D1E1E',
         },
       ],
     },
