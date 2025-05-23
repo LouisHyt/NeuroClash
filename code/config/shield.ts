@@ -7,7 +7,7 @@ const shieldConfig = defineConfig({
    * to learn more
    */
   csp: {
-    enabled: true,
+    enabled: false,
     directives: {
       defaultSrc: [`'self'`],
       fontSrc: [`'self'`, 'https://fonts.bunny.net'],
