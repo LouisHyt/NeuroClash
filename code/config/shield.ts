@@ -34,6 +34,12 @@ const shieldConfig = defineConfig({
     exceptRoutes: [],
     enableXsrfCookie: true,
     methods: ['POST', 'PUT', 'PATCH', 'DELETE'],
+    cookieOptions: {
+      httpOnly: false,
+      sameSite: 'strict',
+      path: '/',
+      secure: env.get('NODE_ENV') === 'production',
+    },
   },
 
   /**
