@@ -15,13 +15,14 @@ export const updateProfileValidator = vine.compile(
     username: vine
       .string()
       .trim()
+      .escape()
       .maxLength(25)
       .minLength(3)
       .unique(async (db, value) => {
         const user = await db.from('users').where('username', value).first()
         return !user
       }),
-    bio: vine.string().maxLength(175).nullable(),
+    bio: vine.string().escape().maxLength(175).nullable(),
     avatar: vine
       .file({
         size: '2mb',
@@ -33,8 +34,8 @@ export const updateProfileValidator = vine.compile(
 
 export const updateProfileVarientValidator = vine.compile(
   vine.object({
-    username: vine.string().trim().maxLength(25).minLength(3),
-    bio: vine.string().maxLength(175).nullable(),
+    username: vine.string().trim().escape().maxLength(25).minLength(3),
+    bio: vine.string().escape().maxLength(175).nullable(),
     avatar: vine
       .file({
         size: '2mb',
