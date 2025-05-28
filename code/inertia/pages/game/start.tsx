@@ -25,7 +25,7 @@ const Start = () => {
 
   const { players, gameId } = usePage<InferPageProps<GameController, 'showStartGame'>>().props
 
-  const timeSec = 20 // 5 secondes pour le compte à rebours
+  const timeSec = 10 
   const { count, reset } = useCountdown(timeSec, handleEndTimer)
 
   useEffect(() => {
