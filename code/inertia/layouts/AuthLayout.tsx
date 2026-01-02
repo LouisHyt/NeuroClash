@@ -9,7 +9,7 @@ type Props = {
   children: React.ReactNode
 }
 
-function AppLayout({ children }: Props) {
+function AuthLayout({ children }: Props) {
   const page = usePage()
   const direction = page.url.startsWith('/login') ? 20 : -20
   const pageVariants: Variants = {
@@ -59,4 +59,4 @@ function AppLayout({ children }: Props) {
   )
 }
 
-export default AppLayout
+export default AuthLayout
