@@ -78,8 +78,8 @@ importers:
         specifier: ^3.14.0
         version: 3.14.0
       qs:
-        specifier: ^6.14.0
-        version: 6.14.0
+        specifier: '>=6.14.1'
+        version: 6.14.1
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -2980,8 +2980,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
+  qs@6.14.1:
+    resolution: {integrity: sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==}
     engines: {node: '>=0.6'}
 
   quansync@0.2.10:
@@ -3703,7 +3703,7 @@ snapshots:
       file-type: 20.4.1
       inflation: 2.1.0
       media-typer: 1.1.0
-      qs: 6.14.0
+      qs: 6.14.1
       raw-body: 3.0.0
     transitivePeerDependencies:
       - supports-color
@@ -3837,7 +3837,7 @@ snapshots:
       mime-types: 2.1.35
       on-finished: 2.4.1
       proxy-addr: 2.0.7
-      qs: 6.14.0
+      qs: 6.14.1
       tmp-cache: 1.1.0
       type-is: 1.6.18
       vary: 1.1.2
@@ -3854,7 +3854,7 @@ snapshots:
       edge.js: 6.2.1
       html-entities: 2.6.0
       locate-path: 7.2.0
-      qs: 6.14.0
+      qs: 6.14.1
 
   '@adonisjs/logger@6.0.6':
     dependencies:
@@ -3876,7 +3876,7 @@ snapshots:
       knex: 3.1.0(mysql2@3.14.0)
       knex-dynamic-connection: 3.2.0(mysql2@3.14.0)
       pretty-hrtime: 1.0.3
-      qs: 6.14.0
+      qs: 6.14.1
       slash: 5.1.0
       tarn: 3.0.2
     optionalDependencies:
@@ -4241,7 +4241,7 @@ snapshots:
     dependencies:
       axios: 1.8.4
       deepmerge: 4.3.1
-      qs: 6.14.0
+      qs: 6.14.1
     transitivePeerDependencies:
       - debug
 
@@ -6294,7 +6294,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  qs@6.14.0:
+  qs@6.14.1:
     dependencies:
       side-channel: 1.1.0
 

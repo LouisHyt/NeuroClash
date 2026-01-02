@@ -1,5 +1,5 @@
 {
-  "name": "NeuroClash",
+  "name": "neuroclash",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -82,7 +82,7 @@
     "luxon": "^3.6.1",
     "motion": "^12.6.3",
     "mysql2": "^3.14.0",
-    "qs": "^6.14.0",
+    "qs": ">=6.14.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
